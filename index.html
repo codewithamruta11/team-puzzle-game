@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gantec Puzzle Challenge</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Gantec Puzzle Arena</title>
 
 <style>
 body{
@@ -23,7 +23,7 @@ body{
     margin:auto;
     padding:50px;
     border-radius:28px;
-    min-height:650px;
+    min-height:700px;
     background: rgba(255,255,255,0.12);
     backdrop-filter: blur(16px);
     border:1px solid rgba(255,255,255,0.25);
@@ -31,12 +31,12 @@ body{
     animation: slideIn 0.8s ease;
 }
 
-.hidden{ display:none; }
+.hidden{display:none;}
 
 button{
-    padding:14px 26px;
-    font-size:18px;
-    margin:10px;
+    padding:16px 32px;
+    font-size:22px;
+    margin:12px;
     border:none;
     border-radius:14px;
     cursor:pointer;
@@ -45,33 +45,31 @@ button{
     transition: all 0.3s ease;
 }
 
-button:hover{
-    transform: scale(1.08);
-}
+button:hover{transform: scale(1.08);}
 
 .timer{
-    font-size:64px;
+    font-size:72px;
     font-weight:bold;
     margin:20px 0;
     animation: pulse 1s infinite;
 }
 
 .reverse-answer{
-    font-size:54px;
+    font-size:58px;
     font-weight:bold;
     margin-top:20px;
     animation: popIn 0.8s ease;
 }
 
 .correct-answer{
-    font-size:32px;
+    font-size:34px;
     font-weight:bold;
     margin-top:20px;
     animation: fadeUp 1s ease;
 }
 
 .answer-img{
-    max-width:250px;
+    max-width:260px;
     border-radius:20px;
     margin-top:20px;
     animation: zoomIn 0.8s ease;
@@ -80,7 +78,7 @@ button:hover{
 #question{
     white-space:pre-line;
     line-height:1.8;
-    font-size:30px;
+    font-size:34px;
     animation: fadeUp 0.8s ease;
 }
 
@@ -89,28 +87,23 @@ button:hover{
     50%{background-position:100% 50%;}
     100%{background-position:0% 50%;}
 }
-
 @keyframes slideIn{
     from{opacity:0;transform:translateY(30px);}
     to{opacity:1;transform:translateY(0);}
 }
-
 @keyframes pulse{
     0%{transform:scale(1);}
     50%{transform:scale(1.08);}
     100%{transform:scale(1);}
 }
-
 @keyframes fadeUp{
     from{opacity:0;transform:translateY(20px);}
     to{opacity:1;transform:translateY(0);}
 }
-
 @keyframes popIn{
     from{opacity:0;transform:scale(0.7);}
     to{opacity:1;transform:scale(1);}
 }
-
 @keyframes zoomIn{
     from{opacity:0;transform:scale(0.8);}
     to{opacity:1;transform:scale(1);}
@@ -121,31 +114,50 @@ button:hover{
 
 <div class="box">
 
+<!-- INTRO -->
 <div id="intro">
-    <h1 style="font-size:52px;">🎉 Gantec Puzzle Challenge 🎉</h1>
-    <h2>Think Fast • Reverse First • Win Big 🏆</h2>
-    <button onclick="startIntro()">▶ Start Game</button>
+    <img 
+      src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200"
+      style="width:100%;max-height:320px;object-fit:cover;border-radius:24px;">
+
+    <h1 style="font-size:70px;">🎉 GANTEC PUZZLE ARENA 🎉</h1>
+    <h2 style="font-size:40px;">Think Fast ⚡ Speak Reverse 🔄 Win Glory 🏆</h2>
+
+    <p style="font-size:28px;line-height:1.7;">
+        Welcome Team Gantec! <br>
+        Get ready for the most exciting brain challenge 🚀
+    </p>
+
+    <button onclick="startIntro()">▶ START THE SHOW</button>
 </div>
 
+<!-- RULES -->
 <div id="rules" class="hidden">
-    <h1>📋 Rules</h1>
-    <p>1) Answer can be word or number</p>
-    <p>2) Only 20 seconds</p>
-    <p>3) First answer in reverse order</p>
-    <p>4) First team gets point</p>
-    <button onclick="goExample()">Next</button>
+    <h1 style="font-size:64px;">📋 GAME RULES</h1>
+
+    <div style="font-size:30px; line-height:2; margin-top:30px;">
+        1️⃣ Every puzzle answer can be a <b>word or number</b><br>
+        2️⃣ You have only <b>20 seconds</b> ⏱<br>
+        3️⃣ First answer must be in <b>reverse order</b> 🔄<br>
+        4️⃣ First team to answer gets the point 🏆<br>
+        5️⃣ 3 levels • 30 puzzles • 1 winner 🎯
+    </div>
+
+    <button onclick="goExample()">NEXT ➜</button>
 </div>
 
+<!-- EXAMPLE -->
 <div id="example" class="hidden">
-    <h1>💡 Example</h1>
-    <h2>What gets wetter the more it dries?</h2>
+    <h1 style="font-size:60px;">💡 EXAMPLE</h1>
+    <h2 style="font-size:34px;">What gets wetter the more it dries?</h2>
     <div class="reverse-answer">LEWOT</div>
     <img class="answer-img"
          src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400">
     <div class="correct-answer">TOWEL</div>
-    <button onclick="startGame()">🎮 Start Level 1</button>
+    <button onclick="startGame()">🎮 START LEVEL 1</button>
 </div>
 
+<!-- GAME -->
 <div id="game" class="hidden">
     <h1 id="levelTitle">LEVEL 1</h1>
     <h2 id="question"></h2>
@@ -160,47 +172,81 @@ button:hover{
 <script>
 let level=1;
 let index=0;
+let timerInt;
 
-const levels = {
+const levels={
 level1:[
-{q:"I live in memory\nforget when power dies\nhelp programs run fast\nwhat am I?",a:"RAM"}
+{q:"I live in memory\nforget when power dies\nhelp programs run fast\nwhat am I?",a:"RAM"},
+{q:"I have many keys\nopen no locks\nused by every coder\nwhat am I?",a:"KEYBOARD"},
+{q:"Remove from me\nI become bigger\ndig me deeper\nwhat am I?",a:"HOLE"},
+{q:"I store millions\nrows and columns\nused daily\nwhat am I?",a:"DATABASE"},
+{q:"I dry your body\nbecome wet myself\nhang in bathroom\nwhat am I?",a:"TOWEL"},
+{q:"Eight together\nmake one family\nsmallest data unit\nwhat is family?",a:"BYTE"},
+{q:"I shine at night\nvanish by day\nseen by all\nwhat am I?",a:"MOON"},
+{q:"I catch bugs\nnever alive\nhelp developers\nwhat am I?",a:"DEBUGGER"},
+{q:"I have a face\nbut no eyes\nshow time\nwhat am I?",a:"CLOCK"},
+{q:"I make pages beautiful\nwithout paint\nwhat am I?",a:"CSS"}
 ],
 level2:[
-{q:"I protect your house\nblock digital enemies\nwhat am I?",a:"FIREWALL"}
+{q:"I block enemies\nnot made of bricks\nprotect system\nwhat am I?",a:"FIREWALL"},
+{q:"I repeat forever\nuntil stopped\nused in code\nwhat am I?",a:"LOOP"},
+{q:"I speak without mouth\nrepeat words\nfrom walls\nwhat am I?",a:"ECHO"},
+{q:"I fill room\nneed no space\nwhat am I?",a:"LIGHT"},
+{q:"I connect apps\nfront and back\nwhat am I?",a:"API"},
+{q:"I disappear\nwhen spoken\nwhat am I?",a:"SILENCE"},
+{q:"Others use me\nbut it is yours\nwhat am I?",a:"NAME"},
+{q:"I protect passwords\none-way only\nwhat am I?",a:"HASHING"},
+{q:"I connect internet\nsit blinking\nwhat am I?",a:"ROUTER"},
+{q:"I grow without life\nneed air\nwhat am I?",a:"FIRE"}
 ],
 level3:[
-{q:"I run websites\nstay unseen\nwhat am I?",a:"SERVER"}
+{q:"Taken from mine\nlocked in wood\nused by all\nwhat am I?",a:"PENCIL"},
+{q:"Forward heavy\nbackward not\nwhat am I?",a:"TON"},
+{q:"Cities roads rivers\nno people\nwhat am I?",a:"MAP"},
+{q:"Break without touch\nhurt silently\nwhat am I?",a:"PROMISE"},
+{q:"I run websites\nstay unseen\nwhat am I?",a:"SERVER"},
+{q:"Brain of system\nprocess commands\nwhat am I?",a:"CPU"},
+{q:"I make machines learn\nfuture of tech\nwhat am I?",a:"AI"},
+{q:"Store forever\nafter shutdown\nwhat am I?",a:"DISK"},
+{q:"Hide in code\ncause trouble\nwhat am I?",a:"BUG"},
+{q:"I help teams go back\nin code history\nwhat am I?",a:"GIT"}
 ]
 };
 
-function speak(text){
+function speak(text, female=true){
     speechSynthesis.cancel();
     let msg=new SpeechSynthesisUtterance(text);
-    msg.rate=0.95;
-    msg.pitch=1;
+    let voices=speechSynthesis.getVoices();
+
+    msg.voice=female
+        ? voices.find(v=>v.name.toLowerCase().includes("female")) || voices[0]
+        : voices.find(v=>v.name.toLowerCase().includes("male")) || voices[0];
+
+    msg.rate=0.9;
+    msg.pitch=female?1.15:1;
     speechSynthesis.speak(msg);
 }
 
 function startIntro(){
-    speak("Welcome Gantec team. Get ready for the fun challenge.");
+    speak("Welcome Team Gantec! Are you ready for the puzzle arena?",true);
     intro.classList.add("hidden");
     rules.classList.remove("hidden");
 
     setTimeout(()=>{
-        speak("Please read the rules carefully.");
-    },1500);
+        speak("Please read the rules carefully before we start.",false);
+    },2500);
 }
 
 function goExample(){
     rules.classList.add("hidden");
     example.classList.remove("hidden");
-    speak("Here is your reference example.");
+    speak("Here is an example question.",true);
 }
 
 function startGame(){
     example.classList.add("hidden");
     game.classList.remove("hidden");
-    speak("Level 1 starts now.");
+    speak("Level one starts now.",false);
     loadQuestion();
 }
 
@@ -208,21 +254,23 @@ function loadQuestion(){
     let q=levels["level"+level][index];
     question.innerText=q.q;
     answer.innerHTML="";
-    speak("Here is your question. " + q.q.replace(/\n/g," "));
+    levelTitle.innerText="LEVEL "+level;
+
+    speak("Here is your question. "+q.q.replace(/\n/g," "),false);
     startTimer();
 }
 
 function startTimer(){
     let t=20;
     timer.innerText=t;
+    clearInterval(timerInt);
 
-    clearInterval(window.timerInt);
-    window.timerInt=setInterval(()=>{
+    timerInt=setInterval(()=>{
         t--;
         timer.innerText=t;
         if(t<=0){
-            clearInterval(window.timerInt);
-            speak("Time is up.");
+            clearInterval(timerInt);
+            speak("Time is up.",true);
         }
     },1000);
 }
@@ -236,7 +284,7 @@ function showAnswer(){
     "<img class='answer-img' src='https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=400'>"+
     "<div class='correct-answer'>"+q.a+"</div>";
 
-    speak("Answer is " + rev + ". Correct answer is " + q.a);
+    speak("Reverse answer is "+rev+". Correct answer is "+q.a,false);
 }
 
 function nextQuestion(){
@@ -247,13 +295,12 @@ function nextQuestion(){
         index=0;
 
         if(level>3){
-            speak("Congratulations. Game completed.");
-            alert("🏆 Game Completed");
+            speak("Congratulations. Game completed.",true);
+            alert("🏆 GAME COMPLETED");
             return;
         }
 
-        speak("Level " + (level-1) + " completed. Moving to level " + level);
-        levelTitle.innerText="LEVEL "+level;
+        speak("Level completed. Moving to level "+level,true);
     }
 
     loadQuestion();
