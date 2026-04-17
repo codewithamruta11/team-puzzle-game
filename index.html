@@ -91,7 +91,7 @@ button:hover{transform:scale(1.08);}
     <h1 style="font-size:64px;">📋 GAME RULES</h1>
     <div style="font-size:30px;line-height:2;">
         1️⃣ Answer can be word or number<br>
-        2️⃣ Only 20 seconds ⏱<br>
+        2️⃣ Only 15 seconds ⏱<br>
         3️⃣ Give answer only in reverse order 🔄<br>
         4️⃣ Whoever answers first in reverse order gets point 🏆
     </div>
@@ -111,7 +111,7 @@ button:hover{transform:scale(1.08);}
 <div id="game" class="hidden">
     <h1 id="levelTitle">LEVEL 1</h1>
     <h2 id="question"></h2>
-    <div class="timer" id="timer">20</div>
+    <div class="timer" id="timer">15</div>
     <button onclick="showAnswer()">Show Answer</button>
     <button onclick="nextQuestion()">Next</button>
     <div id="answer"></div>
@@ -176,7 +176,7 @@ level4:[
 ]
 };
 
-function speak(text, style="normal"){
+function speak(text){
     speechSynthesis.cancel();
     const msg=new SpeechSynthesisUtterance(text);
     msg.rate=1;
@@ -186,7 +186,9 @@ function speak(text, style="normal"){
 
 window.onload=function(){
     setTimeout(()=>{
-        speak("Welcome Team Gantec! Get ready for the most exciting puzzle arena.");
+        speak(
+            "Welcome Team Gantec! Welcome to the Puzzle Arena. Think fast, reverse smart, and win big. Today is all about speed, teamwork, and fun. Three teams will compete. Only one team will take the crown. Get ready to challenge your mind, laugh together, and enjoy every second. Stay sharp, stay quick, and let the battle begin. All the very best to every team!"
+        );
     },500);
 }
 
@@ -194,14 +196,14 @@ function startIntro(){
     intro.classList.add("hidden");
     rules.classList.remove("hidden");
 
-    speak("Answer can be word or number. You have only twenty seconds. Give answer only in reverse order. Whoever answers first in reverse order gets the point.");
+    speak("Answer can be word or number. You have only fifteen seconds. Give answer only in reverse order. Whoever answers first in reverse order gets the point.");
 }
 
 function goExample(){
     rules.classList.add("hidden");
     example.classList.remove("hidden");
 
-    speak("What gets wetter the more it dries? Reverse answer is lewot. Correct answer is towel.");
+    speak("Example question. What gets wetter the more it dries? Reverse answer is lewot. Correct answer is towel.");
 }
 
 function startGame(){
@@ -220,19 +222,16 @@ function loadQuestion(){
     let q=levels["level"+level][index];
     let questionNo=index+1;
 
-    question.innerText=
-        "Question " + questionNo + "\n\n" + q.q;
-
+    question.innerText="Question "+questionNo+"\n\n"+q.q;
     answer.innerHTML="";
     levelTitle.innerText="LEVEL "+level;
 
     speak(q.q.replace(/\n/g,"... "));
-
     startTimer();
 }
 
 function startTimer(){
-    let t=20;
+    let t=15;
     timer.innerText=t;
     clearInterval(timerInt);
 
