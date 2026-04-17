@@ -1,73 +1,214 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Team Puzzle Championship</title>
   <style>
-    body { font-family: Arial, sans-serif; text-align:center; background: linear-gradient(135deg,#0f172a,#1e3a8a); color:white; padding:30px; margin:0; }
-    .box { max-width:1100px; margin:auto; background:white; color:black; padding:50px; border-radius:24px; min-height:520px; box-shadow:0 10px 30px rgba(0,0,0,0.25); }
-    .hidden { display:none; }
-    button { padding:14px 24px; font-size:18px; margin:10px; border:none; border-radius:12px; cursor:pointer; }
-    .timer { font-size:56px; font-weight:bold; }
-    img.answer { max-width:240px; border-radius:16px; margin-top:20px; }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: linear-gradient(135deg, #0f172a, #1e3a8a);
+      color: white;
+      padding: 30px;
+      margin: 0;
+    }
+
+    .box {
+      max-width: 1100px;
+      margin: auto;
+      background: white;
+      color: black;
+      padding: 50px;
+      border-radius: 24px;
+      min-height: 520px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    button {
+      padding: 14px 24px;
+      font-size: 18px;
+      margin: 10px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      background: #2563eb;
+      color: white;
+    }
+
+    .timer {
+      font-size: 56px;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+
+    img.answer {
+      max-width: 240px;
+      border-radius: 16px;
+      margin-top: 20px;
+    }
+
+    #question {
+      white-space: pre-line;
+      line-height: 1.6;
+    }
   </style>
 </head>
 <body>
+
 <div class="box">
+
+  <!-- INTRO -->
   <div id="intro">
     <h1>🎉 Welcome Gantec Team 🎉</h1>
     <p>Ready for a fun puzzle challenge?</p>
-    <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=900" style="width:100%;max-height:260px;object-fit:cover;border-radius:16px;"/>
+    <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=900"
+         style="width:100%;max-height:260px;object-fit:cover;border-radius:16px;" />
     <br><br>
-    <button onclick="startWelcomeFlow()">▶ Start</button>
+    <button id="startBtn">▶ Start</button>
   </div>
 
+  <!-- RULES -->
   <div id="rules" class="hidden">
     <h1>📋 Rules</h1>
     <p>• You have <b>20 seconds</b> to answer each puzzle.</p>
-    <p>• First give the answer in <b>reverse order</b>.</p>
-    <p>• Then give the <b>correct answer</b>.</p>
-    <p>• Some puzzles have <b>number answers</b> hidden in clues.</p>
-    <button onclick="showExample()">Next: Example</button>
+    <p>• First answer in <b>reverse order</b>.</p>
+    <p>• Then answer in <b>correct order</b>.</p>
+    <p>• Some puzzles may have <b>number answers</b>.</p>
+    <button id="rulesNextBtn">Next: Example</button>
   </div>
 
+  <!-- EXAMPLE -->
   <div id="example" class="hidden">
     <h1>💡 Reference Example</h1>
     <h2>What gets wetter the more it dries?</h2>
     <p>Reverse: <b>lewot</b></p>
     <p>Correct: <b>Towel</b></p>
-    <img class="answer" src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400"/>
+    <img class="answer"
+         src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400" />
     <br><br>
-    <button onclick="startGame()">🎮 Start Game</button>
+    <button id="gameStartBtn">🎮 Start Game</button>
   </div>
 
+  <!-- GAME -->
   <div id="game" class="hidden">
     <h1>🏆 Puzzle Challenge</h1>
     <h2 id="question"></h2>
     <div class="timer" id="timer">20</div>
-    <button onclick="showAnswer()">Show Answer</button>
-    <button onclick="nextQuestion()">Next</button>
+    <button id="answerBtn">Show Answer</button>
+    <button id="nextBtn">Next</button>
     <div id="answer"></div>
   </div>
+
 </div>
 
 <script>
-const questions = [
-  { q:'I dry your body yet become wet.
-Who am I?', a:'Towel', img:'https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400' },
-  { q:'I have hands but never clap.
-Who am I?', a:'Clock', img:'https://images.unsplash.com/photo-1501139083538-0139583c060f?w=400' },
-  { q:'I appear in a week twice, in a year once, never in a day.
-What am I?', a:'E', img:'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400' }
-];
-let index=0, timerInt;
-function beep(freq=800,d=0.2){ const ctx=new (window.AudioContext||window.webkitAudioContext)(); const o=ctx.createOscillator(); const g=ctx.createGain(); o.connect(g); g.connect(ctx.destination); o.frequency.value=freq; g.gain.value=0.04; o.start(); o.stop(ctx.currentTime+d); }
-function startWelcomeFlow(){ beep(700,0.3); setTimeout(()=>beep(1000,0.4),400); setTimeout(()=>{ document.getElementById('intro').classList.add('hidden'); document.getElementById('rules').classList.remove('hidden'); },900); }
-function showExample(){ beep(900,0.2); document.getElementById('rules').classList.add('hidden'); document.getElementById('example').classList.remove('hidden'); }
-function startGame(){ beep(1100,0.3); document.getElementById('example').classList.add('hidden'); document.getElementById('game').classList.remove('hidden'); loadQuestion(); }
-function loadQuestion(){ document.getElementById('question').innerText=questions[index].q; document.getElementById('answer').innerHTML=''; startTimer(); }
-function startTimer(){ let t=20; document.getElementById('timer').innerText=t; clearInterval(timerInt); timerInt=setInterval(()=>{ t--; document.getElementById('timer').innerText=t; if(t<=0) clearInterval(timerInt); },1000); }
-function showAnswer(){ const q=questions[index]; const rev=q.a.split('').reverse().join('').toLowerCase(); document.getElementById('answer').innerHTML='🔄 Reverse: <b>'+rev+'</b><br><br>✅ Correct: <b>'+q.a+'</b><br><img class="answer" src="'+q.img+'"/>'; beep(1300,0.25); }
-function nextQuestion(){ index=(index+1)%questions.length; loadQuestion(); }
+  const questions = [
+    {
+      q: "I dry your body yet become wet.\nWho am I?",
+      a: "Towel",
+      img: "https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400"
+    },
+    {
+      q: "I have hands but never clap.\nWho am I?",
+      a: "Clock",
+      img: "https://images.unsplash.com/photo-1501139083538-0139583c060f?w=400"
+    },
+    {
+      q: "I appear in a week twice,\nin a year once,\nnever in a day.\nWhat am I?",
+      a: "E",
+      img: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400"
+    }
+  ];
+
+  let index = 0;
+  let timerInterval;
+
+  function beep(freq = 800, duration = 0.2) {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.frequency.value = freq;
+    gain.gain.value = 0.04;
+
+    osc.start();
+    osc.stop(ctx.currentTime + duration);
+  }
+
+  function showSlide(hideId, showId) {
+    document.getElementById(hideId).classList.add("hidden");
+    document.getElementById(showId).classList.remove("hidden");
+  }
+
+  function loadQuestion() {
+    const q = questions[index];
+    document.getElementById("question").innerText = q.q;
+    document.getElementById("answer").innerHTML = "";
+    startTimer();
+  }
+
+  function startTimer() {
+    let t = 20;
+    document.getElementById("timer").innerText = t;
+
+    clearInterval(timerInterval);
+
+    timerInterval = setInterval(() => {
+      t--;
+      document.getElementById("timer").innerText = t;
+
+      if (t <= 0) {
+        clearInterval(timerInterval);
+      }
+    }, 1000);
+  }
+
+  function showAnswer() {
+    const q = questions[index];
+    const rev = q.a.split("").reverse().join("").toLowerCase();
+
+    document.getElementById("answer").innerHTML =
+      "🔄 Reverse: <b>" + rev + "</b><br><br>" +
+      "✅ Correct: <b>" + q.a + "</b><br>" +
+      '<img class="answer" src="' + q.img + '" />';
+
+    beep(1300, 0.25);
+  }
+
+  function nextQuestion() {
+    index = (index + 1) % questions.length;
+    loadQuestion();
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("startBtn").addEventListener("click", function () {
+      beep(700, 0.3);
+      showSlide("intro", "rules");
+    });
+
+    document.getElementById("rulesNextBtn").addEventListener("click", function () {
+      beep(900, 0.2);
+      showSlide("rules", "example");
+    });
+
+    document.getElementById("gameStartBtn").addEventListener("click", function () {
+      beep(1100, 0.3);
+      showSlide("example", "game");
+      loadQuestion();
+    });
+
+    document.getElementById("answerBtn").addEventListener("click", showAnswer);
+    document.getElementById("nextBtn").addEventListener("click", nextQuestion);
+  });
 </script>
+
 </body>
 </html>
