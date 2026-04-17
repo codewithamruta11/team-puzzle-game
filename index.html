@@ -9,23 +9,13 @@
 body{
     margin:0;
     font-family: Arial, sans-serif;
-    background: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1600') center/cover no-repeat fixed;
     color:white;
     text-align:center;
     padding:30px;
     min-height:100vh;
-}
-
-body::before{
-    content:"";
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background: rgba(15,23,42,0.55);
-    backdrop-filter: blur(8px);
-    z-index:-1;
+    background: linear-gradient(-45deg,#0f172a,#1e3a8a,#7c3aed,#0ea5e9);
+    background-size: 400% 400%;
+    animation: gradientMove 15s ease infinite;
 }
 
 .box{
@@ -34,16 +24,14 @@ body::before{
     padding:50px;
     border-radius:28px;
     min-height:650px;
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(18px);
-    border:1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(16px);
+    border:1px solid rgba(255,255,255,0.25);
     box-shadow:0 12px 40px rgba(0,0,0,0.35);
     animation: slideIn 0.8s ease;
 }
 
-.hidden{
-    display:none;
-}
+.hidden{ display:none; }
 
 button{
     padding:14px 26px;
@@ -61,37 +49,11 @@ button:hover{
     transform: scale(1.08);
 }
 
-.hero{
-    width:100%;
-    max-height:320px;
-    border-radius:22px;
-    object-fit:cover;
-}
-
-.tagline{
-    font-size:30px;
-    font-weight:bold;
-    animation: glow 2s infinite alternate;
-}
-
 .timer{
     font-size:64px;
     font-weight:bold;
     margin:20px 0;
     animation: pulse 1s infinite;
-}
-
-.answer-img{
-    max-width:240px;
-    border-radius:18px;
-    margin-top:20px;
-}
-
-#question{
-    white-space:pre-line;
-    line-height:1.8;
-    font-size:30px;
-    animation: fadeUp 0.8s ease;
 }
 
 .reverse-answer{
@@ -105,16 +67,32 @@ button:hover{
     font-size:32px;
     font-weight:bold;
     margin-top:20px;
+    animation: fadeUp 1s ease;
+}
+
+.answer-img{
+    max-width:250px;
+    border-radius:20px;
+    margin-top:20px;
+    animation: zoomIn 0.8s ease;
+}
+
+#question{
+    white-space:pre-line;
+    line-height:1.8;
+    font-size:30px;
+    animation: fadeUp 0.8s ease;
+}
+
+@keyframes gradientMove{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
 }
 
 @keyframes slideIn{
     from{opacity:0;transform:translateY(30px);}
     to{opacity:1;transform:translateY(0);}
-}
-
-@keyframes glow{
-    from{opacity:0.7;transform:scale(1);}
-    to{opacity:1;transform:scale(1.04);}
 }
 
 @keyframes pulse{
@@ -132,6 +110,11 @@ button:hover{
     from{opacity:0;transform:scale(0.7);}
     to{opacity:1;transform:scale(1);}
 }
+
+@keyframes zoomIn{
+    from{opacity:0;transform:scale(0.8);}
+    to{opacity:1;transform:scale(1);}
+}
 </style>
 </head>
 <body>
@@ -140,22 +123,16 @@ button:hover{
 
 <div id="intro">
     <h1 style="font-size:52px;">🎉 Gantec Puzzle Challenge 🎉</h1>
-    <p class="tagline">Think Fast • Reverse First • Win Big 🏆</p>
-    <p style="font-size:24px;">Welcome Team! Ready for the hardest challenge?</p>
-
-    <img class="hero"
-         src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200">
-
-    <br><br>
-    <button onclick="playIntroMusic(); goRules()">▶ Start Game</button>
+    <h2>Think Fast • Reverse First • Win Big 🏆</h2>
+    <button onclick="startIntro()">▶ Start Game</button>
 </div>
 
 <div id="rules" class="hidden">
     <h1>📋 Rules</h1>
-    <p>1) Puzzle answer can be word or number</p>
-    <p>2) You have only 20 seconds</p>
-    <p>3) First answer must be in reverse order</p>
-    <p>4) First team gets the point</p>
+    <p>1) Answer can be word or number</p>
+    <p>2) Only 20 seconds</p>
+    <p>3) First answer in reverse order</p>
+    <p>4) First team gets point</p>
     <button onclick="goExample()">Next</button>
 </div>
 
@@ -166,7 +143,6 @@ button:hover{
     <img class="answer-img"
          src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400">
     <div class="correct-answer">TOWEL</div>
-    <br><br>
     <button onclick="startGame()">🎮 Start Level 1</button>
 </div>
 
@@ -182,93 +158,104 @@ button:hover{
 </div>
 
 <script>
+let level=1;
+let index=0;
+
 const levels = {
-level1: [
-{ q:"Q1.\nI live in memory,\nforget when power dies,\nhelp programs run fast,\nwhat am I?", a:"RAM" },
-{ q:"Q2.\nI have many keys,\nopen no locks,\nused by every coder,\nwhat am I?", a:"KEYBOARD" },
-{ q:"Q3.\nRemove from me,\nI become bigger,\ndig me deeper,\nwhat am I?", a:"HOLE" },
-{ q:"Q4.\nI store millions,\nin rows and columns,\nused by apps daily,\nwhat am I?", a:"DATABASE" },
-{ q:"Q5.\nI dry your body,\nbecome wet myself,\nhang in bathroom,\nwhat am I?", a:"TOWEL" },
-{ q:"Q6.\nEight brothers together,\nmake one family,\nsmallest data unit,\nwhat is the family?", a:"BYTE" },
-{ q:"Q7.\nI shine at night,\nvanish by day,\nseen by all,\nwhat am I?", a:"MOON" },
-{ q:"Q8.\nI catch bugs,\nnever alive,\nhelp developers,\nwhat am I?", a:"DEBUGGER" },
-{ q:"Q9.\nI have a face,\nbut no eyes,\nshow time always,\nwhat am I?", a:"CLOCK" },
-{ q:"Q10.\nI protect websites\nfrom bad designs,\nmake them beautiful,\nwhat am I?", a:"CSS" }
+level1:[
+{q:"I live in memory\nforget when power dies\nhelp programs run fast\nwhat am I?",a:"RAM"}
+],
+level2:[
+{q:"I protect your house\nblock digital enemies\nwhat am I?",a:"FIREWALL"}
+],
+level3:[
+{q:"I run websites\nstay unseen\nwhat am I?",a:"SERVER"}
 ]
 };
 
-let level=1;
-let index=0;
-let timerInterval;
-
-function beep(freq=800,duration=0.2){
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.frequency.value = freq;
-    gain.gain.value = 0.04;
-    osc.start();
-    osc.stop(ctx.currentTime + duration);
+function speak(text){
+    speechSynthesis.cancel();
+    let msg=new SpeechSynthesisUtterance(text);
+    msg.rate=0.95;
+    msg.pitch=1;
+    speechSynthesis.speak(msg);
 }
 
-function playIntroMusic(){
-    beep(600,0.3);
-    setTimeout(()=>beep(800,0.3),300);
-    setTimeout(()=>beep(1000,0.3),600);
-}
-
-function goRules(){
+function startIntro(){
+    speak("Welcome Gantec team. Get ready for the fun challenge.");
     intro.classList.add("hidden");
     rules.classList.remove("hidden");
+
+    setTimeout(()=>{
+        speak("Please read the rules carefully.");
+    },1500);
 }
 
 function goExample(){
     rules.classList.add("hidden");
     example.classList.remove("hidden");
+    speak("Here is your reference example.");
 }
 
 function startGame(){
     example.classList.add("hidden");
     game.classList.remove("hidden");
+    speak("Level 1 starts now.");
     loadQuestion();
 }
 
 function loadQuestion(){
-    let q=levels.level1[index];
-    document.getElementById("question").innerText=q.q;
-    document.getElementById("answer").innerHTML="";
+    let q=levels["level"+level][index];
+    question.innerText=q.q;
+    answer.innerHTML="";
+    speak("Here is your question. " + q.q.replace(/\n/g," "));
     startTimer();
 }
 
 function startTimer(){
     let t=20;
     timer.innerText=t;
-    clearInterval(timerInterval);
 
-    timerInterval=setInterval(()=>{
+    clearInterval(window.timerInt);
+    window.timerInt=setInterval(()=>{
         t--;
         timer.innerText=t;
-        if(t<=0) clearInterval(timerInterval);
+        if(t<=0){
+            clearInterval(window.timerInt);
+            speak("Time is up.");
+        }
     },1000);
 }
 
 function showAnswer(){
-    let q=levels.level1[index];
+    let q=levels["level"+level][index];
     let rev=q.a.split("").reverse().join("");
 
     answer.innerHTML=
-        "<div class='reverse-answer'>"+rev+"</div>"+
-        "<div class='correct-answer'>"+q.a+"</div>";
+    "<div class='reverse-answer'>"+rev+"</div>"+
+    "<img class='answer-img' src='https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=400'>"+
+    "<div class='correct-answer'>"+q.a+"</div>";
+
+    speak("Answer is " + rev + ". Correct answer is " + q.a);
 }
 
 function nextQuestion(){
     index++;
-    if(index>=levels.level1.length){
-        alert("🏆 Level Completed!");
-        return;
+
+    if(index>=levels["level"+level].length){
+        level++;
+        index=0;
+
+        if(level>3){
+            speak("Congratulations. Game completed.");
+            alert("🏆 Game Completed");
+            return;
+        }
+
+        speak("Level " + (level-1) + " completed. Moving to level " + level);
+        levelTitle.innerText="LEVEL "+level;
     }
+
     loadQuestion();
 }
 </script>
