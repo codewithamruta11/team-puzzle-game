@@ -80,6 +80,12 @@ button:hover{
     animation: fadeUp 0.8s ease;
 }
 
+#answer{
+    margin-top:20px;
+    font-size:24px;
+    animation: fadeUp 0.8s ease;
+}
+
 .level-tag{
     font-size:22px;
     color:#2563eb;
@@ -87,25 +93,13 @@ button:hover{
 }
 
 @keyframes slideIn{
-    from{
-        opacity:0;
-        transform: translateY(30px);
-    }
-    to{
-        opacity:1;
-        transform: translateY(0);
-    }
+    from{opacity:0;transform:translateY(30px);}
+    to{opacity:1;transform:translateY(0);}
 }
 
 @keyframes glow{
-    from{
-        opacity:0.6;
-        transform: scale(1);
-    }
-    to{
-        opacity:1;
-        transform: scale(1.05);
-    }
+    from{opacity:0.6;transform:scale(1);}
+    to{opacity:1;transform:scale(1.05);}
 }
 
 @keyframes pulse{
@@ -115,14 +109,8 @@ button:hover{
 }
 
 @keyframes fadeUp{
-    from{
-        opacity:0;
-        transform:translateY(20px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+    from{opacity:0;transform:translateY(20px);}
+    to{opacity:1;transform:translateY(0);}
 }
 </style>
 </head>
@@ -141,15 +129,15 @@ button:hover{
          src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200" />
 
     <br><br>
-    <button onclick="goRules()">▶ Start Game</button>
+    <button onclick="playIntroMusic(); goRules()">▶ Start Game</button>
 </div>
 
 <!-- RULES -->
 <div id="rules" class="hidden">
     <h1>📋 Game Rules</h1>
-    <p>1) You will get puzzle questions with answers as <b>word or number</b>.</p>
+    <p>1) You will get puzzle questions...answers can be <b>words or numbers</b>.</p>
     <p>2) You have only <b>20 seconds</b> to answer each puzzle.</p>
-    <p>3) First answer must be in <b>reverse order</b>.</p>
+    <p>3) answer must be in <b>reverse order</b>.</p>
     <p>4) Team answering reverse first gets the point.</p>
 
     <button onclick="goExample()">Next: Example</button>
@@ -160,8 +148,7 @@ button:hover{
     <h1>💡 Reference Example</h1>
     <h2>What gets wetter the more it dries?</h2>
 
-    <p>Reverse: <b>lewot</b></p>
-    <p>Correct: <b>Towel</b></p>
+    <p>Answer = <b>(lewot) = (Towel)</b></p>
 
     <img class="answer-img"
          src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400" />
@@ -204,16 +191,6 @@ const levels = {
             q:"Q3.\nI appear twice in week,\nonce in year,\nnever in day.\nWhat am I?",
             a:"E",
             img:"https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400"
-        },
-        {
-            q:"Q4.\nCount the corners\nof a square room.\nWhat number?",
-            a:"4",
-            img:"https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=400"
-        },
-        {
-            q:"Q5.\nI have keys but no locks.\nWho am I?",
-            a:"Piano",
-            img:"https://images.unsplash.com/photo-1507838153414-b4b713384a76?w=400"
         }
     ],
     level2: [
@@ -231,16 +208,6 @@ const levels = {
             q:"Q3.\nI speak without mouth,\nhear without ears.\nWhat am I?",
             a:"Echo",
             img:"https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400"
-        },
-        {
-            q:"Q4.\nHow many months\nhave 28 days?",
-            a:"12",
-            img:"https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400"
-        },
-        {
-            q:"Q5.\nWhat has branches\nbut no leaves?",
-            a:"Bank",
-            img:"https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400"
         }
     ]
 };
@@ -265,14 +232,18 @@ function beep(freq=800,duration=0.2){
     osc.stop(ctx.currentTime + duration);
 }
 
+function playIntroMusic(){
+    beep(600,0.3);
+    setTimeout(()=>beep(800,0.3),300);
+    setTimeout(()=>beep(1000,0.3),600);
+}
+
 function goRules(){
-    beep();
     intro.classList.add("hidden");
     rules.classList.remove("hidden");
 }
 
 function goExample(){
-    beep();
     rules.classList.add("hidden");
     example.classList.remove("hidden");
 }
@@ -290,6 +261,7 @@ function loadQuestion(){
 
     const q = document.getElementById("question");
     q.style.animation = "none";
+
     setTimeout(() => {
         q.style.animation = "fadeUp 0.8s ease";
     }, 10);
@@ -320,9 +292,16 @@ function showAnswer(){
     let q = questions[index];
     let rev = q.a.split("").reverse().join("").toLowerCase();
 
-    document.getElementById("answer").innerHTML =
-        "🔄 Reverse: <b>" + rev + "</b><br><br>" +
-        "✅ Correct: <b>" + q.a + "</b><br>" +
+    const ansDiv = document.getElementById("answer");
+
+    ansDiv.style.animation = "none";
+
+    setTimeout(() => {
+        ansDiv.style.animation = "fadeUp 0.8s ease";
+    }, 10);
+
+    ansDiv.innerHTML =
+        "Answer = <b>(" + rev + ") = (" + q.a + ")</b><br>" +
         "<img class='answer-img' src='" + q.img + "'>";
 }
 
