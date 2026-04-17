@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Team Puzzle Game</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      background: #0f172a;
+      color: white;
+      padding: 40px;
+    }
+    .box {
+      max-width: 1000px;
+      margin: auto;
+      background: white;
+      color: black;
+      padding: 40px;
+      border-radius: 20px;
+    }
+    button {
+      padding: 15px 25px;
+      font-size: 18px;
+      margin: 10px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>🏆 Team Puzzle Championship</h1>
+    <h2 id="question">What gets wetter the more it dries?</h2>
+    <h1 id="timer">20</h1>
+    <button onclick="showAnswer()">Reveal Answer</button>
+    <button onclick="nextQuestion()">Next</button>
+    <h2 id="answer"></h2>
+  </div>
+
+  <script>
+    let questions = [
+      { q: "What gets wetter the more it dries?", a: "Towel" },
+      { q: "What has keys but can't open locks?", a: "Piano" },
+      { q: "What has hands but cannot clap?", a: "Clock" }
+    ];
+
+    let index = 0;
+    let time = 20;
+
+    function startTimer() {
+      time = 20;
+      document.getElementById("timer").innerText = time;
+      let x = setInterval(() => {
+        time--;
+        document.getElementById("timer").innerText = time;
+        if (time <= 0) clearInterval(x);
+      }, 1000);
+    }
+
+    function showAnswer() {
+      document.getElementById("answer").innerText =
+        "Answer: " + questions[index].a;
+    }
+
+    function nextQuestion() {
+      index = (index + 1) % questions.length;
+      document.getElementById("question").innerText =
+        questions[index].q;
+      document.getElementById("answer").innerText = "";
+      startTimer();
+    }
+
+    startTimer();
+  </script>
+</body>
+</html>
