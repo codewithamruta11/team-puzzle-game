@@ -53,10 +53,10 @@
       <button onclick="startGame()">Begin Round</button>
     </div>
 
-    <div id="game" class="hidden" style="background-image:url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=900');background-size:cover;border-radius:20px;padding:30px;">
+    <div id="game" class="hidden" style="border-radius:20px;padding:30px; background:white; color:black;">
       <h1>🏆 Team Puzzle Championship</h1>
       <h2 id="question"></h2>
-      <div class="timer" id="timer">20</div>
+      <div class="timer" id="timer">20</div><p style="font-size:18px;color:#64748b;">⏱ Time remaining</p>
       <button onclick="showBothAnswers()">Show Answer</button>
       <button onclick="nextQuestion()">Next</button>
       <h2 id="answer"></h2>
@@ -65,9 +65,9 @@
 
   <script>
     const questions = [
-      { q: 'What gets wetter the more it dries?', a: 'Towel' },
-      { q: 'What has keys but cannot open locks?', a: 'Piano' },
-      { q: 'What has hands but cannot clap?', a: 'Clock' }
+      { q: 'I speak in silence,\nI move without feet,\nI vanish in light,\nYet follow you at night.\nWho am I?', a: 'Shadow' },
+      { q: 'No lungs I own, yet breathe I do,\nNo mouth I have, yet whisper to you,\nI dance through trees and windows wide,\nUnseen force that cannot hide.\nWhat am I?', a: 'Wind' },
+      { q: 'Born in fire, shaped by hand,\nI mark all time across the land,\nI have no life, yet stories keep,\nIn lines where memories softly sleep.\nWhat am I?', a: 'Book' }
     ];
 
     let index = 0;
