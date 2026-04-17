@@ -4,20 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gantec Puzzle Arena</title>
-
 <style>
 body{
     margin:0;
-    font-family: Arial, sans-serif;
+    font-family:Arial,sans-serif;
     color:white;
     text-align:center;
     padding:30px;
     min-height:100vh;
-    background: linear-gradient(-45deg,#0f172a,#1e3a8a,#7c3aed,#0ea5e9);
+    background:linear-gradient(-45deg,#0f172a,#1e3a8a,#7c3aed,#0ea5e9);
     background-size:400% 400%;
     animation:gradientMove 15s ease infinite;
 }
-
 .box{
     max-width:1100px;
     margin:auto;
@@ -29,9 +27,7 @@ body{
     border:1px solid rgba(255,255,255,0.25);
     box-shadow:0 12px 40px rgba(0,0,0,0.35);
 }
-
 .hidden{display:none;}
-
 button{
     padding:16px 32px;
     font-size:22px;
@@ -42,48 +38,38 @@ button{
     background:linear-gradient(135deg,#2563eb,#1d4ed8);
     color:white;
 }
-
-button:hover{
-    transform:scale(1.08);
-}
-
+button:hover{transform:scale(1.08);}
 .timer{
     font-size:72px;
     font-weight:bold;
     margin:20px 0;
     animation:pulse 1s infinite;
 }
-
 .reverse-answer{
     font-size:58px;
     font-weight:bold;
     margin-top:20px;
 }
-
 .correct-answer{
     font-size:34px;
     font-weight:bold;
     margin-top:20px;
 }
-
 .answer-img{
     max-width:260px;
     border-radius:20px;
     margin-top:20px;
 }
-
 #question{
     white-space:pre-line;
     line-height:1.8;
     font-size:34px;
 }
-
 @keyframes gradientMove{
     0%{background-position:0% 50%;}
     50%{background-position:100% 50%;}
     100%{background-position:0% 50%;}
 }
-
 @keyframes pulse{
     0%{transform:scale(1);}
     50%{transform:scale(1.08);}
@@ -96,31 +82,20 @@ button:hover{
 <div class="box">
 
 <div id="intro">
-    <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200"
-         style="width:100%;max-height:320px;object-fit:cover;border-radius:24px;">
-
     <h1 style="font-size:70px;">🎉 GANTEC PUZZLE ARENA 🎉</h1>
     <h2 style="font-size:40px;">Think Fast ⚡ Reverse First 🔄 Win Big 🏆</h2>
-
-    <p style="font-size:28px;line-height:1.7;">
-        Welcome Team Gantec! <br>
-        Get ready for the most exciting challenge 🚀
-    </p>
-
     <button onclick="startIntro()">▶ START THE SHOW</button>
 </div>
 
 <div id="rules" class="hidden">
     <h1 style="font-size:64px;">📋 GAME RULES</h1>
-
-    <div style="font-size:30px; line-height:2;">
+    <div style="font-size:30px;line-height:2;">
         1️⃣ Answer can be word or number<br>
         2️⃣ Only 20 seconds ⏱<br>
         3️⃣ First answer in reverse order 🔄<br>
         4️⃣ First team gets point 🏆<br>
-        5️⃣ 3 levels • 30 puzzles 🎯
+        5️⃣ 4 levels • 35 questions 🎯
     </div>
-
     <button onclick="goExample()">NEXT ➜</button>
 </div>
 
@@ -128,8 +103,6 @@ button:hover{
     <h1 style="font-size:60px;">💡 EXAMPLE</h1>
     <h2>What gets wetter the more it dries?</h2>
     <div class="reverse-answer">LEWOT</div>
-    <img class="answer-img"
-         src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400">
     <div class="correct-answer">TOWEL</div>
     <button onclick="startGame()">🎮 START LEVEL 1</button>
 </div>
@@ -141,6 +114,15 @@ button:hover{
     <button onclick="showAnswer()">Show Answer</button>
     <button onclick="nextQuestion()">Next</button>
     <div id="answer"></div>
+</div>
+
+<div id="level4intro" class="hidden">
+    <h1 style="font-size:70px;">💻 LEVEL 4</h1>
+    <h2 style="font-size:42px;">TECHNICAL CHALLENGE ROUND 🚀</h2>
+    <p style="font-size:30px;line-height:1.8;">
+        Theory • Python • SQL • Logic 🧠
+    </p>
+    <button onclick="startLevel4()">▶ START LEVEL 4</button>
 </div>
 
 </div>
@@ -156,130 +138,114 @@ level1:[
 {q:"I have many keys\nopen no locks\nused by every coder\nwhat am I?",a:"KEYBOARD"},
 {q:"Remove from me\nI become bigger\ndig me deeper\nwhat am I?",a:"HOLE"},
 {q:"I store millions\nrows and columns\nused daily\nwhat am I?",a:"DATABASE"},
-{q:"I dry your body\nbecome wet myself\nhang in bathroom\nwhat am I?",a:"TOWEL"},
-{q:"Eight together\nmake one family\nsmallest data unit\nwhat is family?",a:"BYTE"},
-{q:"I shine at night\nvanish by day\nseen by all\nwhat am I?",a:"MOON"},
-{q:"I catch bugs\nnever alive\nhelp developers\nwhat am I?",a:"DEBUGGER"},
-{q:"I have a face\nbut no eyes\nshow time\nwhat am I?",a:"CLOCK"},
-{q:"I make pages beautiful\nwithout paint\nwhat am I?",a:"CSS"}
+{q:"I dry your body\nbecome wet myself\nwhat am I?",a:"TOWEL"},
+{q:"Eight together\nmake one family\nwhat am I?",a:"BYTE"},
+{q:"I shine at night\nvanish by day\nwhat am I?",a:"MOON"},
+{q:"I catch bugs\nhelp developers\nwhat am I?",a:"DEBUGGER"},
+{q:"I show time\nbut no eyes\nwhat am I?",a:"CLOCK"},
+{q:"I make pages beautiful\nwhat am I?",a:"CSS"}
 ],
 level2:[
-{q:"I block enemies\nnot made of bricks\nprotect system\nwhat am I?",a:"FIREWALL"},
-{q:"I repeat forever\nuntil stopped\nused in code\nwhat am I?",a:"LOOP"},
-{q:"I speak without mouth\nrepeat words\nfrom walls\nwhat am I?",a:"ECHO"},
-{q:"I fill room\nneed no space\nwhat am I?",a:"LIGHT"},
-{q:"I connect apps\nfront and back\nwhat am I?",a:"API"},
-{q:"I disappear\nwhen spoken\nwhat am I?",a:"SILENCE"},
+{q:"I block enemies\nprotect system\nwhat am I?",a:"FIREWALL"},
+{q:"I repeat forever\nused in code\nwhat am I?",a:"LOOP"},
+{q:"I speak without mouth\nwhat am I?",a:"ECHO"},
+{q:"I connect apps\nwhat am I?",a:"API"},
+{q:"I disappear when spoken\nwhat am I?",a:"SILENCE"},
 {q:"Others use me\nbut it is yours\nwhat am I?",a:"NAME"},
-{q:"I protect passwords\none-way only\nwhat am I?",a:"HASHING"},
-{q:"I connect internet\nsit blinking\nwhat am I?",a:"ROUTER"},
-{q:"I grow without life\nneed air\nwhat am I?",a:"FIRE"}
+{q:"I protect passwords\nwhat am I?",a:"HASHING"},
+{q:"I connect internet\nwhat am I?",a:"ROUTER"},
+{q:"I grow without life\nwhat am I?",a:"FIRE"},
+{q:"I run websites\nwhat am I?",a:"SERVER"}
 ],
 level3:[
-{q:"Taken from mine\nlocked in wood\nused by all\nwhat am I?",a:"PENCIL"},
+{q:"Taken from mine\nlocked in wood\nwhat am I?",a:"PENCIL"},
 {q:"Forward heavy\nbackward not\nwhat am I?",a:"TON"},
 {q:"Cities roads rivers\nno people\nwhat am I?",a:"MAP"},
-{q:"Break without touch\nhurt silently\nwhat am I?",a:"PROMISE"},
-{q:"I run websites\nstay unseen\nwhat am I?",a:"SERVER"},
-{q:"Brain of system\nprocess commands\nwhat am I?",a:"CPU"},
-{q:"Machines learn\nfuture of tech\nwhat am I?",a:"AI"},
-{q:"Store forever\nafter shutdown\nwhat am I?",a:"DISK"},
-{q:"Hide in code\ncause trouble\nwhat am I?",a:"BUG"},
-{q:"Go back in code history\nused by teams\nwhat am I?",a:"GIT"}
+{q:"Break without touch\nwhat am I?",a:"PROMISE"},
+{q:"Brain of system\nwhat am I?",a:"CPU"},
+{q:"Machines learn\nwhat am I?",a:"AI"},
+{q:"Store forever\nwhat am I?",a:"DISK"},
+{q:"Hide in code\nwhat am I?",a:"BUG"},
+{q:"Go back in code history\nwhat am I?",a:"GIT"},
+{q:"Smallest unit\nwhat am I?",a:"BIT"}
+],
+level4:[
+{q:"Which data structure uses FIFO?\nUsed in printers\noldest first",a:"QUEUE"},
+{q:"Same function behaves differently\nin OOP what is it?",a:"POLYMORPHISM"},
+{q:"What is output?\n\nx=[1,2,3]\nprint(x[::-1][1])",a:"2"},
+{q:"SQL:\nSELECT COUNT(*) FROM employees\nWHERE salary > 50000;\nWhat returns?",a:"COUNT"},
+{q:"Which SQL clause filters grouped data\nafter GROUP BY?",a:"HAVING"}
 ]
 };
 
 function speak(text, style="normal"){
     speechSynthesis.cancel();
+    const msg=new SpeechSynthesisUtterance(text);
+    const voices=speechSynthesis.getVoices();
 
-    const msg = new SpeechSynthesisUtterance(text);
-    const voices = speechSynthesis.getVoices();
-
-    let voice =
-        voices.find(v => v.lang === "en-IN") ||
-        voices.find(v => v.lang.includes("en-IN")) ||
-        voices.find(v => v.lang.includes("en-GB")) ||
+    let voice=
+        voices.find(v=>v.lang==="en-IN") ||
+        voices.find(v=>v.lang.includes("en-IN")) ||
         voices[0];
 
-    msg.voice = voice;
-    msg.volume = 1;
+    msg.voice=voice;
 
-    if(style==="welcome"){
-        msg.rate = 0.72;
-        msg.pitch = 1.15;
-    }
-    else if(style==="rules"){
-        msg.rate = 0.68;
-        msg.pitch = 1.05;
-    }
-    else if(style==="puzzle"){
-        msg.rate = 0.58;
-        msg.pitch = 1.08;
-    }
-    else if(style==="answer"){
-        msg.rate = 0.62;
-        msg.pitch = 1.02;
-    }
-    else{
-        msg.rate = 0.68;
-        msg.pitch = 1.05;
-    }
+    if(style==="welcome") msg.rate=0.9;
+    else if(style==="rules") msg.rate=0.78;
+    else if(style==="puzzle") msg.rate=0.62;
+    else if(style==="answer") msg.rate=0.68;
+    else msg.rate=0.75;
 
+    msg.pitch=1.05;
     speechSynthesis.speak(msg);
 }
 
-function startIntro(){
-    speak(
-        "Welcome Team Gantec... Are you ready for today’s exciting puzzle challenge... Let the fun begin.",
-        "welcome"
-    );
+window.onload=function(){
+    setTimeout(()=>{
+        speak("Welcome Team Gantec. Are you ready for the ultimate puzzle arena?", "welcome");
+    },800);
+}
 
-    intro.classList.add("hidden");
-    rules.classList.remove("hidden");
+function startIntro(){
+    speak("Welcome Team Gantec. Get ready for the most exciting puzzle challenge.", "welcome");
 
     setTimeout(()=>{
-        speak(
-            "Please read the rules carefully. You will get twenty seconds for every puzzle. The first answer must be given in reverse order. The first team to answer gets the point.",
-            "rules"
-        );
-    },4500);
+        intro.classList.add("hidden");
+        rules.classList.remove("hidden");
+
+        speak("Rule one. Answer can be word or number. Rule two. You get twenty seconds. Rule three. Answer first in reverse order. Example towel becomes lewot.", "rules");
+    },3000);
 }
 
 function goExample(){
     rules.classList.add("hidden");
     example.classList.remove("hidden");
 
-    speak(
-        "Here is one example puzzle for everyone.",
-        "rules"
-    );
+    speak("Example question. What gets wetter the more it dries? Answer towel. Reverse answer lewot.", "rules");
 }
 
 function startGame(){
     example.classList.add("hidden");
     game.classList.remove("hidden");
+    loadQuestion();
+}
 
-    speak(
-        "Level one starts now. Best of luck teams.",
-        "welcome"
-    );
+function startLevel4(){
+    level4intro.classList.add("hidden");
+    game.classList.remove("hidden");
 
+    speak("Welcome to level four. Technical challenge round starts now.", "welcome");
     loadQuestion();
 }
 
 function loadQuestion(){
-    let q = levels["level"+level][index];
+    let q=levels["level"+level][index];
 
-    question.innerText = q.q;
-    answer.innerHTML = "";
-    levelTitle.innerText = "LEVEL " + level;
+    question.innerText=q.q;
+    answer.innerHTML="";
+    levelTitle.innerText="LEVEL "+level;
 
-    let poetic = q.q.replace(/\n/g,"... ");
-
-    speak(
-        "Listen carefully... " + poetic,
-        "puzzle"
-    );
+    speak("Listen carefully. "+q.q.replace(/\n/g,"... "), "puzzle");
 
     startTimer();
 }
@@ -302,38 +268,36 @@ function startTimer(){
 }
 
 function showAnswer(){
-    let q = levels["level"+level][index];
-    let rev = q.a.split("").reverse().join("");
+    let q=levels["level"+level][index];
+    let rev=q.a.split("").reverse().join("");
 
-    answer.innerHTML =
-        "<div class='reverse-answer'>" + rev + "</div>" +
-        "<img class='answer-img' src='https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=400'>" +
-        "<div class='correct-answer'>" + q.a + "</div>";
+    answer.innerHTML=
+        "<div class='reverse-answer'>"+rev+"</div>"+
+        "<div class='correct-answer'>"+q.a+"</div>";
 
-    speak(
-        "The reverse answer is... " + rev +
-        ". The correct answer is... " + q.a,
-        "answer"
-    );
+    speak("Reverse answer is "+rev+". Correct answer is "+q.a, "answer");
 }
 
 function nextQuestion(){
     index++;
 
-    if(index >= levels["level"+level].length){
+    if(index>=levels["level"+level].length){
         level++;
-        index = 0;
+        index=0;
 
-        if(level > 3){
+        if(level===4){
+            game.classList.add("hidden");
+            level4intro.classList.remove("hidden");
+
+            speak("Excellent teams. Now it is time for level four. Technical challenge round.", "welcome");
+            return;
+        }
+
+        if(level>4){
             speak("Congratulations teams. The game is completed.", "answer");
             alert("🏆 GAME COMPLETED");
             return;
         }
-
-        speak(
-            "Level completed. Moving to level " + level,
-            "answer"
-        );
     }
 
     loadQuestion();
