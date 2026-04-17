@@ -186,7 +186,7 @@ function speak(text){
 
 window.onload=function(){
     setTimeout(()=>{
-        speak("Welcome Team Gantec! Welcome to the Puzzle Arena. Think fast, reverse smart, and win big. Today is all about speed, teamwork, and fun. Three teams will compete. Only one team will take the crown. Get ready to challenge your mind, laugh together, and enjoy every second. Stay sharp, stay quick, and let the battle begin. All the very best to every team!");
+        speak("Welcome Team Gantec! Welcome to the Puzzle Arena. Think fast, reverse smart, and win big. Three teams will compete. Only one team will take the crown. Stay sharp, stay quick, and let the battle begin!");
     },500);
 }
 
@@ -246,58 +246,45 @@ function showAnswer(){
     let q = levels["level"+level][index];
 
     const answerImages = {
-        "RAM":"https://images.unsplash.com/photo-1562976540-1502c2145186?w=500",
+        "RAM":"https://images.unsplash.com/photo-1518770660439-4636190af475?w=500",
         "KEYBOARD":"https://images.unsplash.com/photo-1517336714739-489689fd1ca8?w=500",
         "TOWEL":"https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=500",
         "MOON":"https://images.unsplash.com/photo-1532693322450-2cb5c511067d?w=500",
-        "CSS":"https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=500",
         "CLOCK":"https://images.unsplash.com/photo-1501139083538-0139583c060f?w=500",
-        "DEBUGGER":"https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=500",
         "FIRE":"https://images.unsplash.com/photo-1511389026070-a14ae610a1be?w=500",
-        "HOLE":"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=500",
-        "BYTE":"https://images.unsplash.com/photo-1518770660439-4636190af475?w=500",
-        "FIREWALL":"https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=500",
-        "LOOP":"https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=500",
-        "API":"https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500",
-        "HASHING":"https://images.unsplash.com/photo-1563986768609-322da13575f3?w=500",
-        "ROUTER":"https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=500",
+        "CPU":"https://images.unsplash.com/photo-1518770660439-4636190af475?w=500",
+        "BUG":"https://images.unsplash.com/photo-1466721591366-2d5fba72006d?w=500",
+        "PENCIL":"https://images.unsplash.com/photo-1503602642458-232111445657?w=500",
+        "MAP":"https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=500",
+        "AI":"https://images.unsplash.com/photo-1677442136019-21780ecad995?w=500",
         "SERVER":"https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=500",
         "DATABASE":"https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=500",
-        "CPU":"https://images.unsplash.com/photo-1518770660439-4636190af475?w=500",
-        "BUG":"https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=500",
-        "GIT":"https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=500",
-        "DISK":"https://images.unsplash.com/photo-1580894908361-967195033215?w=500",
-        "AI":"https://images.unsplash.com/photo-1677442136019-21780ecad995?w=500",
-        "PENCIL":"https://images.unsplash.com/photo-1517842645767-c639042777db?w=500",
-        "MAP":"https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=500",
-        "PROMISE":"https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=500",
-        "BIT":"https://images.unsplash.com/photo-1518770660439-4636190af475?w=500",
-        "QUEUE":"https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=500",
-        "POLYMORPHISM":"https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=500",
-        "COUNT":"https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500",
-        "HAVING":"https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=500"
+        "ROUTER":"https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=500",
+        "QUEUE":"https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=500"
     };
 
-    let imageUrl = answerImages[q.a] ||
-        "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=500";
+    let fallbackImage =
+        "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500";
+
+    let imageUrl = answerImages[q.a] || fallbackImage;
 
     if(level===4){
         answer.innerHTML =
             "<img class='answer-image' src='"+imageUrl+"'>" +
             "<div class='correct-answer'>"+q.a+"</div>";
 
-        speak("Correct answer is "+q.a);
+        speak("Correct answer is " + q.a);
         return;
     }
 
-    let rev=q.a.split("").reverse().join("");
+    let rev = q.a.split("").reverse().join("");
 
     answer.innerHTML =
         "<div class='reverse-answer'>"+rev+"</div>" +
         "<img class='answer-image' src='"+imageUrl+"'>" +
         "<div class='correct-answer'>"+q.a+"</div>";
 
-    speak("Reverse answer is "+rev+". Correct answer is "+q.a);
+    speak("Reverse answer is " + rev + ". Correct answer is " + q.a);
 }
 
 function nextQuestion(){
