@@ -37,6 +37,7 @@ button{
     cursor:pointer;
     background:linear-gradient(135deg,#2563eb,#1d4ed8);
     color:white;
+    transition:0.3s;
 }
 button:hover{transform:scale(1.08);}
 .timer{
@@ -53,6 +54,12 @@ button:hover{transform:scale(1.08);}
     font-size:34px;
     font-weight:bold;
     margin-top:20px;
+}
+.answer-image{
+    width:260px;
+    border-radius:18px;
+    margin-top:20px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.35);
 }
 #question{
     white-space:pre-line;
@@ -85,8 +92,8 @@ button:hover{transform:scale(1.08);}
     <div style="font-size:30px;line-height:2;">
         1️⃣ Answer can be word or number<br>
         2️⃣ Only 20 seconds ⏱<br>
-        3️⃣ Give answer in reverse order 🔄<br>
-        4️⃣ First team gets point 🏆
+        3️⃣ Give answer only in reverse order 🔄<br>
+        4️⃣ Whoever answers first in reverse order gets point 🏆
     </div>
     <button onclick="goExample()">NEXT ➜</button>
 </div>
@@ -95,6 +102,8 @@ button:hover{transform:scale(1.08);}
     <h1 style="font-size:60px;">💡 EXAMPLE</h1>
     <h2>What gets wetter the more it dries?</h2>
     <div class="reverse-answer">LEWOT</div>
+    <img class="answer-image"
+         src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=500">
     <div class="correct-answer">TOWEL</div>
     <button onclick="startGame()">🎮 START LEVEL 1</button>
 </div>
@@ -181,7 +190,7 @@ function startIntro(){
     rules.classList.remove("hidden");
 
     speak(
-        "Here are the rules. You have only twenty seconds. Answer can be a word or number. You must answer first in reverse order. First team gets the point.",
+        "Here are the rules. Answer can be a word or a number. You have only twenty seconds. Give answer only in reverse order. Whoever answers first in reverse order gets the point.",
         "rules"
     );
 }
@@ -191,7 +200,7 @@ function goExample(){
     example.classList.remove("hidden");
 
     speak(
-        "Here is an example. If the answer is towel, you must first answer lewot. Then the correct answer is towel.",
+        "Here is an example. If the answer is towel, answer lewot. Then the correct answer is towel.",
         "example"
     );
 }
@@ -222,12 +231,19 @@ function startLevel4(){
 
 function loadQuestion(){
     let q=levels["level"+level][index];
+    let questionNo=index+1;
 
-    question.innerText=q.q;
+    question.innerText=
+        "Question " + questionNo + "\n\n" + q.q;
+
     answer.innerHTML="";
     levelTitle.innerText="LEVEL "+level;
 
-    speak("Question. "+q.q.replace(/\n/g,"... "), "puzzle");
+    speak(
+        "Question number " + questionNo + ". " +
+        q.q.replace(/\n/g,"... "),
+        "puzzle"
+    );
 
     startTimer();
 }
@@ -252,11 +268,15 @@ function startTimer(){
 function showAnswer(){
     let q=levels["level"+level][index];
 
+    let imageUrl =
+        "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=500";
+
     if(level===4){
         answer.innerHTML=
+            "<img class='answer-image' src='"+imageUrl+"'>" +
             "<div class='correct-answer'>"+q.a+"</div>";
 
-        speak("Correct answer is "+q.a, "answer");
+        speak("Correct answer is " + q.a, "answer");
         return;
     }
 
@@ -264,10 +284,12 @@ function showAnswer(){
 
     answer.innerHTML=
         "<div class='reverse-answer'>"+rev+"</div>"+
+        "<img class='answer-image' src='"+imageUrl+"'>" +
         "<div class='correct-answer'>"+q.a+"</div>";
 
     speak(
-        "Reverse answer is "+rev+". Correct answer is "+q.a,
+        "Reverse answer is " + rev +
+        ". Correct answer is " + q.a,
         "answer"
     );
 }
