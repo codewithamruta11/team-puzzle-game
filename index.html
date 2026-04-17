@@ -43,7 +43,9 @@ button{
     color:white;
 }
 
-button:hover{transform:scale(1.08);}
+button:hover{
+    transform:scale(1.08);
+}
 
 .timer{
     font-size:72px;
@@ -187,34 +189,40 @@ level3:[
 ]
 };
 
-function speak(text, role="female", style="normal"){
+function speak(text, style="normal"){
     speechSynthesis.cancel();
 
-    const msg=new SpeechSynthesisUtterance(text);
-    const voices=speechSynthesis.getVoices();
+    const msg = new SpeechSynthesisUtterance(text);
+    const voices = speechSynthesis.getVoices();
 
-    let indianVoices=voices.filter(v =>
-        v.lang.includes("en-IN") ||
-        v.name.toLowerCase().includes("india")
-    );
+    let voice =
+        voices.find(v => v.lang === "en-IN") ||
+        voices.find(v => v.lang.includes("en-IN")) ||
+        voices.find(v => v.lang.includes("en-GB")) ||
+        voices[0];
 
-    let voice=indianVoices[0] || voices[0];
-    msg.voice=voice;
+    msg.voice = voice;
+    msg.volume = 1;
 
     if(style==="welcome"){
-        msg.rate=0.75;
-        msg.pitch=1.2;
-    }else if(style==="rules"){
-        msg.rate=0.72;
-        msg.pitch=0.95;
-    }else if(style==="puzzle"){
-        msg.rate=0.65;
-        msg.pitch=1.1;
-    }else if(style==="answer"){
-        msg.rate=0.68;
-        msg.pitch=1;
-    }else{
-        msg.rate=0.75;
+        msg.rate = 0.72;
+        msg.pitch = 1.15;
+    }
+    else if(style==="rules"){
+        msg.rate = 0.68;
+        msg.pitch = 1.05;
+    }
+    else if(style==="puzzle"){
+        msg.rate = 0.58;
+        msg.pitch = 1.08;
+    }
+    else if(style==="answer"){
+        msg.rate = 0.62;
+        msg.pitch = 1.02;
+    }
+    else{
+        msg.rate = 0.68;
+        msg.pitch = 1.05;
     }
 
     speechSynthesis.speak(msg);
@@ -222,8 +230,7 @@ function speak(text, role="female", style="normal"){
 
 function startIntro(){
     speak(
-        "Welcome Team Gantec... Are you ready for the most exciting puzzle arena...",
-        "female",
+        "Welcome Team Gantec... Are you ready for today’s exciting puzzle challenge... Let the fun begin.",
         "welcome"
     );
 
@@ -232,11 +239,10 @@ function startIntro(){
 
     setTimeout(()=>{
         speak(
-            "Please read the rules carefully before we start.",
-            "male",
+            "Please read the rules carefully. You will get twenty seconds for every puzzle. The first answer must be given in reverse order. The first team to answer gets the point.",
             "rules"
         );
-    },4000);
+    },4500);
 }
 
 function goExample(){
@@ -244,8 +250,7 @@ function goExample(){
     example.classList.remove("hidden");
 
     speak(
-        "Here is your example puzzle...",
-        "male",
+        "Here is one example puzzle for everyone.",
         "rules"
     );
 }
@@ -255,8 +260,7 @@ function startGame(){
     game.classList.remove("hidden");
 
     speak(
-        "Level one starts now...",
-        "female",
+        "Level one starts now. Best of luck teams.",
         "welcome"
     );
 
@@ -264,17 +268,16 @@ function startGame(){
 }
 
 function loadQuestion(){
-    let q=levels["level"+level][index];
+    let q = levels["level"+level][index];
 
-    question.innerText=q.q;
-    answer.innerHTML="";
-    levelTitle.innerText="LEVEL "+level;
+    question.innerText = q.q;
+    answer.innerHTML = "";
+    levelTitle.innerText = "LEVEL " + level;
 
-    let poetic=q.q.replace(/\n/g,"... ");
+    let poetic = q.q.replace(/\n/g,"... ");
 
     speak(
-        "Here is your puzzle... "+poetic,
-        "female",
+        "Listen carefully... " + poetic,
         "puzzle"
     );
 
@@ -293,24 +296,23 @@ function startTimer(){
 
         if(t<=0){
             clearInterval(timerInt);
-            speak("Time is up...", "female", "rules");
+            speak("Time is up.", "rules");
         }
     },1000);
 }
 
 function showAnswer(){
-    let q=levels["level"+level][index];
-    let rev=q.a.split("").reverse().join("");
+    let q = levels["level"+level][index];
+    let rev = q.a.split("").reverse().join("");
 
-    answer.innerHTML=
-        "<div class='reverse-answer'>"+rev+"</div>"+
-        "<img class='answer-img' src='https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=400'>"+
-        "<div class='correct-answer'>"+q.a+"</div>";
+    answer.innerHTML =
+        "<div class='reverse-answer'>" + rev + "</div>" +
+        "<img class='answer-img' src='https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=400'>" +
+        "<div class='correct-answer'>" + q.a + "</div>";
 
     speak(
-        "Amazing... reverse answer is "+rev+
-        "... correct answer is "+q.a,
-        "male",
+        "The reverse answer is... " + rev +
+        ". The correct answer is... " + q.a,
         "answer"
     );
 }
@@ -318,19 +320,18 @@ function showAnswer(){
 function nextQuestion(){
     index++;
 
-    if(index>=levels["level"+level].length){
+    if(index >= levels["level"+level].length){
         level++;
-        index=0;
+        index = 0;
 
-        if(level>3){
-            speak("Congratulations... game completed...", "male", "answer");
+        if(level > 3){
+            speak("Congratulations teams. The game is completed.", "answer");
             alert("🏆 GAME COMPLETED");
             return;
         }
 
         speak(
-            "Fantastic... level completed... moving to level "+level,
-            "male",
+            "Level completed. Moving to level " + level,
             "answer"
         );
     }
