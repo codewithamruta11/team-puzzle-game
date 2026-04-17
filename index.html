@@ -3,176 +3,71 @@
 <head>
   <title>Team Puzzle Championship</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: linear-gradient(135deg, #0f172a, #1e3a8a);
-      color: white;
-      padding: 30px;
-      margin: 0;
-    }
-    .box {
-      max-width: 1100px;
-      margin: auto;
-      background: white;
-      color: black;
-      padding: 50px;
-      border-radius: 24px;
-      min-height: 500px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    }
-    button {
-      padding: 14px 24px;
-      font-size: 18px;
-      margin: 10px;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-    }
-    .big { font-size: 48px; }
-    .timer { font-size: 60px; font-weight: bold; }
-    .hidden { display: none; }
+    body { font-family: Arial, sans-serif; text-align:center; background: linear-gradient(135deg,#0f172a,#1e3a8a); color:white; padding:30px; margin:0; }
+    .box { max-width:1100px; margin:auto; background:white; color:black; padding:50px; border-radius:24px; min-height:520px; box-shadow:0 10px 30px rgba(0,0,0,0.25); }
+    .hidden { display:none; }
+    button { padding:14px 24px; font-size:18px; margin:10px; border:none; border-radius:12px; cursor:pointer; }
+    .timer { font-size:56px; font-weight:bold; }
+    img.answer { max-width:240px; border-radius:16px; margin-top:20px; }
   </style>
 </head>
 <body>
-  <div class="box">
-    <div id="intro">
-      <h1 class="big">🎉 Welcome Gantec Team 🎉</h1>
-      <p id="welcomeText">Get ready for an exciting and fun team challenge!</p>
-      <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=900" style="width:100%;max-height:260px;object-fit:cover;border-radius:16px;" />
-      <br><br>
-      <button onclick="playWelcomeAndShowRules()">▶ Start Fun Game</button>
-    </div>
-
-    <div id="rules" class="hidden" style="background-image:url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900');background-size:cover;border-radius:20px;padding:30px;">
-      <h1>📋 Game Rules</h1>
-      <p>1. Teams must answer in <b>reverse order</b></p>
-      <p>2. Example: towel → <b>lewot</b></p>
-      <p>3. First reveal reverse answer, then correct answer</p>
-      <p>4. 20 seconds timer for each question</p>
-      <button onclick="startGame()">Begin Round</button>
-    </div>
-
-    <div id="game" class="hidden" style="border-radius:20px;padding:30px; background:white; color:black;">
-      <h1>🏆 Team Puzzle Championship</h1>
-      <h2 id="question"></h2>
-      <div class="timer" id="timer">20</div><p style="font-size:18px;color:#64748b;">⏱ Time remaining</p>
-      <button onclick="showBothAnswers()">Show Answer</button>
-      <button onclick="nextQuestion()">Next</button>
-      <h2 id="answer"></h2>
-    </div>
+<div class="box">
+  <div id="intro">
+    <h1>🎉 Welcome Gantec Team 🎉</h1>
+    <p>Ready for a fun puzzle challenge?</p>
+    <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=900" style="width:100%;max-height:260px;object-fit:cover;border-radius:16px;"/>
+    <br><br>
+    <button onclick="startWelcomeFlow()">▶ Start</button>
   </div>
 
-  <script>
-    const levels = {
-      easy: [
-        { q: 'What has hands but cannot clap?', a: 'Clock', img: 'https://images.unsplash.com/photo-1501139083538-0139583c060f?w=400' },
-        { q: 'What gets wetter the more it dries?', a: 'Towel', img: 'https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400' },
-        { q: '2 + 8 × 2 = ?', a: '18', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400' },
-        { q: 'How many sides does a hexagon have?', a: '6', img: 'https://images.unsplash.com/photo-1633493702341-4d04841df53b?w=400' },
-        { q: 'What has keys but no locks?', a: 'Piano', img: 'https://images.unsplash.com/photo-1507838153414-b4b713384a76?w=400' },
-        { q: 'What has a neck but no head?', a: 'Bottle', img: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400' },
-        { q: '10 ÷ 2 + 3 = ?', a: '8', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400' },
-        { q: 'What has teeth but cannot bite?', a: 'Comb', img: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400' },
-        { q: 'How many days in a week?', a: '7', img: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400' },
-        { q: 'What comes once in a minute?', a: 'M', img: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400' }
-      ],
-      medium: [
-        { q: 'I speak without a mouth. What am I?', a: 'Echo', img: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400' },
-        { q: 'What has cities but no houses?', a: 'Map', img: 'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=400' },
-        { q: '15 + 15 ÷ 3 = ?', a: '20', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400' },
-        { q: 'How many months have 28 days?', a: '12', img: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400' },
-        { q: 'What gets bigger the more you take away?', a: 'Hole', img: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400' },
-        { q: '25 × 2 = ?', a: '50', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400' },
-        { q: 'What kind of room has no doors?', a: 'Mushroom', img: 'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=400' },
-        { q: 'How many continents?', a: '7', img: 'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=400' },
-        { q: 'What has one eye but cannot see?', a: 'Needle', img: 'https://images.unsplash.com/photo-1586864387967-d02ef85d93e8?w=400' },
-        { q: 'Hours in 2 days?', a: '48', img: 'https://images.unsplash.com/photo-1501139083538-0139583c060f?w=400' }
-      ],
-      hard: [
-        { q: 'The more you take, the more you leave behind.', a: 'Footsteps', img: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=400' },
-        { q: 'I am always coming but never arrive.', a: 'Tomorrow', img: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400' },
-        { q: '999 ÷ 3 = ?', a: '333', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400' },
-        { q: 'Square root of 144?', a: '12', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400' },
-        { q: 'Forward I am heavy, backward I am not.', a: 'Ton', img: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400' },
-        { q: 'What can be broken without touching?', a: 'Promise', img: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400' },
-        { q: '11 × 11 = ?', a: '121', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400' },
-        { q: 'Degrees in a triangle?', a: '180', img: 'https://images.unsplash.com/photo-1633493702341-4d04841df53b?w=400' },
-        { q: 'What word becomes shorter with two letters?', a: 'Short', img: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400' },
-        { q: 'What has branches but no leaves?', a: 'Bank', img: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400' }
-      ]};
-    let currentLevel = 'easy';
-    let questions = levels[currentLevel];
+  <div id="rules" class="hidden">
+    <h1>📋 Rules</h1>
+    <p>• You have <b>20 seconds</b> to answer each puzzle.</p>
+    <p>• First give the answer in <b>reverse order</b>.</p>
+    <p>• Then give the <b>correct answer</b>.</p>
+    <p>• Some puzzles have <b>number answers</b> hidden in clues.</p>
+    <button onclick="showExample()">Next: Example</button>
+  </div>
 
-    let index = 0;
-    let timerInterval;
+  <div id="example" class="hidden">
+    <h1>💡 Reference Example</h1>
+    <h2>What gets wetter the more it dries?</h2>
+    <p>Reverse: <b>lewot</b></p>
+    <p>Correct: <b>Towel</b></p>
+    <img class="answer" src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400"/>
+    <br><br>
+    <button onclick="startGame()">🎮 Start Game</button>
+  </div>
 
-    function playSound(freq = 800, duration = 150) {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.frequency.value = freq;
-      gain.gain.value = 0.04;
-      osc.start();
-      osc.stop(ctx.currentTime + duration / 1000);
-    }
+  <div id="game" class="hidden">
+    <h1>🏆 Puzzle Challenge</h1>
+    <h2 id="question"></h2>
+    <div class="timer" id="timer">20</div>
+    <button onclick="showAnswer()">Show Answer</button>
+    <button onclick="nextQuestion()">Next</button>
+    <div id="answer"></div>
+  </div>
+</div>
 
-    function playVoiceLikeMessage(text, freq=600) {
-      playSound(freq, 220);
-      const el = document.getElementById('welcomeText');
-      if (el && text) el.innerText = text;
-    }
-
-    function playWelcomeAndShowRules() {
-      playVoiceLikeMessage('Welcome Gantec employees, are you ready for fun?');
-      setTimeout(() => playSound(1000, 400), 500);
-      setTimeout(() => showRules(), 1200);
-    }
-
-    function showRules() {
-      playSound(700);
-      document.getElementById('intro').classList.add('hidden');
-      document.getElementById('rules').classList.remove('hidden');
-    }
-
-    function startGame() {
-      playSound(1000);
-      document.getElementById('rules').classList.add('hidden');
-      document.getElementById('game').classList.remove('hidden');
-      loadQuestion();
-    }
-
-    function loadQuestion() {
-      document.getElementById('question').innerText = questions[index].q;
-      document.getElementById('answer').innerText = '';
-      startTimer();
-    }
-
-    function startTimer() {
-      let time = 20;
-      document.getElementById('timer').innerText = time;
-      clearInterval(timerInterval);
-      timerInterval = setInterval(() => {
-        time--;
-        document.getElementById('timer').innerText = time;
-        playSound(1200, 60);
-        if (time <= 0) clearInterval(timerInterval);
-      }, 1000);
-    }
-
-    function showBothAnswers() {
-      const ans = questions[index].a;
-      const rev = ans.split('').reverse().join('').toLowerCase();
-      document.getElementById('answer').innerHTML = '🔄 Reverse: <b>' + rev + '</b><br><br>✅ Correct: <b>' + ans + '</b><br><br><img src="' + questions[index].img + '" style="max-width:260px;border-radius:16px;box-shadow:0 6px 16px rgba(0,0,0,0.2);" />';
-      playSound(1400, 300);
-    }
-
-    function nextQuestion() {
-      index = (index + 1) % questions.length;
-      loadQuestion();
-    }
-  </script>
+<script>
+const questions = [
+  { q:'I dry your body yet become wet.
+Who am I?', a:'Towel', img:'https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400' },
+  { q:'I have hands but never clap.
+Who am I?', a:'Clock', img:'https://images.unsplash.com/photo-1501139083538-0139583c060f?w=400' },
+  { q:'I appear in a week twice, in a year once, never in a day.
+What am I?', a:'E', img:'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400' }
+];
+let index=0, timerInt;
+function beep(freq=800,d=0.2){ const ctx=new (window.AudioContext||window.webkitAudioContext)(); const o=ctx.createOscillator(); const g=ctx.createGain(); o.connect(g); g.connect(ctx.destination); o.frequency.value=freq; g.gain.value=0.04; o.start(); o.stop(ctx.currentTime+d); }
+function startWelcomeFlow(){ beep(700,0.3); setTimeout(()=>beep(1000,0.4),400); setTimeout(()=>{ document.getElementById('intro').classList.add('hidden'); document.getElementById('rules').classList.remove('hidden'); },900); }
+function showExample(){ beep(900,0.2); document.getElementById('rules').classList.add('hidden'); document.getElementById('example').classList.remove('hidden'); }
+function startGame(){ beep(1100,0.3); document.getElementById('example').classList.add('hidden'); document.getElementById('game').classList.remove('hidden'); loadQuestion(); }
+function loadQuestion(){ document.getElementById('question').innerText=questions[index].q; document.getElementById('answer').innerHTML=''; startTimer(); }
+function startTimer(){ let t=20; document.getElementById('timer').innerText=t; clearInterval(timerInt); timerInt=setInterval(()=>{ t--; document.getElementById('timer').innerText=t; if(t<=0) clearInterval(timerInt); },1000); }
+function showAnswer(){ const q=questions[index]; const rev=q.a.split('').reverse().join('').toLowerCase(); document.getElementById('answer').innerHTML='🔄 Reverse: <b>'+rev+'</b><br><br>✅ Correct: <b>'+q.a+'</b><br><img class="answer" src="'+q.img+'"/>'; beep(1300,0.25); }
+function nextQuestion(){ index=(index+1)%questions.length; loadQuestion(); }
+</script>
 </body>
 </html>
