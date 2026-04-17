@@ -64,11 +64,45 @@
   </div>
 
   <script>
-    const questions = [
-      { q: 'I speak in silence,\nI move without feet,\nI vanish in light,\nYet follow you at night.\nWho am I?', a: 'Shadow' },
-      { q: 'No lungs I own, yet breathe I do,\nNo mouth I have, yet whisper to you,\nI dance through trees and windows wide,\nUnseen force that cannot hide.\nWhat am I?', a: 'Wind' },
-      { q: 'Born in fire, shaped by hand,\nI mark all time across the land,\nI have no life, yet stories keep,\nIn lines where memories softly sleep.\nWhat am I?', a: 'Book' }
-    ];
+    const levels = {
+      easy: [
+        { q: 'What has hands but cannot clap?', a: 'Clock', img: 'https://images.unsplash.com/photo-1501139083538-0139583c060f?w=400' },
+        { q: 'What gets wetter the more it dries?', a: 'Towel', img: 'https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400' },
+        { q: '2 + 8 × 2 = ?', a: '18', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400' },
+        { q: 'How many sides does a hexagon have?', a: '6', img: 'https://images.unsplash.com/photo-1633493702341-4d04841df53b?w=400' },
+        { q: 'What has keys but no locks?', a: 'Piano', img: 'https://images.unsplash.com/photo-1507838153414-b4b713384a76?w=400' },
+        { q: 'What has a neck but no head?', a: 'Bottle', img: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400' },
+        { q: '10 ÷ 2 + 3 = ?', a: '8', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400' },
+        { q: 'What has teeth but cannot bite?', a: 'Comb', img: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400' },
+        { q: 'How many days in a week?', a: '7', img: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400' },
+        { q: 'What comes once in a minute?', a: 'M', img: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400' }
+      ],
+      medium: [
+        { q: 'I speak without a mouth. What am I?', a: 'Echo', img: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400' },
+        { q: 'What has cities but no houses?', a: 'Map', img: 'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=400' },
+        { q: '15 + 15 ÷ 3 = ?', a: '20', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400' },
+        { q: 'How many months have 28 days?', a: '12', img: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400' },
+        { q: 'What gets bigger the more you take away?', a: 'Hole', img: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400' },
+        { q: '25 × 2 = ?', a: '50', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400' },
+        { q: 'What kind of room has no doors?', a: 'Mushroom', img: 'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=400' },
+        { q: 'How many continents?', a: '7', img: 'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=400' },
+        { q: 'What has one eye but cannot see?', a: 'Needle', img: 'https://images.unsplash.com/photo-1586864387967-d02ef85d93e8?w=400' },
+        { q: 'Hours in 2 days?', a: '48', img: 'https://images.unsplash.com/photo-1501139083538-0139583c060f?w=400' }
+      ],
+      hard: [
+        { q: 'The more you take, the more you leave behind.', a: 'Footsteps', img: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=400' },
+        { q: 'I am always coming but never arrive.', a: 'Tomorrow', img: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400' },
+        { q: '999 ÷ 3 = ?', a: '333', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400' },
+        { q: 'Square root of 144?', a: '12', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400' },
+        { q: 'Forward I am heavy, backward I am not.', a: 'Ton', img: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400' },
+        { q: 'What can be broken without touching?', a: 'Promise', img: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400' },
+        { q: '11 × 11 = ?', a: '121', img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400' },
+        { q: 'Degrees in a triangle?', a: '180', img: 'https://images.unsplash.com/photo-1633493702341-4d04841df53b?w=400' },
+        { q: 'What word becomes shorter with two letters?', a: 'Short', img: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400' },
+        { q: 'What has branches but no leaves?', a: 'Bank', img: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400' }
+      ]};
+    let currentLevel = 'easy';
+    let questions = levels[currentLevel];
 
     let index = 0;
     let timerInterval;
@@ -131,7 +165,7 @@
     function showBothAnswers() {
       const ans = questions[index].a;
       const rev = ans.split('').reverse().join('').toLowerCase();
-      document.getElementById('answer').innerHTML = '🔄 Reverse: <b>' + rev + '</b><br><br>✅ Correct: <b>' + ans + '</b>';
+      document.getElementById('answer').innerHTML = '🔄 Reverse: <b>' + rev + '</b><br><br>✅ Correct: <b>' + ans + '</b><br><br><img src="' + questions[index].img + '" style="max-width:260px;border-radius:16px;box-shadow:0 6px 16px rgba(0,0,0,0.2);" />';
       playSound(1400, 300);
     }
 
