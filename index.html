@@ -1,134 +1,256 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Team Puzzle Championship</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: linear-gradient(135deg, #0f172a, #1e3a8a);
-      color: white;
-      padding: 30px;
-      margin: 0;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gantec Team Puzzle Challenge</title>
 
-    .box {
-      max-width: 1100px;
-      margin: auto;
-      background: white;
-      color: black;
-      padding: 50px;
-      border-radius: 24px;
-      min-height: 520px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    }
+<style>
+body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#0f172a,#1e3a8a);
+    color:white;
+    text-align:center;
+    padding:30px;
+}
 
-    .hidden {
-      display: none;
-    }
+.box{
+    max-width:1100px;
+    margin:auto;
+    background:white;
+    color:black;
+    padding:50px;
+    border-radius:24px;
+    min-height:620px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+    animation: slideIn 1s ease;
+}
 
-    button {
-      padding: 14px 24px;
-      font-size: 18px;
-      margin: 10px;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      background: #2563eb;
-      color: white;
-    }
+.hidden{
+    display:none;
+}
 
-    .timer {
-      font-size: 56px;
-      font-weight: bold;
-      margin: 20px 0;
-    }
+button{
+    padding:14px 24px;
+    font-size:18px;
+    margin:10px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    background:#2563eb;
+    color:white;
+    transition: all 0.3s ease;
+}
 
-    img.answer {
-      max-width: 240px;
-      border-radius: 16px;
-      margin-top: 20px;
-    }
+button:hover{
+    transform: scale(1.08);
+}
 
-    #question {
-      white-space: pre-line;
-      line-height: 1.6;
+.hero{
+    width:100%;
+    max-height:300px;
+    border-radius:20px;
+    object-fit:cover;
+}
+
+.tagline{
+    font-size:28px;
+    font-weight:bold;
+    animation: glow 2s infinite alternate;
+}
+
+.timer{
+    font-size:60px;
+    font-weight:bold;
+    margin:20px 0;
+    animation: pulse 1s infinite;
+}
+
+.answer-img{
+    max-width:220px;
+    border-radius:16px;
+    margin-top:20px;
+}
+
+#question{
+    white-space:pre-line;
+    line-height:1.8;
+    font-size:28px;
+    animation: fadeUp 0.8s ease;
+}
+
+.level-tag{
+    font-size:22px;
+    color:#2563eb;
+    font-weight:bold;
+}
+
+@keyframes slideIn{
+    from{
+        opacity:0;
+        transform: translateY(30px);
     }
-  </style>
+    to{
+        opacity:1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes glow{
+    from{
+        opacity:0.6;
+        transform: scale(1);
+    }
+    to{
+        opacity:1;
+        transform: scale(1.05);
+    }
+}
+
+@keyframes pulse{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.08);}
+    100%{transform:scale(1);}
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+</style>
 </head>
+
 <body>
 
 <div class="box">
 
-  <!-- INTRO -->
-  <div id="intro">
-    <h1>🎉 Welcome Gantec Team 🎉</h1>
-    <p>Ready for a fun puzzle challenge?</p>
-    <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=900"
-         style="width:100%;max-height:260px;object-fit:cover;border-radius:16px;" />
+<!-- INTRO -->
+<div id="intro">
+    <h1 style="font-size:48px;">🎉 Gantec Fun Puzzle Challenge 🎉</h1>
+    <p class="tagline">Think Fast • Answer Smart • Win Big 🏆</p>
+    <p style="font-size:22px;">Welcome Team! Ready for today’s exciting challenge?</p>
+
+    <img class="hero"
+         src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200" />
+
     <br><br>
-    <button id="startBtn">▶ Start</button>
-  </div>
+    <button onclick="goRules()">▶ Start Game</button>
+</div>
 
-  <!-- RULES -->
-  <div id="rules" class="hidden">
-    <h1>📋 Rules</h1>
-    <p>• You have <b>20 seconds</b> to answer each puzzle.</p>
-    <p>• First answer in <b>reverse order</b>.</p>
-    <p>• Then answer in <b>correct order</b>.</p>
-    <p>• Some puzzles may have <b>number answers</b>.</p>
-    <button id="rulesNextBtn">Next: Example</button>
-  </div>
+<!-- RULES -->
+<div id="rules" class="hidden">
+    <h1>📋 Game Rules</h1>
+    <p>1) You will get puzzle questions with answers as <b>word or number</b>.</p>
+    <p>2) You have only <b>20 seconds</b> to answer each puzzle.</p>
+    <p>3) First answer must be in <b>reverse order</b>.</p>
+    <p>4) Team answering reverse first gets the point.</p>
 
-  <!-- EXAMPLE -->
-  <div id="example" class="hidden">
+    <button onclick="goExample()">Next: Example</button>
+</div>
+
+<!-- EXAMPLE -->
+<div id="example" class="hidden">
     <h1>💡 Reference Example</h1>
     <h2>What gets wetter the more it dries?</h2>
+
     <p>Reverse: <b>lewot</b></p>
     <p>Correct: <b>Towel</b></p>
-    <img class="answer"
-         src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400" />
-    <br><br>
-    <button id="gameStartBtn">🎮 Start Game</button>
-  </div>
 
-  <!-- GAME -->
-  <div id="game" class="hidden">
+    <img class="answer-img"
+         src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400" />
+
+    <br><br>
+    <button onclick="startGame()">🎮 Start Level 1</button>
+</div>
+
+<!-- GAME -->
+<div id="game" class="hidden">
+    <div class="level-tag" id="levelTag">LEVEL 1</div>
     <h1>🏆 Puzzle Challenge</h1>
+
     <h2 id="question"></h2>
+
     <div class="timer" id="timer">20</div>
-    <button id="answerBtn">Show Answer</button>
-    <button id="nextBtn">Next</button>
+
+    <button onclick="showAnswer()">Show Answer</button>
+    <button onclick="nextQuestion()">Next</button>
+
     <div id="answer"></div>
-  </div>
+</div>
 
 </div>
 
 <script>
-  const questions = [
-    {
-      q: "I dry your body yet become wet.\nWho am I?",
-      a: "Towel",
-      img: "https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400"
-    },
-    {
-      q: "I have hands but never clap.\nWho am I?",
-      a: "Clock",
-      img: "https://images.unsplash.com/photo-1501139083538-0139583c060f?w=400"
-    },
-    {
-      q: "I appear in a week twice,\nin a year once,\nnever in a day.\nWhat am I?",
-      a: "E",
-      img: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400"
-    }
-  ];
+const levels = {
+    level1: [
+        {
+            q:"Q1.\nI have hands but never clap.\nWho am I?",
+            a:"Clock",
+            img:"https://images.unsplash.com/photo-1501139083538-0139583c060f?w=400"
+        },
+        {
+            q:"Q2.\nI dry your body\nbut become wet.\nWho am I?",
+            a:"Towel",
+            img:"https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400"
+        },
+        {
+            q:"Q3.\nI appear twice in week,\nonce in year,\nnever in day.\nWhat am I?",
+            a:"E",
+            img:"https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400"
+        },
+        {
+            q:"Q4.\nCount the corners\nof a square room.\nWhat number?",
+            a:"4",
+            img:"https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=400"
+        },
+        {
+            q:"Q5.\nI have keys but no locks.\nWho am I?",
+            a:"Piano",
+            img:"https://images.unsplash.com/photo-1507838153414-b4b713384a76?w=400"
+        }
+    ],
+    level2: [
+        {
+            q:"Q1.\nThe more you take,\nthe more you leave behind.\nWhat am I?",
+            a:"Footsteps",
+            img:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=400"
+        },
+        {
+            q:"Q2.\nI am always coming\nbut never arrive.\nWhat am I?",
+            a:"Tomorrow",
+            img:"https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400"
+        },
+        {
+            q:"Q3.\nI speak without mouth,\nhear without ears.\nWhat am I?",
+            a:"Echo",
+            img:"https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400"
+        },
+        {
+            q:"Q4.\nHow many months\nhave 28 days?",
+            a:"12",
+            img:"https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400"
+        },
+        {
+            q:"Q5.\nWhat has branches\nbut no leaves?",
+            a:"Bank",
+            img:"https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400"
+        }
+    ]
+};
 
-  let index = 0;
-  let timerInterval;
+let currentLevel = "level1";
+let questions = levels[currentLevel];
+let index = 0;
+let timerInterval;
 
-  function beep(freq = 800, duration = 0.2) {
+function beep(freq=800,duration=0.2){
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
@@ -141,73 +263,86 @@
 
     osc.start();
     osc.stop(ctx.currentTime + duration);
-  }
+}
 
-  function showSlide(hideId, showId) {
-    document.getElementById(hideId).classList.add("hidden");
-    document.getElementById(showId).classList.remove("hidden");
-  }
+function goRules(){
+    beep();
+    intro.classList.add("hidden");
+    rules.classList.remove("hidden");
+}
 
-  function loadQuestion() {
-    const q = questions[index];
-    document.getElementById("question").innerText = q.q;
+function goExample(){
+    beep();
+    rules.classList.add("hidden");
+    example.classList.remove("hidden");
+}
+
+function startGame(){
+    beep(1000);
+    example.classList.add("hidden");
+    game.classList.remove("hidden");
+    loadQuestion();
+}
+
+function loadQuestion(){
+    document.getElementById("levelTag").innerText =
+        currentLevel === "level1" ? "LEVEL 1" : "LEVEL 2";
+
+    const q = document.getElementById("question");
+    q.style.animation = "none";
+    setTimeout(() => {
+        q.style.animation = "fadeUp 0.8s ease";
+    }, 10);
+
+    q.innerText = questions[index].q;
+
     document.getElementById("answer").innerHTML = "";
     startTimer();
-  }
+}
 
-  function startTimer() {
+function startTimer(){
     let t = 20;
     document.getElementById("timer").innerText = t;
 
     clearInterval(timerInterval);
 
     timerInterval = setInterval(() => {
-      t--;
-      document.getElementById("timer").innerText = t;
+        t--;
+        document.getElementById("timer").innerText = t;
 
-      if (t <= 0) {
-        clearInterval(timerInterval);
-      }
+        if(t <= 0){
+            clearInterval(timerInterval);
+        }
     }, 1000);
-  }
+}
 
-  function showAnswer() {
-    const q = questions[index];
-    const rev = q.a.split("").reverse().join("").toLowerCase();
+function showAnswer(){
+    let q = questions[index];
+    let rev = q.a.split("").reverse().join("").toLowerCase();
 
     document.getElementById("answer").innerHTML =
-      "🔄 Reverse: <b>" + rev + "</b><br><br>" +
-      "✅ Correct: <b>" + q.a + "</b><br>" +
-      '<img class="answer" src="' + q.img + '" />';
+        "🔄 Reverse: <b>" + rev + "</b><br><br>" +
+        "✅ Correct: <b>" + q.a + "</b><br>" +
+        "<img class='answer-img' src='" + q.img + "'>";
+}
 
-    beep(1300, 0.25);
-  }
+function nextQuestion(){
+    index++;
 
-  function nextQuestion() {
-    index = (index + 1) % questions.length;
+    if(index >= questions.length){
+        if(currentLevel === "level1"){
+            currentLevel = "level2";
+            questions = levels.level2;
+            index = 0;
+            alert("🎉 LEVEL 2 STARTS NOW!");
+        } else {
+            alert("🏆 GAME COMPLETED!");
+            return;
+        }
+    }
+
     loadQuestion();
-  }
-
-  document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("startBtn").addEventListener("click", function () {
-      beep(700, 0.3);
-      showSlide("intro", "rules");
-    });
-
-    document.getElementById("rulesNextBtn").addEventListener("click", function () {
-      beep(900, 0.2);
-      showSlide("rules", "example");
-    });
-
-    document.getElementById("gameStartBtn").addEventListener("click", function () {
-      beep(1100, 0.3);
-      showSlide("example", "game");
-      loadQuestion();
-    });
-
-    document.getElementById("answerBtn").addEventListener("click", showAnswer);
-    document.getElementById("nextBtn").addEventListener("click", nextQuestion);
-  });
+}
 </script>
 
 </body>
