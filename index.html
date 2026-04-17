@@ -1,30 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Gantec Team Puzzle Challenge</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gantec Puzzle Challenge</title>
 
 <style>
 body{
     margin:0;
     font-family: Arial, sans-serif;
-    background: linear-gradient(135deg,#0f172a,#1e40af,#2563eb);
+    background: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1600') center/cover no-repeat fixed;
     color:white;
     text-align:center;
     padding:30px;
+    min-height:100vh;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: rgba(15,23,42,0.55);
+    backdrop-filter: blur(8px);
+    z-index:-1;
 }
 
 .box{
     max-width:1100px;
     margin:auto;
-    background:white;
-    color:black;
     padding:50px;
     border-radius:28px;
     min-height:650px;
-    box-shadow:0 12px 35px rgba(0,0,0,0.25);
-    animation: slideIn 1s ease;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(18px);
+    border:1px solid rgba(255,255,255,0.2);
+    box-shadow:0 12px 40px rgba(0,0,0,0.35);
+    animation: slideIn 0.8s ease;
 }
 
 .hidden{
@@ -38,10 +52,9 @@ button{
     border:none;
     border-radius:14px;
     cursor:pointer;
-    background:#2563eb;
+    background: linear-gradient(135deg,#2563eb,#1d4ed8);
     color:white;
     transition: all 0.3s ease;
-    box-shadow:0 4px 10px rgba(0,0,0,0.15);
 }
 
 button:hover{
@@ -53,7 +66,6 @@ button:hover{
     max-height:320px;
     border-radius:22px;
     object-fit:cover;
-    animation: zoomIn 2s ease;
 }
 
 .tagline{
@@ -66,7 +78,6 @@ button:hover{
     font-size:64px;
     font-weight:bold;
     margin:20px 0;
-    color:#1e40af;
     animation: pulse 1s infinite;
 }
 
@@ -74,7 +85,6 @@ button:hover{
     max-width:240px;
     border-radius:18px;
     margin-top:20px;
-    box-shadow:0 6px 18px rgba(0,0,0,0.2);
 }
 
 #question{
@@ -87,7 +97,6 @@ button:hover{
 .reverse-answer{
     font-size:54px;
     font-weight:bold;
-    color:#1e40af;
     margin-top:20px;
     animation: popIn 0.8s ease;
 }
@@ -96,14 +105,6 @@ button:hover{
     font-size:32px;
     font-weight:bold;
     margin-top:20px;
-    color:#111827;
-    animation: fadeUp 1s ease;
-}
-
-.level-tag{
-    font-size:24px;
-    color:#2563eb;
-    font-weight:bold;
 }
 
 @keyframes slideIn{
@@ -112,8 +113,8 @@ button:hover{
 }
 
 @keyframes glow{
-    from{opacity:0.6;transform:scale(1);}
-    to{opacity:1;transform:scale(1.05);}
+    from{opacity:0.7;transform:scale(1);}
+    to{opacity:1;transform:scale(1.04);}
 }
 
 @keyframes pulse{
@@ -127,70 +128,54 @@ button:hover{
     to{opacity:1;transform:translateY(0);}
 }
 
-@keyframes zoomIn{
-    from{transform:scale(0.95);}
-    to{transform:scale(1);}
-}
-
 @keyframes popIn{
     from{opacity:0;transform:scale(0.7);}
     to{opacity:1;transform:scale(1);}
 }
 </style>
 </head>
-
 <body>
 
 <div class="box">
 
 <div id="intro">
-    <h1 style="font-size:52px;">🎉 Gantec Fun Puzzle Challenge 🎉</h1>
-    <p class="tagline">Think Fast • Answer Smart • Win Big 🏆</p>
-    <p style="font-size:24px;">Welcome Team! Ready for the challenge?</p>
+    <h1 style="font-size:52px;">🎉 Gantec Puzzle Challenge 🎉</h1>
+    <p class="tagline">Think Fast • Reverse First • Win Big 🏆</p>
+    <p style="font-size:24px;">Welcome Team! Ready for the hardest challenge?</p>
 
     <img class="hero"
-         src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200" />
+         src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200">
 
     <br><br>
     <button onclick="playIntroMusic(); goRules()">▶ Start Game</button>
 </div>
 
 <div id="rules" class="hidden">
-    <h1>📋 Game Rules</h1>
-    <p>1) Answer can be <b>word or number</b></p>
-    <p>2) Only <b>20 seconds</b> per puzzle</p>
-    <p>3) Give answer in <b>reverse order first</b></p>
-    <p>4) First correct reverse answer gets point</p>
-
-    <button onclick="goExample()">Next: Example</button>
+    <h1>📋 Rules</h1>
+    <p>1) Puzzle answer can be word or number</p>
+    <p>2) You have only 20 seconds</p>
+    <p>3) First answer must be in reverse order</p>
+    <p>4) First team gets the point</p>
+    <button onclick="goExample()">Next</button>
 </div>
 
 <div id="example" class="hidden">
     <h1>💡 Example</h1>
     <h2>What gets wetter the more it dries?</h2>
-
     <div class="reverse-answer">LEWOT</div>
-
     <img class="answer-img"
-         src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400" />
-
+         src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400">
     <div class="correct-answer">TOWEL</div>
-
     <br><br>
     <button onclick="startGame()">🎮 Start Level 1</button>
 </div>
 
 <div id="game" class="hidden">
-    <div class="level-tag" id="levelTag">LEVEL 1</div>
-    <h1>🏆 Puzzle Challenge</h1>
-
+    <h1 id="levelTitle">LEVEL 1</h1>
     <h2 id="question"></h2>
-
     <div class="timer" id="timer">20</div>
-
     <button onclick="showAnswer()">Show Answer</button>
     <button onclick="nextQuestion()">Next</button>
-
     <div id="answer"></div>
 </div>
 
@@ -198,28 +183,22 @@ button:hover{
 
 <script>
 const levels = {
-    level1: [
-        {
-            q:"Q1.\nI have hands but never clap.\nWho am I?",
-            a:"CLOCK",
-            img:"https://images.unsplash.com/photo-1501139083538-0139583c060f?w=400"
-        },
-        {
-            q:"Q2.\nI dry your body\nbut become wet.\nWho am I?",
-            a:"TOWEL",
-            img:"https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=400"
-        },
-        {
-            q:"Q3.\nI appear twice in week,\nonce in year,\nnever in day.\nWhat am I?",
-            a:"E",
-            img:"https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400"
-        }
-    ]
+level1: [
+{ q:"Q1.\nI live in memory,\nforget when power dies,\nhelp programs run fast,\nwhat am I?", a:"RAM" },
+{ q:"Q2.\nI have many keys,\nopen no locks,\nused by every coder,\nwhat am I?", a:"KEYBOARD" },
+{ q:"Q3.\nRemove from me,\nI become bigger,\ndig me deeper,\nwhat am I?", a:"HOLE" },
+{ q:"Q4.\nI store millions,\nin rows and columns,\nused by apps daily,\nwhat am I?", a:"DATABASE" },
+{ q:"Q5.\nI dry your body,\nbecome wet myself,\nhang in bathroom,\nwhat am I?", a:"TOWEL" },
+{ q:"Q6.\nEight brothers together,\nmake one family,\nsmallest data unit,\nwhat is the family?", a:"BYTE" },
+{ q:"Q7.\nI shine at night,\nvanish by day,\nseen by all,\nwhat am I?", a:"MOON" },
+{ q:"Q8.\nI catch bugs,\nnever alive,\nhelp developers,\nwhat am I?", a:"DEBUGGER" },
+{ q:"Q9.\nI have a face,\nbut no eyes,\nshow time always,\nwhat am I?", a:"CLOCK" },
+{ q:"Q10.\nI protect websites\nfrom bad designs,\nmake them beautiful,\nwhat am I?", a:"CSS" }
+]
 };
 
-let currentLevel = "level1";
-let questions = levels[currentLevel];
-let index = 0;
+let level=1;
+let index=0;
 let timerInterval;
 
 function beep(freq=800,duration=0.2){
@@ -257,38 +236,37 @@ function startGame(){
 }
 
 function loadQuestion(){
-    document.getElementById("question").innerText = questions[index].q;
-    document.getElementById("answer").innerHTML = "";
+    let q=levels.level1[index];
+    document.getElementById("question").innerText=q.q;
+    document.getElementById("answer").innerHTML="";
     startTimer();
 }
 
 function startTimer(){
-    let t = 20;
-    document.getElementById("timer").innerText = t;
-
+    let t=20;
+    timer.innerText=t;
     clearInterval(timerInterval);
 
-    timerInterval = setInterval(()=>{
+    timerInterval=setInterval(()=>{
         t--;
-        document.getElementById("timer").innerText = t;
+        timer.innerText=t;
         if(t<=0) clearInterval(timerInterval);
     },1000);
 }
 
 function showAnswer(){
-    let q = questions[index];
-    let rev = q.a.split("").reverse().join("");
+    let q=levels.level1[index];
+    let rev=q.a.split("").reverse().join("");
 
-    document.getElementById("answer").innerHTML =
-        "<div class='reverse-answer'>" + rev + "</div>" +
-        "<img class='answer-img' src='" + q.img + "'>" +
-        "<div class='correct-answer'>" + q.a + "</div>";
+    answer.innerHTML=
+        "<div class='reverse-answer'>"+rev+"</div>"+
+        "<div class='correct-answer'>"+q.a+"</div>";
 }
 
 function nextQuestion(){
     index++;
-    if(index >= questions.length){
-        alert("🏆 GAME COMPLETED!");
+    if(index>=levels.level1.length){
+        alert("🏆 Level Completed!");
         return;
     }
     loadQuestion();
