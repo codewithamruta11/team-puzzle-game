@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Puzzle Arena</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gantec Puzzle Arena</title>
 
 <style>
 body{
     margin:0;
-    font-family:Arial;
+    font-family:Arial,sans-serif;
     color:white;
     text-align:center;
-    padding:20px;
+    padding:30px;
+    min-height:100vh;
     background:linear-gradient(-45deg,#0f172a,#1e3a8a,#7c3aed,#0ea5e9);
     background-size:400% 400%;
     animation:gradientMove 15s ease infinite;
@@ -18,40 +20,59 @@ body{
 .box{
     max-width:1100px;
     margin:auto;
-    padding:30px;
-    border-radius:20px;
-    background:rgba(255,255,255,0.1);
+    padding:50px;
+    border-radius:28px;
+    min-height:700px;
+    background:rgba(255,255,255,0.12);
+    backdrop-filter:blur(16px);
+    border:1px solid rgba(255,255,255,0.25);
+    box-shadow:0 12px 40px rgba(0,0,0,0.35);
 }
+.hidden{display:none;}
 button{
-    padding:12px 20px;
-    font-size:18px;
-    margin:8px;
+    padding:16px 32px;
+    font-size:22px;
+    margin:12px;
     border:none;
-    border-radius:10px;
+    border-radius:14px;
     cursor:pointer;
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+    color:white;
 }
-.timer{font-size:50px;margin:10px;}
-.correct-answer{font-size:28px;margin-top:15px;}
+.timer{font-size:72px;font-weight:bold;}
+.correct-answer{font-size:34px;margin-top:20px;}
+.answer-image{
+    width:260px;
+    border-radius:18px;
+    margin-top:20px;
+}
 
+/* SCOREBOARD */
 .scoreboard{
     display:flex;
-    justify-content:space-around;
+    justify-content:space-between;
     margin-bottom:20px;
 }
 .team{
-    background:rgba(0,0,0,0.3);
+    width:32%;
+    background:rgba(0,0,0,0.4);
     padding:15px;
-    border-radius:12px;
-    width:30%;
+    border-radius:14px;
 }
 .score{
     font-size:40px;
     font-weight:bold;
 }
+
+#question{
+    white-space:pre-line;
+    font-size:34px;
+}
+
 @keyframes gradientMove{
-    0%{background-position:0%}
-    50%{background-position:100%}
-    100%{background-position:0%}
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
 }
 </style>
 </head>
@@ -59,73 +80,142 @@ button{
 <body>
 <div class="box">
 
-<h1>🎉 PUZZLE ARENA 🎉</h1>
-
-<!-- 🔥 SCOREBOARD -->
+<!-- SCOREBOARD -->
 <div class="scoreboard">
-
-    <!-- 👉 CHANGE TEAM NAMES HERE -->
     <div class="team">
-        <h2 id="team1Name">Team A</h2>
+        <h2>Team A</h2>
         <div class="score" id="score1">0</div>
-        <button onclick="addPoint(1)">+ Point</button>
     </div>
-
     <div class="team">
-        <h2 id="team2Name">Team B</h2>
+        <h2>Team B</h2>
         <div class="score" id="score2">0</div>
-        <button onclick="addPoint(2)">+ Point</button>
     </div>
-
     <div class="team">
-        <h2 id="team3Name">Team C</h2>
+        <h2>Team C</h2>
         <div class="score" id="score3">0</div>
-        <button onclick="addPoint(3)">+ Point</button>
     </div>
-
 </div>
 
-<button onclick="resetScores()">🔄 Reset Scores</button>
+<!-- INTRO -->
+<div id="intro">
+    <h1 style="font-size:72px;">🎉 GANTEC PUZZLE ARENA 🎉</h1>
+    <h2 style="font-size:42px;">Think Fast ⚡ Win Big 🏆</h2>
+    <button onclick="startIntro()">▶ START THE SHOW</button>
+</div>
 
-<hr>
+<!-- RULES -->
+<div id="rules" class="hidden">
+    <h1 style="font-size:64px;">📋 GAME RULES</h1>
 
-<h2 id="question"></h2>
-<div class="timer" id="timer">15</div>
+    <div style="font-size:30px; line-height:2; text-align:left; max-width:800px; margin:auto;">
 
-<button onclick="showAnswer()">Show Answer</button>
-<button onclick="nextQuestion()">Next</button>
+        👉 Each team will listen carefully to the question displayed on screen.<br><br>
+        👉 You will have <b>15 seconds</b> to think and answer.<br><br>
+        👉 Answers must be given in <b>normal format</b> (no reverse).<br><br>
+        👉 The <b>first team to answer correctly</b> wins the point.<br><br>
+        👉 The host will decide which team answered first.<br><br>
+        👉 Maintain fair play and avoid shouting over others 😊<br><br>
+        👉 Get ready to think fast, stay sharp, and have fun! 🎉
 
-<div id="answer"></div>
+    </div>
+
+    <button onclick="goExample()">NEXT ➜</button>
+</div>
+
+<!-- EXAMPLE -->
+<div id="example" class="hidden">
+    <h1>💡 EXAMPLE</h1>
+    <h2>What gets wetter the more it dries?</h2>
+    <img class="answer-image"
+         src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=500">
+    <div class="correct-answer">TOWEL</div>
+    <button onclick="startGame()">🎮 START LEVEL 1</button>
+</div>
+
+<!-- GAME -->
+<div id="game" class="hidden">
+    <h1 id="levelTitle">LEVEL 1</h1>
+    <h2 id="question"></h2>
+    <div class="timer" id="timer">15</div>
+    <button onclick="showAnswer()">Show Answer</button>
+    <button onclick="nextQuestion()">Next</button>
+    <div id="answer"></div>
+</div>
 
 </div>
 
 <script>
 
+// SCORE SYSTEM (keyboard control)
+let scores=[0,0,0];
+
+function addPoint(team){
+    scores[team-1]++;
+    document.getElementById("score"+team).innerText=scores[team-1];
+}
+
+// press 1 / 2 / 3 to give points
+document.addEventListener("keydown", function(e){
+    if(e.key==="1") addPoint(1);
+    if(e.key==="2") addPoint(2);
+    if(e.key==="3") addPoint(3);
+});
+
+// GAME LOGIC
+let level=1;
 let index=0;
 let timerInt;
 
-// QUESTIONS
-const questions=[
-{q:"I live in memory, forget when power dies",a:"RAM"},
-{q:"I have keys but no locks",a:"KEYBOARD"},
-{q:"I dry your body",a:"TOWEL"},
-{q:"I shine at night",a:"MOON"},
-{q:"Remove from me I become bigger",a:"HOLE"}
-];
+const levels={
+level1:[
+{q:"I live in memory\nforget when power dies\nwhat am I?",a:"RAM"},
+{q:"I have many keys\nopen no locks\nwhat am I?",a:"KEYBOARD"},
+{q:"I dry your body\nbecome wet myself\nwhat am I?",a:"TOWEL"},
+{q:"I shine at night\nvanish by day\nwhat am I?",a:"MOON"},
+{q:"Remove from me\nI become bigger\nwhat am I?",a:"HOLE"}
+]
+};
 
-// SCORE
-let scores=[0,0,0];
+function speak(text){
+    speechSynthesis.cancel();
+    const msg=new SpeechSynthesisUtterance(text);
+    msg.rate=1;
+    msg.pitch=1.05;
+    speechSynthesis.speak(msg);
+}
 
-// LOAD QUESTION
+window.onload=function(){
+    setTimeout(()=>{
+        speak("Welcome to the Puzzle Arena. Think fast, answer smart, and win big.");
+    },500);
+}
+
+function startIntro(){
+    intro.classList.add("hidden");
+    rules.classList.remove("hidden");
+
+    speak("Each team will have fifteen seconds to answer. Answer normally. First correct team gets the point.");
+}
+
+function goExample(){
+    rules.classList.add("hidden");
+    example.classList.remove("hidden");
+}
+
+function startGame(){
+    example.classList.add("hidden");
+    game.classList.remove("hidden");
+    loadQuestion();
+}
+
 function loadQuestion(){
-    document.getElementById("question").innerText=
-        questions[index].q;
-
-    document.getElementById("answer").innerHTML="";
+    let q=levels["level"+level][index];
+    question.innerText=q.q;
+    answer.innerHTML="";
+    speak(q.q.replace(/\n/g," "));
     startTimer();
 }
 
-// TIMER
 function startTimer(){
     let t=15;
     timer.innerText=t;
@@ -134,45 +224,34 @@ function startTimer(){
     timerInt=setInterval(()=>{
         t--;
         timer.innerText=t;
-        if(t<=0) clearInterval(timerInt);
+
+        if(t<=0){
+            clearInterval(timerInt);
+            speak("Time is up");
+        }
     },1000);
 }
 
-// SHOW ANSWER
 function showAnswer(){
-    let q=questions[index];
-    document.getElementById("answer").innerHTML=
+    let q=levels["level"+level][index];
+
+    answer.innerHTML =
         "<div class='correct-answer'>"+q.a+"</div>";
+
+    speak("Correct answer is " + q.a);
 }
 
-// NEXT
 function nextQuestion(){
     index++;
-    if(index>=questions.length){
-        alert("Game Over!");
+
+    if(index>=levels["level"+level].length){
+        alert("🏆 GAME COMPLETED");
         return;
     }
+
     loadQuestion();
 }
 
-// ADD POINT
-function addPoint(team){
-    scores[team-1]++;
-    document.getElementById("score"+team).innerText=scores[team-1];
-}
-
-// RESET
-function resetScores(){
-    scores=[0,0,0];
-    document.getElementById("score1").innerText=0;
-    document.getElementById("score2").innerText=0;
-    document.getElementById("score3").innerText=0;
-}
-
-// START
-loadQuestion();
-
 </script>
-
 </body>
 </html>
