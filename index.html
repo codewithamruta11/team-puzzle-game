@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Gantec Puzzle Arena</title>
+<meta charset="UTF-8">
+<title>Puzzle Arena</title>
+
 <style>
 body{
     margin:0;
-    font-family:Arial,sans-serif;
+    font-family:Arial;
     color:white;
     text-align:center;
-    padding:30px;
-    min-height:100vh;
+    padding:20px;
     background:linear-gradient(-45deg,#0f172a,#1e3a8a,#7c3aed,#0ea5e9);
     background-size:400% 400%;
     animation:gradientMove 15s ease infinite;
@@ -19,213 +18,114 @@ body{
 .box{
     max-width:1100px;
     margin:auto;
-    padding:50px;
-    border-radius:28px;
-    min-height:700px;
-    background:rgba(255,255,255,0.12);
-    backdrop-filter:blur(16px);
-    border:1px solid rgba(255,255,255,0.25);
-    box-shadow:0 12px 40px rgba(0,0,0,0.35);
+    padding:30px;
+    border-radius:20px;
+    background:rgba(255,255,255,0.1);
 }
-.hidden{display:none;}
 button{
-    padding:16px 32px;
-    font-size:22px;
-    margin:12px;
+    padding:12px 20px;
+    font-size:18px;
+    margin:8px;
     border:none;
-    border-radius:14px;
+    border-radius:10px;
     cursor:pointer;
-    background:linear-gradient(135deg,#2563eb,#1d4ed8);
-    color:white;
-    transition:0.3s;
 }
-button:hover{transform:scale(1.08);}
-.timer{
-    font-size:72px;
+.timer{font-size:50px;margin:10px;}
+.correct-answer{font-size:28px;margin-top:15px;}
+
+.scoreboard{
+    display:flex;
+    justify-content:space-around;
+    margin-bottom:20px;
+}
+.team{
+    background:rgba(0,0,0,0.3);
+    padding:15px;
+    border-radius:12px;
+    width:30%;
+}
+.score{
+    font-size:40px;
     font-weight:bold;
-    margin:20px 0;
-}
-.reverse-answer{
-    font-size:58px;
-    font-weight:bold;
-    margin-top:20px;
-}
-.correct-answer{
-    font-size:34px;
-    font-weight:bold;
-    margin-top:20px;
-}
-.answer-image{
-    width:260px;
-    border-radius:18px;
-    margin-top:20px;
-    box-shadow:0 8px 24px rgba(0,0,0,0.35);
-}
-#question{
-    white-space:pre-line;
-    line-height:1.8;
-    font-size:34px;
 }
 @keyframes gradientMove{
-    0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
-    100%{background-position:0% 50%;}
+    0%{background-position:0%}
+    50%{background-position:100%}
+    100%{background-position:0%}
 }
 </style>
 </head>
-<body>
 
+<body>
 <div class="box">
 
-<div id="intro">
-    <h1 style="font-size:72px;">🎉 GANTEC PUZZLE ARENA 🎉</h1>
-    <h2 style="font-size:42px;">Think Fast ⚡ Reverse Smart 🔄 Win Big 🏆</h2>
-    <p style="font-size:28px;line-height:1.8;">
-        Welcome to the most exciting team challenge of the day!<br>
-        Get ready to think, laugh, and compete together 🚀
-    </p>
-    <button onclick="startIntro()">▶ START THE SHOW</button>
-</div>
+<h1>🎉 PUZZLE ARENA 🎉</h1>
 
-<div id="rules" class="hidden">
-    <h1 style="font-size:64px;">📋 GAME RULES</h1>
-    <div style="font-size:30px;line-height:2;">
-        1️⃣ Answer can be word or number<br>
-        2️⃣ Only 15 seconds ⏱<br>
-        3️⃣ Give answer only in reverse order 🔄<br>
-        4️⃣ Whoever answers first in reverse order gets point 🏆
+<!-- 🔥 SCOREBOARD -->
+<div class="scoreboard">
+
+    <!-- 👉 CHANGE TEAM NAMES HERE -->
+    <div class="team">
+        <h2 id="team1Name">Team A</h2>
+        <div class="score" id="score1">0</div>
+        <button onclick="addPoint(1)">+ Point</button>
     </div>
-    <button onclick="goExample()">NEXT ➜</button>
+
+    <div class="team">
+        <h2 id="team2Name">Team B</h2>
+        <div class="score" id="score2">0</div>
+        <button onclick="addPoint(2)">+ Point</button>
+    </div>
+
+    <div class="team">
+        <h2 id="team3Name">Team C</h2>
+        <div class="score" id="score3">0</div>
+        <button onclick="addPoint(3)">+ Point</button>
+    </div>
+
 </div>
 
-<div id="example" class="hidden">
-    <h1 style="font-size:60px;">💡 EXAMPLE</h1>
-    <h2>What gets wetter the more it dries?</h2>
-    <div class="reverse-answer">LEWOT</div>
-    <img class="answer-image"
-         src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=500">
-    <div class="correct-answer">TOWEL</div>
-    <button onclick="startGame()">🎮 START LEVEL 1</button>
-</div>
+<button onclick="resetScores()">🔄 Reset Scores</button>
 
-<div id="game" class="hidden">
-    <h1 id="levelTitle">LEVEL 1</h1>
-    <h2 id="question"></h2>
-    <div class="timer" id="timer">15</div>
-    <button onclick="showAnswer()">Show Answer</button>
-    <button onclick="nextQuestion()">Next</button>
-    <div id="answer"></div>
-</div>
+<hr>
 
-<div id="level4intro" class="hidden">
-    <h1 style="font-size:70px;">💻 LEVEL 4</h1>
-    <h2 style="font-size:42px;">TECHNICAL CHALLENGE ROUND 🚀</h2>
-    <button onclick="startLevel4()">▶ START LEVEL 4</button>
-</div>
+<h2 id="question"></h2>
+<div class="timer" id="timer">15</div>
+
+<button onclick="showAnswer()">Show Answer</button>
+<button onclick="nextQuestion()">Next</button>
+
+<div id="answer"></div>
 
 </div>
 
 <script>
-let level=1;
+
 let index=0;
 let timerInt;
 
-const levels={
-level1:[
-{q:"I live in memory\nforget when power dies\nwhat am I?",a:"RAM"},
-{q:"I have many keys\nopen no locks\nwhat am I?",a:"KEYBOARD"},
-{q:"I dry your body\nbecome wet myself\nwhat am I?",a:"TOWEL"},
-{q:"I shine at night\nvanish by day\nwhat am I?",a:"MOON"},
-{q:"I make pages beautiful\nwithout paint\nwhat am I?",a:"CSS"},
-{q:"I show time\nbut no eyes\nwhat am I?",a:"CLOCK"},
-{q:"I catch bugs\nhelp developers\nwhat am I?",a:"DEBUGGER"},
-{q:"I grow without life\nneed air\nwhat am I?",a:"FIRE"},
-{q:"Remove from me\nI become bigger\nwhat am I?",a:"HOLE"},
-{q:"Eight together\nmake one family\nwhat am I?",a:"BYTE"}
-],
-level2:[
-{q:"I block enemies\nprotect system\nwhat am I?",a:"FIREWALL"},
-{q:"I repeat forever\nused in code\nwhat am I?",a:"LOOP"},
-{q:"I connect apps\nfront and back\nwhat am I?",a:"API"},
-{q:"I protect passwords\none-way only\nwhat am I?",a:"HASHING"},
-{q:"I connect internet\nsit blinking\nwhat am I?",a:"ROUTER"},
-{q:"I disappear when spoken\nwhat am I?",a:"SILENCE"},
-{q:"I run websites\nstay unseen\nwhat am I?",a:"SERVER"},
-{q:"I speak without mouth\nrepeat words\nwhat am I?",a:"ECHO"},
-{q:"Others use me\nbut it is yours\nwhat am I?",a:"NAME"},
-{q:"I store millions\nrows and columns\nwhat am I?",a:"DATABASE"}
-],
-level3:[
-{q:"Brain of system\nprocess commands\nwhat am I?",a:"CPU"},
-{q:"Hide in code\ncause trouble\nwhat am I?",a:"BUG"},
-{q:"Go back in code history\nused by teams\nwhat am I?",a:"GIT"},
-{q:"Store forever\nafter shutdown\nwhat am I?",a:"DISK"},
-{q:"Machines learn\nfuture of tech\nwhat am I?",a:"AI"},
-{q:"Taken from mine\nlocked in wood\nwhat am I?",a:"PENCIL"},
-{q:"Cities roads rivers\nno people\nwhat am I?",a:"MAP"},
-{q:"Break without touch\nhurt silently\nwhat am I?",a:"PROMISE"},
-{q:"Forward heavy\nbackward not\nwhat am I?",a:"TON"},
-{q:"Smallest unit of data\nwhat am I?",a:"BIT"}
-],
-level4:[
-{q:"Which data structure uses FIFO?",a:"QUEUE"},
-{q:"Which OOP concept means same function different behavior?",a:"POLYMORPHISM"},
-{q:"x=[1,2,3]\nprint(x[::-1][1])",a:"2"},
-{q:"Which SQL clause filters after GROUP BY?",a:"HAVING"},
-{q:"SELECT COUNT(*) returns?",a:"COUNT"}
-]
-};
+// QUESTIONS
+const questions=[
+{q:"I live in memory, forget when power dies",a:"RAM"},
+{q:"I have keys but no locks",a:"KEYBOARD"},
+{q:"I dry your body",a:"TOWEL"},
+{q:"I shine at night",a:"MOON"},
+{q:"Remove from me I become bigger",a:"HOLE"}
+];
 
-function speak(text){
-    speechSynthesis.cancel();
-    const msg=new SpeechSynthesisUtterance(text);
-    msg.rate=1;
-    msg.pitch=1.05;
-    speechSynthesis.speak(msg);
-}
+// SCORE
+let scores=[0,0,0];
 
-window.onload=function(){
-    setTimeout(()=>{
-        speak("Welcome Team Gantec! Welcome to the Puzzle Arena. Think fast, reverse smart, and win big. Three teams will compete. Only one team will take the crown. Stay sharp, stay quick, and let the battle begin!");
-    },500);
-}
-
-function startIntro(){
-    intro.classList.add("hidden");
-    rules.classList.remove("hidden");
-    speak("Answer can be word or number. You have only fifteen seconds. Give answer only in reverse order. Whoever answers first in reverse order gets the point.");
-}
-
-function goExample(){
-    rules.classList.add("hidden");
-    example.classList.remove("hidden");
-    speak("Example question. What gets wetter the more it dries? Reverse answer is lewot. Correct answer is towel.");
-}
-
-function startGame(){
-    example.classList.add("hidden");
-    game.classList.remove("hidden");
-    loadQuestion();
-}
-
-function startLevel4(){
-    level4intro.classList.add("hidden");
-    game.classList.remove("hidden");
-    loadQuestion();
-}
-
+// LOAD QUESTION
 function loadQuestion(){
-    let q=levels["level"+level][index];
-    let questionNo=index+1;
+    document.getElementById("question").innerText=
+        questions[index].q;
 
-    question.innerText="Question "+questionNo+"\n\n"+q.q;
-    answer.innerHTML="";
-    levelTitle.innerText="LEVEL "+level;
-
-    speak(q.q.replace(/\n/g,"... "));
+    document.getElementById("answer").innerHTML="";
     startTimer();
 }
 
+// TIMER
 function startTimer(){
     let t=15;
     timer.innerText=t;
@@ -234,80 +134,44 @@ function startTimer(){
     timerInt=setInterval(()=>{
         t--;
         timer.innerText=t;
-
-        if(t<=0){
-            clearInterval(timerInt);
-            speak("Time is up.");
-        }
+        if(t<=0) clearInterval(timerInt);
     },1000);
 }
 
+// SHOW ANSWER
 function showAnswer(){
-    let q = levels["level"+level][index];
-
-    const answerImages = {
-        "RAM":"https://images.unsplash.com/photo-1518770660439-4636190af475?w=500",
-        "KEYBOARD":"https://images.unsplash.com/photo-1517336714739-489689fd1ca8?w=500",
-        "TOWEL":"https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=500",
-        "MOON":"https://images.unsplash.com/photo-1532693322450-2cb5c511067d?w=500",
-        "CLOCK":"https://images.unsplash.com/photo-1501139083538-0139583c060f?w=500",
-        "FIRE":"https://images.unsplash.com/photo-1511389026070-a14ae610a1be?w=500",
-        "CPU":"https://images.unsplash.com/photo-1518770660439-4636190af475?w=500",
-        "BUG":"https://images.unsplash.com/photo-1466721591366-2d5fba72006d?w=500",
-        "PENCIL":"https://images.unsplash.com/photo-1503602642458-232111445657?w=500",
-        "MAP":"https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=500",
-        "AI":"https://images.unsplash.com/photo-1677442136019-21780ecad995?w=500",
-        "SERVER":"https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=500",
-        "DATABASE":"https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=500",
-        "ROUTER":"https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=500",
-        "QUEUE":"https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=500"
-    };
-
-    let fallbackImage =
-        "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500";
-
-    let imageUrl = answerImages[q.a] || fallbackImage;
-
-    if(level===4){
-        answer.innerHTML =
-            "<img class='answer-image' src='"+imageUrl+"'>" +
-            "<div class='correct-answer'>"+q.a+"</div>";
-
-        speak("Correct answer is " + q.a);
-        return;
-    }
-
-    let rev = q.a.split("").reverse().join("");
-
-    answer.innerHTML =
-        "<div class='reverse-answer'>"+rev+"</div>" +
-        "<img class='answer-image' src='"+imageUrl+"'>" +
+    let q=questions[index];
+    document.getElementById("answer").innerHTML=
         "<div class='correct-answer'>"+q.a+"</div>";
-
-    speak("Reverse answer is " + rev + ". Correct answer is " + q.a);
 }
 
+// NEXT
 function nextQuestion(){
     index++;
-
-    if(index>=levels["level"+level].length){
-        level++;
-        index=0;
-
-        if(level===4){
-            game.classList.add("hidden");
-            level4intro.classList.remove("hidden");
-            return;
-        }
-
-        if(level>4){
-            alert("🏆 GAME COMPLETED");
-            return;
-        }
+    if(index>=questions.length){
+        alert("Game Over!");
+        return;
     }
-
     loadQuestion();
 }
+
+// ADD POINT
+function addPoint(team){
+    scores[team-1]++;
+    document.getElementById("score"+team).innerText=scores[team-1];
+}
+
+// RESET
+function resetScores(){
+    scores=[0,0,0];
+    document.getElementById("score1").innerText=0;
+    document.getElementById("score2").innerText=0;
+    document.getElementById("score3").innerText=0;
+}
+
+// START
+loadQuestion();
+
 </script>
 
 </body>
