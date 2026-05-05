@@ -77,15 +77,12 @@ button{
     <h1 style="font-size:64px;">📋 GAME RULES</h1>
 
     <div style="font-size:30px; line-height:2; max-width:900px; margin:auto; text-align:left;">
-
         👉 Each team must listen carefully to the question.<br><br>
-
         👉 You will get <b>15 seconds</b> to think and answer.<br><br>
-
-         👉 The <b>who first  type answer correctly</b> will win the point.<br><br>
-
-        👉 Be quick, be sharp, and enjoy the game! 🎉
-
+        👉 Answer should be given in <b>normal format</b> (no reverse).<br><br>
+        👉 The <b>first team to answer correctly</b> will win the point.<br><br>
+        👉 The host will decide which team answered first.<br><br>
+        👉 Maintain discipline and enjoy the game! 🎉
     </div>
 
     <button onclick="goExample()">NEXT ➜</button>
@@ -94,10 +91,9 @@ button{
 <!-- EXAMPLE -->
 <div id="example" class="hidden">
     <h1>💡 EXAMPLE</h1>
-    <h2>What gets wetter the more it dries?</h2>
-    <img class="answer-image"
-         src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=500">
-    <div class="correct-answer">TOWEL</div>
+    <h2 id="exampleQ">What gets wetter the more it dries?</h2>
+    <button onclick="showExampleAnswer()">Show Answer</button>
+    <div id="exampleAns"></div>
     <button onclick="startGame()">🎮 START GAME</button>
 </div>
 
@@ -115,19 +111,7 @@ button{
 
 <script>
 
-// GAME DATA
-let index=0;
-let timerInt;
-
-const questions=[
-{q:"I live in memory\nforget when power dies\nwhat am I?",a:"RAM"},
-{q:"I have many keys\nopen no locks\nwhat am I?",a:"KEYBOARD"},
-{q:"I dry your body\nbecome wet myself\nwhat am I?",a:"TOWEL"},
-{q:"I shine at night\nvanish by day\nwhat am I?",a:"MOON"},
-{q:"Remove from me\nI become bigger\nwhat am I?",a:"HOLE"}
-];
-
-// VOICE
+// SPEAK
 function speak(text){
     speechSynthesis.cancel();
     const msg=new SpeechSynthesisUtterance(text);
@@ -136,35 +120,64 @@ function speak(text){
     speechSynthesis.speak(msg);
 }
 
-// 🎤 EXCITING INTRO
+// INTRO VOICE
 window.onload=function(){
     setTimeout(()=>{
-        speak("Welcome everyone to the Gantec Puzzle Arena! Get ready for an exciting battle of brains. Think fast, answer smart, and compete to win!");
+        speak("Welcome everyone to the Gantec Puzzle Arena! Get ready for an exciting battle of brains!");
     },500);
 }
 
-// FLOW
+// RULES SPEAK ONE BY ONE
 function startIntro(){
     intro.classList.add("hidden");
     rules.classList.remove("hidden");
 
-    speak("Here are the rules. Listen carefully.");
+    speak("Rule one. Listen carefully to the question.");
+
+    setTimeout(()=>speak("Rule two. You will get fifteen seconds to answer."),4000);
+    setTimeout(()=>speak("Rule three. Answer in normal format, no reverse."),8000);
+    setTimeout(()=>speak("Rule four. First correct team wins the point."),12000);
+    setTimeout(()=>speak("Rule five. Host will decide the fastest answer."),16000);
+    setTimeout(()=>speak("Now let's see an example."),20000);
 }
 
+// EXAMPLE
 function goExample(){
     rules.classList.add("hidden");
     example.classList.remove("hidden");
 
-    speak("Let's look at an example.");
+    speak("Example question. What gets wetter the more it dries?");
 }
 
+// SHOW EXAMPLE ANSWER ON CLICK
+function showExampleAnswer(){
+    document.getElementById("exampleAns").innerHTML=
+        "<img class='answer-image' src='https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=500'>" +
+        "<div class='correct-answer'>TOWEL</div>";
+
+    speak("The correct answer is towel.");
+}
+
+// START GAME WITH EXCITING LINE
 function startGame(){
     example.classList.add("hidden");
     game.classList.remove("hidden");
+
+    speak("Get ready teams! The real challenge begins now!");
     loadQuestion();
 }
 
-// QUESTION
+// QUESTIONS
+let index=0;
+let timerInt;
+
+const questions=[
+{q:"I live in memory\nforget when power dies\nwhat am I?",a:"RAM"},
+{q:"I have many keys\nopen no locks\nwhat am I?",a:"KEYBOARD"},
+{q:"I dry your body\nbecome wet myself\nwhat am I?",a:"TOWEL"}
+];
+
+// LOAD QUESTION
 function loadQuestion(){
     let q=questions[index];
     question.innerText=q.q;
