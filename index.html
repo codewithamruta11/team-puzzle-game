@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Gantec Puzzle Arena</title>
+<meta charset="UTF-8">
+<title>Puzzle Arena</title>
 
 <style>
 body{
@@ -37,9 +37,8 @@ color:white;
 }
 .timer{font-size:70px;}
 .correct-answer{font-size:32px;margin-top:20px;}
-.answer-image{width:260px;margin-top:20px;border-radius:12px;}
+.answer-image{width:250px;margin-top:20px;}
 #question{font-size:34px;white-space:pre-line;}
-
 @keyframes gradientMove{
 0%{background-position:0%}
 50%{background-position:100%}
@@ -53,7 +52,7 @@ color:white;
 
 <!-- INTRO -->
 <div id="intro">
-<h1 style="font-size:70px;">🎉 GANTEC PUZZLE ARENA 🎉</h1>
+<h1>🎉 GANTEC PUZZLE ARENA 🎉</h1>
 <h2>Think Fast ⚡ Win Big 🏆</h2>
 <button onclick="startIntro()">▶ START</button>
 </div>
@@ -71,7 +70,7 @@ color:white;
 <h2>What gets wetter the more it dries?</h2>
 <button onclick="showExample()">Show Answer</button>
 <div id="exampleAns"></div>
-<button onclick="startGame()">🎮 START GAME</button>
+<button onclick="startGame()">START GAME</button>
 </div>
 
 <!-- GAME -->
@@ -88,23 +87,13 @@ color:white;
 
 <script>
 
-/* 🔊 PERFECT SPEECH QUEUE (NO MIXING) */
-let speaking=false;
-function speakQueue(lines){
-    if(speaking) speechSynthesis.cancel();
-    speaking=true;
-
-    let i=0;
-    function speakNext(){
-        if(i>=lines.length){
-            speaking=false;
-            return;
-        }
-        let msg=new SpeechSynthesisUtterance(lines[i]);
-        msg.onend=()=>{ i++; speakNext(); };
-        speechSynthesis.speak(msg);
-    }
-    speakNext();
+// 🔊 SPEAK (clean - no queue needed now)
+function speak(text){
+    speechSynthesis.cancel();
+    const msg=new SpeechSynthesisUtterance(text);
+    msg.rate=1;
+    msg.pitch=1.1;
+    speechSynthesis.speak(msg);
 }
 
 /* 🎤 INTRO */
@@ -112,33 +101,33 @@ function startIntro(){
     intro.classList.add("hidden");
     rules.classList.remove("hidden");
 
-    showRules();
+    let text = "Welcome everyone to the Gantec Puzzle Arena! " +
+               "Get ready for an exciting battle of brains. " +
+               "Think fast, answer smart, and win big!";
 
-    speakQueue([
-        "Welcome everyone to the Gantec Puzzle Arena!",
-        "Get ready for an exciting battle of brains.",
-        "Listen carefully to the rules."
-    ]);
+    speak(text);
+
+    showRules();
 }
 
 /* 📋 RULES */
 function showRules(){
-let rulesList=[
+let rulesList = [
 "Each team must listen carefully to the question.",
 "You will have fifteen seconds to answer.",
-"Answer must be in normal format, no reverse.",
-"First correct team wins the point.",
 "There are three levels in this game.",
 "Each level contains ten questions.",
 "Difficulty increases in each level.",
+"First correct team wins the point.",
 "Stay sharp and enjoy the challenge!"
 ];
 
 rulesText.innerHTML = rulesList.map(r=>"👉 "+r+"<br><br>").join("");
 
+// Speak rules AFTER intro finishes (~6 sec)
 setTimeout(()=>{
-    speakQueue(rulesList);
-},3000);
+    speak(rulesList.join(". "));
+},6000);
 }
 
 /* 💡 EXAMPLE */
@@ -146,18 +135,12 @@ function goExample(){
     rules.classList.add("hidden");
     example.classList.remove("hidden");
 
-    speakQueue([
-        "Let's see an example.",
-        "What gets wetter the more it dries?"
-    ]);
+    speak("Example question. What gets wetter the more it dries?");
 }
 
 function showExample(){
-    exampleAns.innerHTML =
-        "<img class='answer-image' src='https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=500'>" +
-        "<div class='correct-answer'>TOWEL</div>";
-
-    speakQueue(["The correct answer is towel."]);
+    exampleAns.innerHTML="<div class='correct-answer'>TOWEL</div>";
+    speak("The correct answer is towel.");
 }
 
 /* 🚀 START GAME */
@@ -165,15 +148,12 @@ function startGame(){
     example.classList.add("hidden");
     game.classList.remove("hidden");
 
-    speakQueue([
-        "Teams get ready!",
-        "Level one begins now!"
-    ]);
+    speak("Get ready teams! Level one begins now!");
 
     loadQuestion();
 }
 
-/* 🎮 GAME DATA */
+/* GAME DATA */
 let level=1,index=0,timerInt;
 
 const levels={
@@ -188,46 +168,19 @@ level1:[
 {q:"I grow without life need air",a:"FIRE"},
 {q:"Eight bits make me",a:"BYTE"},
 {q:"Smallest unit of data",a:"BIT"}
-],
-level2:[
-{q:"I connect internet sit blinking",a:"ROUTER"},
-{q:"I protect system block attacks",a:"FIREWALL"},
-{q:"I repeat forever in code",a:"LOOP"},
-{q:"I connect apps front and back",a:"API"},
-{q:"I store millions of rows",a:"DATABASE"},
-{q:"I run websites unseen",a:"SERVER"},
-{q:"I disappear when spoken",a:"SILENCE"},
-{q:"I speak without mouth",a:"ECHO"},
-{q:"Others use me but it is yours",a:"NAME"},
-{q:"I protect passwords one way",a:"HASHING"}
-],
-level3:[
-{q:"Brain of system",a:"CPU"},
-{q:"Hide in code cause trouble",a:"BUG"},
-{q:"Go back in code history",a:"GIT"},
-{q:"Store data permanently",a:"DISK"},
-{q:"Machines learn future tech",a:"AI"},
-{q:"Cities roads rivers no people",a:"MAP"},
-{q:"Break without touch",a:"PROMISE"},
-{q:"Forward heavy backward not",a:"TON"},
-{q:"Taken from mine locked in wood",a:"PENCIL"},
-{q:"Measure distance between points",a:"RULER"}
 ]
 };
 
-/* QUESTION */
 function loadQuestion(){
 let q=levels["level"+level][index];
 levelTitle.innerText="LEVEL "+level;
 question.innerText="Q"+(index+1)+": "+q.q;
-answer.innerHTML="";
 
-speakQueue([q.q]);
+speak(q.q);
 
 startTimer();
 }
 
-/* TIMER */
 function startTimer(){
 let t=15;
 timer.innerText=t;
@@ -236,41 +189,25 @@ clearInterval(timerInt);
 timerInt=setInterval(()=>{
 t--;
 timer.innerText=t;
-
 if(t<=0){
 clearInterval(timerInt);
-speakQueue(["Time is up"]);
+speak("Time is up");
 }
 },1000);
 }
 
-/* ANSWER */
 function showAnswer(){
 let q=levels["level"+level][index];
-
-answer.innerHTML =
-"<img class='answer-image' src='https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500'>" +
-"<div class='correct-answer'>"+q.a+"</div>";
-
-speakQueue(["Correct answer is "+q.a]);
+answer.innerHTML="<div class='correct-answer'>"+q.a+"</div>";
+speak("Correct answer is "+q.a);
 }
 
-/* NEXT */
 function nextQuestion(){
 index++;
-
-if(index>=10){
-level++;
-index=0;
-
-if(level>3){
-alert("🏆 GAME COMPLETED");
+if(index>=levels["level"+level].length){
+alert("Game Completed");
 return;
 }
-
-speakQueue(["Level "+level+" begins now"]);
-}
-
 loadQuestion();
 }
 
