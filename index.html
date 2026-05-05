@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Gantec Puzzle Arena</title>
 
 <style>
 body{
     margin:0;
-    font-family:Arial,sans-serif;
+    font-family:Arial;
     color:white;
     text-align:center;
     padding:30px;
@@ -22,42 +21,22 @@ body{
     margin:auto;
     padding:50px;
     border-radius:28px;
-    min-height:700px;
     background:rgba(255,255,255,0.12);
-    backdrop-filter:blur(16px);
 }
 .hidden{display:none;}
-
 button{
-    padding:16px 32px;
-    font-size:22px;
-    margin:12px;
+    padding:15px 30px;
+    font-size:20px;
+    margin:10px;
     border:none;
-    border-radius:14px;
+    border-radius:10px;
     cursor:pointer;
-    background:linear-gradient(135deg,#2563eb,#1d4ed8);
-    color:white;
 }
-
-.timer{font-size:72px;font-weight:bold;}
-.correct-answer{font-size:34px;margin-top:20px;}
-
-.answer-image{
-    width:260px;
-    border-radius:18px;
-    margin-top:20px;
-}
-
-#question{
-    white-space:pre-line;
-    font-size:34px;
-    line-height:1.6;
-}
-
+.timer{font-size:60px;}
+.correct-answer{font-size:30px;}
+.answer-image{width:250px;margin-top:15px;}
 @keyframes gradientMove{
-    0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
-    100%{background-position:0% 50%;}
+0%{background-position:0%}50%{background-position:100%}100%{background-position:0%}
 }
 </style>
 </head>
@@ -65,80 +44,80 @@ button{
 <body>
 <div class="box">
 
-<!-- INTRO -->
 <div id="intro">
-    <h1 style="font-size:72px;">🎉 GANTEC PUZZLE ARENA 🎉</h1>
-    <h2 style="font-size:42px;">Think Fast ⚡ Answer Smart 💡 Win Big 🏆</h2>
-    <button onclick="startIntro()">▶ START THE SHOW</button>
+<h1>🎉 GANTEC PUZZLE ARENA 🎉</h1>
+<button onclick="startIntro()">START</button>
 </div>
 
-<!-- RULES -->
 <div id="rules" class="hidden">
-    <h1 style="font-size:64px;">📋 GAME RULES</h1>
-
-    <div style="font-size:30px; line-height:2; max-width:900px; margin:auto; text-align:left;">
-        👉 Each team must listen carefully to the question.<br><br>
-        👉 You will get <b>15 seconds</b> to think and answer.<br><br>
-        👉 Answer should be given in <b>normal format</b> (no reverse).<br><br>
-        👉 The <b>first team to answer correctly</b> will win the point.<br><br>
-        👉 The host will decide which team answered first.<br><br>
-        👉 Maintain discipline and enjoy the game! 🎉
-    </div>
-
-    <button onclick="goExample()">NEXT ➜</button>
+<h1>📋 RULES</h1>
+<div id="rulesText"></div>
+<button onclick="goExample()">NEXT</button>
 </div>
 
-<!-- EXAMPLE -->
 <div id="example" class="hidden">
-    <h1>💡 EXAMPLE</h1>
-    <h2 id="exampleQ">What gets wetter the more it dries?</h2>
-    <button onclick="showExampleAnswer()">Show Answer</button>
-    <div id="exampleAns"></div>
-    <button onclick="startGame()">🎮 START GAME</button>
+<h2>Example Question</h2>
+<h3>What gets wetter the more it dries?</h3>
+<button onclick="showExample()">Show Answer</button>
+<div id="exAns"></div>
+<button onclick="startGame()">START GAME</button>
 </div>
 
-<!-- GAME -->
 <div id="game" class="hidden">
-    <h1 id="levelTitle">LEVEL 1</h1>
-    <h2 id="question"></h2>
-    <div class="timer" id="timer">15</div>
-    <button onclick="showAnswer()">Show Answer</button>
-    <button onclick="nextQuestion()">Next</button>
-    <div id="answer"></div>
+<h1 id="levelTitle"></h1>
+<h2 id="question"></h2>
+<div class="timer" id="timer">15</div>
+<button onclick="showAnswer()">Show Answer</button>
+<button onclick="nextQuestion()">Next</button>
+<div id="answer"></div>
 </div>
 
 </div>
 
 <script>
 
-// SPEAK
-function speak(text){
-    speechSynthesis.cancel();
-    const msg=new SpeechSynthesisUtterance(text);
-    msg.rate=1;
-    msg.pitch=1.1;
-    speechSynthesis.speak(msg);
+// 🔊 FIXED SPEAK (queue system)
+function speakQueue(lines){
+    let i=0;
+    function next(){
+        if(i>=lines.length) return;
+        let msg=new SpeechSynthesisUtterance(lines[i]);
+        msg.onend=()=>{i++;next();};
+        speechSynthesis.speak(msg);
+    }
+    next();
 }
 
-// INTRO VOICE
-window.onload=function(){
-    setTimeout(()=>{
-        speak("Welcome everyone to the Gantec Puzzle Arena! Get ready for an exciting battle of brains!");
-    },500);
-}
-
-// RULES SPEAK ONE BY ONE
+// INTRO
 function startIntro(){
     intro.classList.add("hidden");
     rules.classList.remove("hidden");
 
-    speak("Rule one. Listen carefully to the question.");
+    speakQueue([
+        "Welcome everyone to the Gantec Puzzle Arena!",
+        "Get ready for an exciting battle of brains.",
+        "Think fast, answer smart, and win big!"
+    ]);
 
-    setTimeout(()=>speak("Rule two. You will get fifteen seconds to answer."),4000);
-    setTimeout(()=>speak("Rule three. Answer in normal format, no reverse."),8000);
-    setTimeout(()=>speak("Rule four. First correct team wins the point."),12000);
-    setTimeout(()=>speak("Rule five. Host will decide the fastest answer."),16000);
-    setTimeout(()=>speak("Now let's see an example."),20000);
+    showRules();
+}
+
+// RULES TEXT + VOICE
+function showRules(){
+    let rulesList=[
+        "Each team must listen carefully to the question.",
+        "You will have fifteen seconds to answer.",
+        "Answer must be in normal format, no reverse.",
+        "First correct team wins the point.",
+        "There are three levels in this game.",
+        "Each level has ten questions.",
+        "Difficulty will increase with each level.",
+        "Stay focused and enjoy the challenge!"
+    ];
+
+    rulesText.innerHTML=rulesList.map(r=>"👉 "+r+"<br><br>").join("");
+
+    speakQueue(rulesList);
 }
 
 // EXAMPLE
@@ -146,47 +125,48 @@ function goExample(){
     rules.classList.add("hidden");
     example.classList.remove("hidden");
 
-    speak("Example question. What gets wetter the more it dries?");
+    speakQueue([
+        "Let's look at an example question.",
+        "What gets wetter the more it dries?"
+    ]);
 }
 
-// SHOW EXAMPLE ANSWER ON CLICK
-function showExampleAnswer(){
-    document.getElementById("exampleAns").innerHTML=
-        "<img class='answer-image' src='https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=500'>" +
-        "<div class='correct-answer'>TOWEL</div>";
-
-    speak("The correct answer is towel.");
+function showExample(){
+    exAns.innerHTML="<div class='correct-answer'>TOWEL</div>";
+    speakQueue(["The correct answer is towel."]);
 }
 
-// START GAME WITH EXCITING LINE
+// START GAME
 function startGame(){
     example.classList.add("hidden");
     game.classList.remove("hidden");
 
-    speak("Get ready teams! The real challenge begins now!");
+    speakQueue([
+        "Teams, get ready!",
+        "Level one begins now!"
+    ]);
+
     loadQuestion();
 }
 
 // QUESTIONS
-let index=0;
-let timerInt;
+let level=1,index=0,timerInt;
 
-const questions=[
-{q:"I live in memory\nforget when power dies\nwhat am I?",a:"RAM"},
-{q:"I have many keys\nopen no locks\nwhat am I?",a:"KEYBOARD"},
-{q:"I dry your body\nbecome wet myself\nwhat am I?",a:"TOWEL"}
-];
+const levels={
+level1:Array(10).fill({q:"I live in memory, forget when power dies",a:"RAM"}),
+level2:Array(10).fill({q:"I have keys but no locks",a:"KEYBOARD"}),
+level3:Array(10).fill({q:"I dry your body",a:"TOWEL"})
+};
 
-// LOAD QUESTION
 function loadQuestion(){
-    let q=questions[index];
-    question.innerText=q.q;
+    let q=levels["level"+level][index];
+    levelTitle.innerText="LEVEL "+level;
+    question.innerText="Q"+(index+1)+": "+q.q;
     answer.innerHTML="";
-    speak(q.q.replace(/\n/g," "));
+    speakQueue([q.q]);
     startTimer();
 }
 
-// TIMER
 function startTimer(){
     let t=15;
     timer.innerText=t;
@@ -195,31 +175,31 @@ function startTimer(){
     timerInt=setInterval(()=>{
         t--;
         timer.innerText=t;
-
         if(t<=0){
             clearInterval(timerInt);
-            speak("Time is up!");
+            speakQueue(["Time is up"]);
         }
     },1000);
 }
 
-// ANSWER
 function showAnswer(){
-    let q=questions[index];
-
-    answer.innerHTML =
-        "<img class='answer-image' src='https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500'>" +
-        "<div class='correct-answer'>"+q.a+"</div>";
-
-    speak("The correct answer is " + q.a);
+    let q=levels["level"+level][index];
+    answer.innerHTML="<div class='correct-answer'>"+q.a+"</div>";
+    speakQueue(["Correct answer is "+q.a]);
 }
 
-// NEXT
 function nextQuestion(){
     index++;
-    if(index>=questions.length){
-        alert("🏆 GAME COMPLETED");
-        return;
+    if(index>=10){
+        level++;
+        index=0;
+
+        if(level>3){
+            alert("🏆 GAME COMPLETED");
+            return;
+        }
+
+        speakQueue(["Level "+level+" begins now"]);
     }
     loadQuestion();
 }
