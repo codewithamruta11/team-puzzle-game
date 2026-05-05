@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Puzzle Arena</title>
+<title>Gantec Puzzle Arena</title>
 
 <style>
 body{
 margin:0;
-font-family:Arial;
+font-family:Arial,sans-serif;
 color:white;
 text-align:center;
 padding:30px;
@@ -23,21 +23,23 @@ padding:50px;
 border-radius:28px;
 background:rgba(255,255,255,0.12);
 backdrop-filter:blur(16px);
+box-shadow:0 12px 40px rgba(0,0,0,0.35);
 }
 .hidden{display:none;}
 button{
 padding:14px 28px;
 font-size:18px;
-margin:8px;
+margin:10px;
 border:none;
 border-radius:10px;
 cursor:pointer;
-background:#2563eb;
+background:linear-gradient(135deg,#2563eb,#1d4ed8);
 color:white;
 }
-.timer{font-size:60px;}
+.timer{font-size:65px;}
 .correct-answer{font-size:30px;margin-top:20px;}
-#question{font-size:32px;}
+.answer-image{width:260px;border-radius:12px;margin-top:20px;}
+#question{font-size:32px;white-space:pre-line;}
 @keyframes gradientMove{
 0%{background-position:0%}
 50%{background-position:100%}
@@ -51,15 +53,15 @@ color:white;
 
 <!-- INTRO -->
 <div id="intro">
-<h1>🎉 GANTEC PUZZLE ARENA 🎉</h1>
-<h2>Think Fast ⚡ Win Big 🏆</h2>
-<button onclick="startFlow()">▶ START</button>
+<h1 style="font-size:70px;">🎉 GANTEC PUZZLE ARENA 🎉</h1>
+<h2>Think Fast ⚡ Answer Smart 💡 Win Big 🏆</h2>
+<button onclick="startIntro()">▶ START</button>
 </div>
 
 <!-- RULES -->
 <div id="rules" class="hidden">
-<h1>📋 RULES</h1>
-<div id="rulesText"></div>
+<h1>📋 GAME RULES</h1>
+<div id="rulesText" style="font-size:28px;line-height:2;"></div>
 <button onclick="goBack('intro')">⬅ Back</button>
 <button onclick="goExample()">Next ➜</button>
 </div>
@@ -67,7 +69,7 @@ color:white;
 <!-- EXAMPLE -->
 <div id="example" class="hidden">
 <h1>💡 EXAMPLE</h1>
-<h2>What gets wetter the more it dries?</h2>
+<h2 id="exampleQ">What gets wetter the more it dries?</h2>
 <button onclick="showExample()">Show Answer</button>
 <div id="exampleAns"></div>
 <br>
@@ -91,49 +93,55 @@ color:white;
 
 <script>
 
-// 🔊 Clean speech (no overlap)
-function speak(text){
-speechSynthesis.cancel();
-let msg=new SpeechSynthesisUtterance(text);
-msg.rate=1;
-msg.pitch=1.1;
-speechSynthesis.speak(msg);
+/* 🔊 SPEECH QUEUE (PERFECT FIX) */
+let speaking=false;
+
+function speakQueue(lines){
+    speechSynthesis.cancel();
+    let i=0;
+
+    function speakNext(){
+        if(i>=lines.length) return;
+        let msg=new SpeechSynthesisUtterance(lines[i]);
+        msg.rate=1;
+        msg.pitch=1.05;
+        msg.onend=()=>{ i++; speakNext(); };
+        speechSynthesis.speak(msg);
+    }
+    speakNext();
 }
 
-/* 🎬 FULL FLOW */
-function startFlow(){
-
-// show intro speech first
-speak("Welcome everyone to the Gantec Puzzle Arena! Get ready for an exciting battle of brains! Think fast and win big!");
-
-// after intro → go rules
-setTimeout(()=>{
+/* 🎬 INTRO */
+function startIntro(){
 intro.classList.add("hidden");
 rules.classList.remove("hidden");
-showRules();
-},6000);
 
+let introSpeech=[
+"Welcome everyone to the Gantec Puzzle Arena!",
+"Get ready for an exciting battle of brains.",
+"Think fast, answer smart, and win big!"
+];
+
+speakQueue(introSpeech);
+showRules();
 }
 
 /* 📋 RULES */
 function showRules(){
-
 let rulesList=[
 "Each team must listen carefully to the question.",
 "You will have fifteen seconds to answer.",
-"There are three levels.",
-"Each level has ten questions.",
-"Difficulty increases each level.",
+"Answer must be given in normal format.",
 "First correct team wins the point.",
-"Stay sharp and enjoy the game."
+"There are three levels in this game.",
+"Each level has ten questions.",
+"Difficulty increases with each level.",
+"Stay sharp and enjoy the challenge!"
 ];
 
 rulesText.innerHTML = rulesList.map(r=>"👉 "+r+"<br><br>").join("");
 
-// speak rules
-setTimeout(()=>{
-speak(rulesList.join(". "));
-},1000);
+setTimeout(()=> speakQueue(rulesList),5000);
 }
 
 /* 💡 EXAMPLE */
@@ -141,12 +149,18 @@ function goExample(){
 rules.classList.add("hidden");
 example.classList.remove("hidden");
 
-speak("Example question. What gets wetter the more it dries?");
+speakQueue([
+"Let's look at an example.",
+"What gets wetter the more it dries?"
+]);
 }
 
 function showExample(){
-exampleAns.innerHTML="<div class='correct-answer'>TOWEL</div>";
-speak("The correct answer is towel.");
+exampleAns.innerHTML =
+"<img class='answer-image' src='https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=500'>" +
+"<div class='correct-answer'>TOWEL</div>";
+
+speakQueue(["The correct answer is towel."]);
 }
 
 /* 🚀 START GAME */
@@ -154,7 +168,10 @@ function startGame(){
 example.classList.add("hidden");
 game.classList.remove("hidden");
 
-speak("Get ready teams! Level one begins now!");
+speakQueue([
+"Teams get ready!",
+"Level one begins now!"
+]);
 
 loadQuestion();
 }
@@ -170,19 +187,24 @@ document.getElementById(page).classList.remove("hidden");
 speechSynthesis.cancel();
 }
 
-/* GAME */
-let index=0,timerInt;
+/* 🎮 GAME */
+let level=1,index=0,timerInt;
 
-const questions=[
+const levels={
+level1:[
 {q:"I live in memory forget when power dies",a:"RAM"},
 {q:"I have many keys open no locks",a:"KEYBOARD"},
 {q:"I dry your body become wet myself",a:"TOWEL"}
-];
+]
+};
 
 function loadQuestion(){
-let q=questions[index];
-question.innerText=q.q;
-speak(q.q);
+let q=levels["level"+level][index];
+levelTitle.innerText="LEVEL "+level;
+question.innerText="Q"+(index+1)+": "+q.q;
+answer.innerHTML="";
+
+speakQueue([q.q]);
 startTimer();
 }
 
@@ -196,21 +218,25 @@ t--;
 timer.innerText=t;
 if(t<=0){
 clearInterval(timerInt);
-speak("Time is up");
+speakQueue(["Time is up"]);
 }
 },1000);
 }
 
 function showAnswer(){
-let q=questions[index];
-answer.innerHTML="<div class='correct-answer'>"+q.a+"</div>";
-speak("Correct answer is "+q.a);
+let q=levels["level"+level][index];
+
+answer.innerHTML =
+"<img class='answer-image' src='https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500'>" +
+"<div class='correct-answer'>"+q.a+"</div>";
+
+speakQueue(["Correct answer is "+q.a]);
 }
 
 function nextQuestion(){
 index++;
-if(index>=questions.length){
-alert("Game Over");
+if(index>=levels["level"+level].length){
+alert("🏆 GAME COMPLETED");
 return;
 }
 loadQuestion();
