@@ -25,10 +25,9 @@ body{
     min-height:700px;
     background:rgba(255,255,255,0.12);
     backdrop-filter:blur(16px);
-    border:1px solid rgba(255,255,255,0.25);
-    box-shadow:0 12px 40px rgba(0,0,0,0.35);
 }
 .hidden{display:none;}
+
 button{
     padding:16px 32px;
     font-size:22px;
@@ -39,34 +38,20 @@ button{
     background:linear-gradient(135deg,#2563eb,#1d4ed8);
     color:white;
 }
+
 .timer{font-size:72px;font-weight:bold;}
 .correct-answer{font-size:34px;margin-top:20px;}
+
 .answer-image{
     width:260px;
     border-radius:18px;
     margin-top:20px;
 }
 
-/* SCOREBOARD */
-.scoreboard{
-    display:flex;
-    justify-content:space-between;
-    margin-bottom:20px;
-}
-.team{
-    width:32%;
-    background:rgba(0,0,0,0.4);
-    padding:15px;
-    border-radius:14px;
-}
-.score{
-    font-size:40px;
-    font-weight:bold;
-}
-
 #question{
     white-space:pre-line;
     font-size:34px;
+    line-height:1.6;
 }
 
 @keyframes gradientMove{
@@ -80,26 +65,10 @@ button{
 <body>
 <div class="box">
 
-<!-- SCOREBOARD -->
-<div class="scoreboard">
-    <div class="team">
-        <h2>Team A</h2>
-        <div class="score" id="score1">0</div>
-    </div>
-    <div class="team">
-        <h2>Team B</h2>
-        <div class="score" id="score2">0</div>
-    </div>
-    <div class="team">
-        <h2>Team C</h2>
-        <div class="score" id="score3">0</div>
-    </div>
-</div>
-
 <!-- INTRO -->
 <div id="intro">
     <h1 style="font-size:72px;">🎉 GANTEC PUZZLE ARENA 🎉</h1>
-    <h2 style="font-size:42px;">Think Fast ⚡ Win Big 🏆</h2>
+    <h2 style="font-size:42px;">Think Fast ⚡ Answer Smart 💡 Win Big 🏆</h2>
     <button onclick="startIntro()">▶ START THE SHOW</button>
 </div>
 
@@ -107,15 +76,15 @@ button{
 <div id="rules" class="hidden">
     <h1 style="font-size:64px;">📋 GAME RULES</h1>
 
-    <div style="font-size:30px; line-height:2; text-align:left; max-width:800px; margin:auto;">
+    <div style="font-size:30px; line-height:2; max-width:900px; margin:auto; text-align:left;">
 
-        👉 Each team will listen carefully to the question displayed on screen.<br><br>
-        👉 You will have <b>15 seconds</b> to think and answer.<br><br>
-        👉 Answers must be given in <b>normal format</b> (no reverse).<br><br>
-        👉 The <b>first team to answer correctly</b> wins the point.<br><br>
-        👉 The host will decide which team answered first.<br><br>
-        👉 Maintain fair play and avoid shouting over others 😊<br><br>
-        👉 Get ready to think fast, stay sharp, and have fun! 🎉
+        👉 Each team must listen carefully to the question.<br><br>
+
+        👉 You will get <b>15 seconds</b> to think and answer.<br><br>
+
+         👉 The <b>who first  type answer correctly</b> will win the point.<br><br>
+
+        👉 Be quick, be sharp, and enjoy the game! 🎉
 
     </div>
 
@@ -129,7 +98,7 @@ button{
     <img class="answer-image"
          src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=500">
     <div class="correct-answer">TOWEL</div>
-    <button onclick="startGame()">🎮 START LEVEL 1</button>
+    <button onclick="startGame()">🎮 START GAME</button>
 </div>
 
 <!-- GAME -->
@@ -146,60 +115,47 @@ button{
 
 <script>
 
-// SCORE SYSTEM (keyboard control)
-let scores=[0,0,0];
-
-function addPoint(team){
-    scores[team-1]++;
-    document.getElementById("score"+team).innerText=scores[team-1];
-}
-
-// press 1 / 2 / 3 to give points
-document.addEventListener("keydown", function(e){
-    if(e.key==="1") addPoint(1);
-    if(e.key==="2") addPoint(2);
-    if(e.key==="3") addPoint(3);
-});
-
-// GAME LOGIC
-let level=1;
+// GAME DATA
 let index=0;
 let timerInt;
 
-const levels={
-level1:[
+const questions=[
 {q:"I live in memory\nforget when power dies\nwhat am I?",a:"RAM"},
 {q:"I have many keys\nopen no locks\nwhat am I?",a:"KEYBOARD"},
 {q:"I dry your body\nbecome wet myself\nwhat am I?",a:"TOWEL"},
 {q:"I shine at night\nvanish by day\nwhat am I?",a:"MOON"},
 {q:"Remove from me\nI become bigger\nwhat am I?",a:"HOLE"}
-]
-};
+];
 
+// VOICE
 function speak(text){
     speechSynthesis.cancel();
     const msg=new SpeechSynthesisUtterance(text);
     msg.rate=1;
-    msg.pitch=1.05;
+    msg.pitch=1.1;
     speechSynthesis.speak(msg);
 }
 
+// 🎤 EXCITING INTRO
 window.onload=function(){
     setTimeout(()=>{
-        speak("Welcome to the Puzzle Arena. Think fast, answer smart, and win big.");
+        speak("Welcome everyone to the Gantec Puzzle Arena! Get ready for an exciting battle of brains. Think fast, answer smart, and compete to win!");
     },500);
 }
 
+// FLOW
 function startIntro(){
     intro.classList.add("hidden");
     rules.classList.remove("hidden");
 
-    speak("Each team will have fifteen seconds to answer. Answer normally. First correct team gets the point.");
+    speak("Here are the rules. Listen carefully.");
 }
 
 function goExample(){
     rules.classList.add("hidden");
     example.classList.remove("hidden");
+
+    speak("Let's look at an example.");
 }
 
 function startGame(){
@@ -208,14 +164,16 @@ function startGame(){
     loadQuestion();
 }
 
+// QUESTION
 function loadQuestion(){
-    let q=levels["level"+level][index];
+    let q=questions[index];
     question.innerText=q.q;
     answer.innerHTML="";
     speak(q.q.replace(/\n/g," "));
     startTimer();
 }
 
+// TIMER
 function startTimer(){
     let t=15;
     timer.innerText=t;
@@ -227,28 +185,29 @@ function startTimer(){
 
         if(t<=0){
             clearInterval(timerInt);
-            speak("Time is up");
+            speak("Time is up!");
         }
     },1000);
 }
 
+// ANSWER
 function showAnswer(){
-    let q=levels["level"+level][index];
+    let q=questions[index];
 
     answer.innerHTML =
+        "<img class='answer-image' src='https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500'>" +
         "<div class='correct-answer'>"+q.a+"</div>";
 
-    speak("Correct answer is " + q.a);
+    speak("The correct answer is " + q.a);
 }
 
+// NEXT
 function nextQuestion(){
     index++;
-
-    if(index>=levels["level"+level].length){
+    if(index>=questions.length){
         alert("🏆 GAME COMPLETED");
         return;
     }
-
     loadQuestion();
 }
 
