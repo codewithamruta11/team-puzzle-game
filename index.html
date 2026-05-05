@@ -26,19 +26,18 @@ backdrop-filter:blur(16px);
 }
 .hidden{display:none;}
 button{
-padding:16px 32px;
-font-size:22px;
-margin:12px;
+padding:14px 28px;
+font-size:18px;
+margin:8px;
 border:none;
-border-radius:14px;
+border-radius:10px;
 cursor:pointer;
-background:linear-gradient(135deg,#2563eb,#1d4ed8);
+background:#2563eb;
 color:white;
 }
-.timer{font-size:70px;}
-.correct-answer{font-size:32px;margin-top:20px;}
-.answer-image{width:250px;margin-top:20px;}
-#question{font-size:34px;white-space:pre-line;}
+.timer{font-size:60px;}
+.correct-answer{font-size:30px;margin-top:20px;}
+#question{font-size:32px;}
 @keyframes gradientMove{
 0%{background-position:0%}
 50%{background-position:100%}
@@ -54,14 +53,15 @@ color:white;
 <div id="intro">
 <h1>🎉 GANTEC PUZZLE ARENA 🎉</h1>
 <h2>Think Fast ⚡ Win Big 🏆</h2>
-<button onclick="startIntro()">▶ START</button>
+<button onclick="startFlow()">▶ START</button>
 </div>
 
 <!-- RULES -->
 <div id="rules" class="hidden">
 <h1>📋 RULES</h1>
-<div id="rulesText" style="font-size:28px;line-height:2;"></div>
-<button onclick="goExample()">NEXT</button>
+<div id="rulesText"></div>
+<button onclick="goBack('intro')">⬅ Back</button>
+<button onclick="goExample()">Next ➜</button>
 </div>
 
 <!-- EXAMPLE -->
@@ -70,7 +70,9 @@ color:white;
 <h2>What gets wetter the more it dries?</h2>
 <button onclick="showExample()">Show Answer</button>
 <div id="exampleAns"></div>
-<button onclick="startGame()">START GAME</button>
+<br>
+<button onclick="goBack('rules')">⬅ Back</button>
+<button onclick="startGame()">Start Game</button>
 </div>
 
 <!-- GAME -->
@@ -80,6 +82,8 @@ color:white;
 <div class="timer" id="timer">15</div>
 <button onclick="showAnswer()">Show Answer</button>
 <button onclick="nextQuestion()">Next</button>
+<br>
+<button onclick="goBack('example')">⬅ Back</button>
 <div id="answer"></div>
 </div>
 
@@ -87,97 +91,98 @@ color:white;
 
 <script>
 
-// 🔊 SPEAK (clean - no queue needed now)
+// 🔊 Clean speech (no overlap)
 function speak(text){
-    speechSynthesis.cancel();
-    const msg=new SpeechSynthesisUtterance(text);
-    msg.rate=1;
-    msg.pitch=1.1;
-    speechSynthesis.speak(msg);
+speechSynthesis.cancel();
+let msg=new SpeechSynthesisUtterance(text);
+msg.rate=1;
+msg.pitch=1.1;
+speechSynthesis.speak(msg);
 }
 
-/* 🎤 INTRO */
-function startIntro(){
-    intro.classList.add("hidden");
-    rules.classList.remove("hidden");
+/* 🎬 FULL FLOW */
+function startFlow(){
 
-    let text = "Welcome everyone to the Gantec Puzzle Arena! " +
-               "Get ready for an exciting battle of brains. " +
-               "Think fast, answer smart, and win big!";
+// show intro speech first
+speak("Welcome everyone to the Gantec Puzzle Arena! Get ready for an exciting battle of brains! Think fast and win big!");
 
-    speak(text);
+// after intro → go rules
+setTimeout(()=>{
+intro.classList.add("hidden");
+rules.classList.remove("hidden");
+showRules();
+},6000);
 
-    showRules();
 }
 
 /* 📋 RULES */
 function showRules(){
-let rulesList = [
+
+let rulesList=[
 "Each team must listen carefully to the question.",
 "You will have fifteen seconds to answer.",
-"There are three levels in this game.",
-"Each level contains ten questions.",
-"Difficulty increases in each level.",
+"There are three levels.",
+"Each level has ten questions.",
+"Difficulty increases each level.",
 "First correct team wins the point.",
-"Stay sharp and enjoy the challenge!"
+"Stay sharp and enjoy the game."
 ];
 
 rulesText.innerHTML = rulesList.map(r=>"👉 "+r+"<br><br>").join("");
 
-// Speak rules AFTER intro finishes (~6 sec)
+// speak rules
 setTimeout(()=>{
-    speak(rulesList.join(". "));
-},6000);
+speak(rulesList.join(". "));
+},1000);
 }
 
 /* 💡 EXAMPLE */
 function goExample(){
-    rules.classList.add("hidden");
-    example.classList.remove("hidden");
+rules.classList.add("hidden");
+example.classList.remove("hidden");
 
-    speak("Example question. What gets wetter the more it dries?");
+speak("Example question. What gets wetter the more it dries?");
 }
 
 function showExample(){
-    exampleAns.innerHTML="<div class='correct-answer'>TOWEL</div>";
-    speak("The correct answer is towel.");
+exampleAns.innerHTML="<div class='correct-answer'>TOWEL</div>";
+speak("The correct answer is towel.");
 }
 
 /* 🚀 START GAME */
 function startGame(){
-    example.classList.add("hidden");
-    game.classList.remove("hidden");
+example.classList.add("hidden");
+game.classList.remove("hidden");
 
-    speak("Get ready teams! Level one begins now!");
+speak("Get ready teams! Level one begins now!");
 
-    loadQuestion();
+loadQuestion();
 }
 
-/* GAME DATA */
-let level=1,index=0,timerInt;
+/* 🔙 BACK */
+function goBack(page){
+intro.classList.add("hidden");
+rules.classList.add("hidden");
+example.classList.add("hidden");
+game.classList.add("hidden");
 
-const levels={
-level1:[
+document.getElementById(page).classList.remove("hidden");
+speechSynthesis.cancel();
+}
+
+/* GAME */
+let index=0,timerInt;
+
+const questions=[
 {q:"I live in memory forget when power dies",a:"RAM"},
 {q:"I have many keys open no locks",a:"KEYBOARD"},
-{q:"I dry your body become wet myself",a:"TOWEL"},
-{q:"I shine at night vanish by day",a:"MOON"},
-{q:"Remove from me I become bigger",a:"HOLE"},
-{q:"I show time but no eyes",a:"CLOCK"},
-{q:"I catch bugs help developers",a:"DEBUGGER"},
-{q:"I grow without life need air",a:"FIRE"},
-{q:"Eight bits make me",a:"BYTE"},
-{q:"Smallest unit of data",a:"BIT"}
-]
-};
+{q:"I dry your body become wet myself",a:"TOWEL"}
+];
 
 function loadQuestion(){
-let q=levels["level"+level][index];
-levelTitle.innerText="LEVEL "+level;
-question.innerText="Q"+(index+1)+": "+q.q;
-
+let q=questions[index];
+question.innerText=q.q;
 speak(q.q);
-
 startTimer();
 }
 
@@ -197,15 +202,15 @@ speak("Time is up");
 }
 
 function showAnswer(){
-let q=levels["level"+level][index];
+let q=questions[index];
 answer.innerHTML="<div class='correct-answer'>"+q.a+"</div>";
 speak("Correct answer is "+q.a);
 }
 
 function nextQuestion(){
 index++;
-if(index>=levels["level"+level].length){
-alert("Game Completed");
+if(index>=questions.length){
+alert("Game Over");
 return;
 }
 loadQuestion();
