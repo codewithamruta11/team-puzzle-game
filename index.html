@@ -1,241 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8Slide('rules')">⬅ Back</button><meta charset="UTF-8" />
-        </div>
-        <div id="answer"></div>
-    </div>
-
-    <!-- TECH INTRO -->
-    <div id="techIntro" class="hidden">
-        <div class="round-title">⚙️ TECHNICAL ROUND</div>
-        <div class="sub-title">MCQ + Tables + Code + Theory</div>
-        <p style="font-size:24px;line-height:1.75;max-width:850px;margin:0 auto 18px;">
-            In this round, questions will appear with proper options. For SQL and coding questions, the table/code will be shown clearly.
-            Click <b>Show Answer</b> to reveal the answer and explanation.
-        </p>
-        <div class="btn-row">
-            <button onclick="startTechnicalRound()">Start Technical Round</button>
-            <button onclick="showSlide('round1')">⬅ Back</button>
-        </div>
-    </div>
-
-    <!-- TECH ROUND -->
-    <div id="techRound" class="hidden">
-        <div class="sub-title">Question <span id="techCounter"></span> / <span id="techTotal"></span></div>
-        <div id="techQuestionCard" class="question-card">
-            <h2 id="techQuestion"></h2>
-            <div id="techOptions"></div>
-        </div>
-        <div class="timer" id="techTimer">20</div>
-        <div class="btn-row">
-            <button onclick="showTechAnswer()">Show Answer</button>
-            <button onclick="nextTechQuestion()">Next</button>
-            <button onclick="showSlide('techIntro')">⬅ Back</button>
-        </div>
-        <div id="techAnswer"></div>
-    </div>
-
-    <!-- OUTPUT ROUND -->
-    <div id="outputRound" class="hidden">
-        <div class="round-title">💻 PROGRAM OUTPUT ROUND</div>
-        <div class="sub-title">10 Questions</div>
-        <h2 id="outputQuestion"></h2>
-        <div class="timer" id="outputTimer">20</div>
-        <div class="btn-row">
-            <button onclick="showOutputAnswer()">Show Answer</button>
-            <button onclick="nextOutputQuestion()">Next</button>
-            <button onclick="showSlide('techRound')">⬅ Back</button>
-        </div>
-        <div id="outputAnswer"></div>
-    </div>
-
-    <!-- THANK YOU -->
-    <div id="thankYou" class="hidden">
-        <h1 style="font-size:64px;margin:0 0 10px;">🎉 THANK YOU 🎉</h1>
-        <h2 style="margin:10px 0 16px;">Thank you for participating in the game</h2>
-        <p style="font-size:28px;line-height:1.8;max-width:900px;margin:0 auto;">
-            We hope you enjoyed the challenge.<br>
-            Your presence and participation made this event special.<br>
-            See you again in the next fun session!
-        </p>
-        <h3 style="font-size:32px;margin-top:18px;">👏 Thank you for your participation and support! 👏</h3>
-    </div>
-
-</div>
-
-<script>
-let round1Index=0, techIndex=0, outputIndex=0;
-let timerInt=null, techTimerInt=null, outputTimerInt=null;
-let timeLeft=20, techTimeLeft=20, outputTimeLeft=20;
-
-function speak(text){
-    if(!('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.rate = 0.95;
-    utter.pitch = 1;
-    utter.volume = 1;
-    window.speechSynthesis.speak(utter);
-}
-
-function showSlide(id){
-    const pages=['intro','rules','example','round1','techIntro','techRound','outputRound','thankYou'];
-    for(let i=0;i<pages.length;i++){
-        const el=document.getElementById(pages[i]);
-        if(el) el.classList.add('hidden');
-    }
-    const active=document.getElementById(id);
-    if(active) active.classList.remove('hidden');
-    stopTimer();
-    stopTechTimer();
-    stopOutputTimer();
-
-    if(id==='intro'){
-        speak('Welcome to Gantec Puzzle Arena. Fast minds, smart answers, big fun.');
-    }
-    if(id==='rules'){
-        speak('Please read the rules carefully.');
-    }
-}
-
-function startGame(){
-    showSlide('rules');
-}
-
-function showRules(){
-    const rulesList = [
-        "The game contains 30 Puzzle Questions and 5 Technical Questions.",
-        "⏱️ You have 20 seconds to answer each question.",
-        "📖 Read each question carefully before submitting your answer in chat .",
-        "✅ Each correct answer earns 1 points.",
-        "",
-        "💡 A separate example slide is provided before the main game starts.",
-        "🏁 After the puzzle round, the technical round will begin."
-    ];
-
-    let html = '<div style="font-size:30px;font-weight:800;margin-bottom:18px;text-align:center;">🎮 Game Rules</div>';
-    html += '<div style="display:flex;flex-direction:column;gap:12px;">';
-    for(let i=0;i<rulesList.length;i++){
-        if(rulesList[i] === ""){
-            html += '<div style="height:8px;"></div>';
-        } else {
-            html += '<div style="padding:14px 16px;border-radius:14px;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.14);font-size:22px;line-height:1.6;">'+rulesList[i]+'</div>';
-        }
-    }
-    html += '</div>';
-    document.getElementById('rulesText').innerHTML = html;
-}
-
-function showExample(){
-    const img = 'https://upload.wikimedia.org/wikipedia/commons/1/1c/BlankMap-World.svg';
-    let html = '<div class="answer-box">';
-    html += '<img class="answer-image" src="'+img+'" alt="MAP" onerror="this.style.display=\'none\';">';
-    html += '<div class="answer-text">MAP 🗺️</div>';
-    html += '</div>';
-    document.getElementById('exampleAns').innerHTML = html;
-    speak('Map');
-}
-
-const round1Questions = [
-    {q:'I have many keys but open no locks. What am I?',a:'KEYBOARD',img:'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=900'},
-    {q:'I can run thousands of applications but never move an inch. What am I?',a:'SERVER',img:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900'},
-    {q:'I store memories but have no brain. What am I?',a:'HARD DRIVE',img:'https://images.unsplash.com/photo-1518770660439-4636190af475?w=900'},
-    {q:'I carry my home everywhere.\nSlowly but confidently.\nWhat am I?',a:'TORTOISE',img:'https://images.unsplash.com/photo-1501706362039-c6e80948e7b0?w=900'},
-    {q:'Palaces fill my streets.\nCamels are not far away.\nMy color made me famous.\nWho am I?',a:'JAIPUR',img:'https://images.unsplash.com/photo-1548013146-72479768bada?w=900'},
-    {q:'I am worn in many styles.\nAcross many states.\nYet remain timeless.\nWhat am I?',a:'SAREE',img:'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900'},
-    {q:'I decide your quick-thinking pace.\nIn your game I rule the race.',a:'TIMER',img:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900'},
-    {q:'I protect doors you cannot see,\nHackers fear getting past me.',a:'FIREWALL',img:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900'},
-    {q:'I repeat the same work again,\nTill logic says I should refrain.',a:'LOOP',img:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900'},
-    {q:'I find mistakes hidden in code,\nAnd lighten the developer’s load.',a:'DEBUGGER',img:'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900'},
-    {q:'I rise each year but never fall,\nNo ladder needed after all.',a:'AGE',img:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=900'},
-    {q:'A room with no door and no wall,\nStill people love me after all.',a:'MUSHROOM',img:'https://images.unsplash.com/photo-1547592180-85f173990554?w=900'},
-    {q:'I shine by night, disappear by noon,\nSilent beauty in the sky soon.',a:'MOON',img:'https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?w=900'},
-    {q:'I can be broken.\nWithout being touched.',a:'PROMISE',img:'https://images.unsplash.com/photo-1520975922284-2f9f3f2f1c4a?w=900'},
-    {q:'I can be stolen.\nWithout touching anything.',a:'HEART',img:'https://images.unsplash.com/photo-1529692236671-f1a8f3a8b6f2?w=900'},
-    {q:'Invisible but always near,\nWhen I’m gone everyone feels fear.',a:'WIFI',img:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900'},
-    {q:'I define goals for every team,\nSuccess begins within my theme.',a:'TARGET',img:'https://images.unsplash.com/photo-1552664730-d307ca884978?w=900'},
-    {q:'I come once a year with hope and cheer,\nEmployees wait for me throughout the year.',a:'APPRAISAL',img:'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900'},
-    {q:'I give you a break from office chair,\nRequested in portal with extra care.',a:'LEAVE',img:'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900'},
-    {q:'I teach you skills to grow each day,\nLearning always leads the way.',a:'TRAINING',img:'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900'},
-    {q:'I am small and spinning.\nYet I appear at the center of pride.\nTwenty-four spokes define me.\nWhat am I?',a:'ASHOKA CHAKRA',img:'https://images.unsplash.com/photo-1477901492169-d59f3f63d6c0?w=900'},
-    {q:'I am full of holes but can still hold water. What am I?',a:'SPONGE',img:'https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=900'},
-    {q:'I wear white through day and night.\nA king built me for love.\nMillions visit me every year.\nWho am I?',a:'TAJ MAHAL',img:'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=900'},
-    {q:'There is a word in the English language in which the first two letters signify a male, the first three letters signify a female, the first four signify a great man, and the whole word, a great woman. What is the word?',a:'HEROINE',img:'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=900'},
-    {q:'Turn me on my side, and I am everything. Cut me in half, and I am nothing. What am I?',a:'NUMBER 8',img:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900'},
-    {q:'I lead company vision and goal,\nTaking the highest leadership role.',a:'CEO',img:'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=900'},
-    {q:'I judge your progress through the year,\nManagers review me with care.',a:'PERFORMANCE',img:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900'},
-    {q:'I sit between user and machine,\nMaking everything look clean.',a:'INTERFACE',img:'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900'},
-    {q:'I break programs without a sound,\nDevelopers search till I’m found.',a:'BUG',img:'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900'},
-    {q:'I can be kept.\nWithout being held.',a:'PROMISE',img:'https://images.unsplash.com/photo-1520975922284-2f9f3f2f1c4a?w=900'}
-];
-
-function startRound1(){
-    round1Index=0;
-    showSlide('round1');
-    loadRound1Question();
-}
-
-function loadRound1Question(){
-    if(round1Index>=round1Questions.length){
-        showSlide('techIntro');
-        return;
-    }
-    const q=round1Questions[round1Index];
-    document.getElementById('question').innerText='Q' + (round1Index+1) + ': ' + q.q;
-    document.getElementById('answer').innerHTML='';
-    resetTimer();
-    startTimer();
-}
-
-function nextQuestion(){
-    round1Index++;
-    loadRound1Question();
-}
-
-function resetTimer(){
-    stopTimer();
-    timeLeft=20;
-    document.getElementById('timer').innerText=timeLeft;
-}
-
-function startTimer(){
-    if(timerInt) return;
-    timerInt=setInterval(function(){
-        timeLeft--;
-        document.getElementById('timer').innerText=timeLeft;
-        if(timeLeft<=0){
-            stopTimer();
-            alert('⏰ Time is up!');
-        }
-    },1000);
-}
-
-function stopTimer(){
-    if(timerInt){
-        clearInterval(timerInt);
-        timerInt=null;
-    }
-}
-
-function showAnswer(){
-    const q=round1Questions[round1Index];
-    let html='<div class="answer-box">';
-    if(q.img){
-        html+='<img class="answer-image" src="'+q.img+'" alt="'+q.a+'" onerror="this.style.display=\'none\';">';
-    }
-    html+='<div class="answer-text">'+q.a+'</div>';
-    html+='</div>';
-    document.getElementById('answer').innerHTML=html;
-    speak(q.a);
-}
-
-const techQuestions = [
-    {html:`SQL – LEFT JOIN Nightmare<br><br><div class="table-wrap"><table class="quiz-table"><tr><th>Table A</th></tr><tr><td>ID</td></tr><tr><td>1</td></tr><tr><td>2</td></tr></table><br><table class="quiz-table"><tr><th>Table B</th></tr><tr><td>ID</td></tr><tr><td>1</td></tr><tr><td>1</td></tr><tr><td>1</td></tr><tr><td>2</td></tr><tr><td>2</td></tr></table></div><br>Query:<br><div class="mono">SELECT COUNT(*)\nFROM A\nLEFT JOIN B\nON A.ID = B.ID;</div><br>What is the result?`,options:['A) 2','B) 3','C) 5','D) 7'],a:'C) 5',img:'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=900',explanation:'LEFT JOIN returns one row for each match. ID=1 matches 3 rows in B and ID=2 matches 2 rows in B. So total rows = 3 + 2 = 5.'},
-    {html:`<div class="table-wrap"><table class="quiz-table"><tr><th>Salary</th></tr><tr><td>100</td></tr><tr><td>100</td></tr><tr><td>100</td></tr><tr><td>90</td></tr></table></div><br>Query:<br><div class="mono">SELECT Salary,\n       ROW_NUMBER() OVER(ORDER BY Salary DESC) RN,\n       RANK() OVER(ORDER BY Salary DESC) R,\n       DENSE_RANK() OVER(ORDER BY Salary DESC) DR\nFROM Employee;</div><br>What is the rank of Salary = 90?`,options:['A) RN=4, R=4, DR=2','B) RN=2, R=2, DR=2','C) RN=4, R=2, DR=2','D) RN=4, R=4, DR=4'],a:'A) RN=4, R=4, DR=2',img:'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=900',explanation:'Salary 100 gets RN 1,2,3 and R=1,1,1; Salary 90 gets RN=4, R=4, DR=2.'},
-    {html:`<div class="table-wrap"><table class="quiz-table"><tr><th>Value</th></tr><tr><td>NULL</td></tr><tr><td>NULL</td></tr></table></div><br>Query:<br><div class="mono">SELECT\nCOUNT(*),\nCOUNT(Value),\nSUM(Value),\nAVG(Value)\nFROM T;</div><br>What is the output?`,options:['A) 2,0,NULL,NULL','B) 2,2,0,0','C) 0,0,0,NULL','D) 2,0,0,0'],a:'A) 2,0,NULL,NULL',img:'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900',explanation:'COUNT(*) = 2, COUNT(Value) = 0, SUM(Value) = NULL, AVG(Value) = NULL.'},
-    {html:`<div class="mono">funcs = []\n\nfor i in range(3):\n    funcs.append(lambda: i)\n\nprint([f() for f in funcs])</div><br>What is the output?`,options:['A) [0,1,2]','B) [2,2,2]','C) [3,3,3]','D) Error'],a:'B) [2,2,2]',img:'https://images.unsplash.com/photo-1515879218367-43490279c0fa?w=900',explanation:'Lambdas capture the variable, not its value. After the loop ends, i = 2. So all lambdas return [2,2,2].'},
-    {html:`<div class="mono">a = [1,2]\nb = [1,2]\n\nprint(a == b, a is b)</div><br>What is the output?`,options:['A) True True','B) False False','C) True False','D) False True'],a:'C) True False',img:'https://images.unsplash.com/photo-1515879218367-43490279c0fa?w=900',explanation:'== compares values, is compares object identity.'}
+<meta charset="UTF-8" />
+<meta output?`,options:['A) True True','B) False False','C) True False','D) False True'],a:'C) True False',explanation:'== compares values, is compares object identity.'}<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 ];
 
 function startTechnicalRound(){
@@ -304,9 +71,6 @@ function stopTechTimer(){
 function showTechAnswer(){
     const q=techQuestions[techIndex];
     let html='<div class="answer-box">';
-    if(q.img){
-        html+='<img class="answer-image" src="'+q.img+'" alt="'+q.a+'" onerror="this.style.display=\'none\';">';
-    }
     html+='<div class="answer-text">'+q.a+'</div>';
     html+='<div class="explanation">'+q.explanation+'</div>';
     html+='</div>';
@@ -380,7 +144,6 @@ function showOutputAnswer(){
 </script>
 </body>
 </html>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Gantec Puzzle Arena</title>
 
 <style>
@@ -468,13 +231,6 @@ button:hover{
     animation:fadeIn .35s ease-in-out;
     max-width:100%;
     min-width:70%;
-}
-.answer-image{
-    width:420px;
-    max-width:100%;
-    border-radius:18px;
-    margin-top:14px;
-    box-shadow:0 8px 22px rgba(0,0,0,.35);
 }
 .answer-text{
     font-size:36px;
@@ -697,3 +453,230 @@ button:hover{
         <div class="btn-row">
             <button onclick="showAnswer()">Show Answer</button>
             <button onclick="nextQuestion()">Next</button>
+            <button onclick="showSlide('rules')">⬅ Back</button>
+        </div>
+        <div id="answer"></div>
+    </div>
+
+    <!-- TECH INTRO -->
+    <div id="techIntro" class="hidden">
+        <div class="round-title">⚙️ TECHNICAL ROUND</div>
+        <div class="sub-title">MCQ + Tables + Code + Theory</div>
+        <p style="font-size:24px;line-height:1.75;max-width:850px;margin:0 auto 18px;">
+            In this round, questions will appear with proper options. For SQL and coding questions, the table/code will be shown clearly.
+            Click <b>Show Answer</b> to reveal the answer and explanation.
+        </p>
+        <div class="btn-row">
+            <button onclick="startTechnicalRound()">Start Technical Round</button>
+            <button onclick="showSlide('round1')">⬅ Back</button>
+        </div>
+    </div>
+
+    <!-- TECH ROUND -->
+    <div id="techRound" class="hidden">
+        <div class="sub-title">Question <span id="techCounter"></span> / <span id="techTotal"></span></div>
+        <div id="techQuestionCard" class="question-card">
+            <h2 id="techQuestion"></h2>
+            <div id="techOptions"></div>
+        </div>
+        <div class="timer" id="techTimer">20</div>
+        <div class="btn-row">
+            <button onclick="showTechAnswer()">Show Answer</button>
+            <button onclick="nextTechQuestion()">Next</button>
+            <button onclick="showSlide('techIntro')">⬅ Back</button>
+        </div>
+        <div id="techAnswer"></div>
+    </div>
+
+    <!-- OUTPUT ROUND -->
+    <div id="outputRound" class="hidden">
+        <div class="round-title">💻 PROGRAM OUTPUT ROUND</div>
+        <div class="sub-title">10 Questions</div>
+        <h2 id="outputQuestion"></h2>
+        <div class="timer" id="outputTimer">20</div>
+        <div class="btn-row">
+            <button onclick="showOutputAnswer()">Show Answer</button>
+            <button onclick="nextOutputQuestion()">Next</button>
+            <button onclick="showSlide('techRound')">⬅ Back</button>
+        </div>
+        <div id="outputAnswer"></div>
+    </div>
+
+    <!-- THANK YOU -->
+    <div id="thankYou" class="hidden">
+        <h1 style="font-size:64px;margin:0 0 10px;">🎉 THANK YOU 🎉</h1>
+        <h2 style="margin:10px 0 16px;">Thank you for participating in the game</h2>
+        <p style="font-size:28px;line-height:1.8;max-width:900px;margin:0 auto;">
+            We hope you enjoyed the challenge.<br>
+            Your presence and participation made this event special.<br>
+            See you again in the next fun session!
+        </p>
+        <h3 style="font-size:32px;margin-top:18px;">👏 Thank you for your participation and support! 👏</h3>
+    </div>
+
+</div>
+
+<script>
+let round1Index=0, techIndex=0, outputIndex=0;
+let timerInt=null, techTimerInt=null, outputTimerInt=null;
+let timeLeft=20, techTimeLeft=20, outputTimeLeft=20;
+
+function speak(text){
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = 0.95;
+    utter.pitch = 1;
+    utter.volume = 1;
+    window.speechSynthesis.speak(utter);
+}
+
+function showSlide(id){
+    const pages=['intro','rules','example','round1','techIntro','techRound','outputRound','thankYou'];
+    for(let i=0;i<pages.length;i++){
+        const el=document.getElementById(pages[i]);
+        if(el) el.classList.add('hidden');
+    }
+    const active=document.getElementById(id);
+    if(active) active.classList.remove('hidden');
+    stopTimer(); stopTechTimer(); stopOutputTimer();
+
+    if(id==='intro'){
+        speak('Welcome to Gantec Puzzle Arena. Fast minds, smart answers, big fun.');
+    }
+    if(id==='rules'){
+        speak('Please read the rules carefully.');
+    }
+}
+
+function startGame(){
+    showSlide('rules');
+}
+
+function showRules(){
+    const rulesList = [
+        "The game contains 30 Puzzle Questions and 5 Technical Questions.",
+        "⏱️ You have 20 seconds to answer each question.",
+        "📖 Read each question carefully before submitting your answer in chat .",
+        "✅ Each correct answer earns 1 points.",
+        "",
+        "💡 A separate example slide is provided before the main game starts.",
+        "🏁 After the puzzle round, the technical round will begin."
+    ];
+
+    let html = '<div style="font-size:30px;font-weight:800;margin-bottom:18px;text-align:center;">🎮 Game Rules</div>';
+    html += '<div style="display:flex;flex-direction:column;gap:12px;">';
+    for(let i=0;i<rulesList.length;i++){
+        if(rulesList[i] === ""){
+            html += '<div style="height:8px;"></div>';
+        } else {
+            html += '<div style="padding:14px 16px;border-radius:14px;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.14);font-size:22px;line-height:1.6;">'+rulesList[i]+'</div>';
+        }
+    }
+    html += '</div>';
+    document.getElementById('rulesText').innerHTML = html;
+}
+
+function showExample(){
+    let html = '<div class="answer-box">';
+    html += '<div class="answer-text">MAP 🗺️</div>';
+    html += '</div>';
+    document.getElementById('exampleAns').innerHTML = html;
+    speak('Map');
+}
+
+const round1Questions = [
+    {q:'I have many keys but open no locks. What am I?',a:'KEYBOARD'},
+    {q:'I can run thousands of applications but never move an inch. What am I?',a:'SERVER'},
+    {q:'I store memories but have no brain. What am I?',a:'HARD DRIVE'},
+    {q:'I carry my home everywhere.\nSlowly but confidently.\nWhat am I?',a:'TORTOISE'},
+    {q:'Palaces fill my streets.\nCamels are not far away.\nMy color made me famous.\nWho am I?',a:'JAIPUR'},
+    {q:'I am worn in many styles.\nAcross many states.\nYet remain timeless.\nWhat am I?',a:'SAREE'},
+    {q:'I decide your quick-thinking pace.\nIn your game I rule the race.',a:'TIMER'},
+    {q:'I protect doors you cannot see,\nHackers fear getting past me.',a:'FIREWALL'},
+    {q:'I repeat the same work again,\nTill logic says I should refrain.',a:'LOOP'},
+    {q:'I find mistakes hidden in code,\nAnd lighten the developer’s load.',a:'DEBUGGER'},
+    {q:'I rise each year but never fall,\nNo ladder needed after all.',a:'AGE'},
+    {q:'A room with no door and no wall,\nStill people love me after all.',a:'MUSHROOM'},
+    {q:'I shine by night, disappear by noon,\nSilent beauty in the sky soon.',a:'MOON'},
+    {q:'I can be broken.\nWithout being touched.',a:'PROMISE'},
+    {q:'I can be stolen.\nWithout touching anything.',a:'HEART'},
+    {q:'Invisible but always near,\nWhen I’m gone everyone feels fear.',a:'WIFI'},
+    {q:'I define goals for every team,\nSuccess begins within my theme.',a:'TARGET'},
+    {q:'I come once a year with hope and cheer,\nEmployees wait for me throughout the year.',a:'APPRAISAL'},
+    {q:'I give you a break from office chair,\nRequested in portal with extra care.',a:'LEAVE'},
+    {q:'I teach you skills to grow each day,\nLearning always leads the way.',a:'TRAINING'},
+    {q:'I am small and spinning.\nYet I appear at the center of pride.\nTwenty-four spokes define me.\nWhat am I?',a:'ASHOKA CHAKRA'},
+    {q:'I am full of holes but can still hold water. What am I?',a:'SPONGE'},
+    {q:'I wear white through day and night.\nA king built me for love.\nMillions visit me every year.\nWho am I?',a:'TAJ MAHAL'},
+    {q:'There is a word in the English language in which the first two letters signify a male, the first three letters signify a female, the first four signify a great man, and the whole word, a great woman. What is the word?',a:'HEROINE'},
+    {q:'Turn me on my side, and I am everything. Cut me in half, and I am nothing. What am I?',a:'NUMBER 8'},
+    {q:'I lead company vision and goal,\nTaking the highest leadership role.',a:'CEO'},
+    {q:'I judge your progress through the year,\nManagers review me with care.',a:'PERFORMANCE'},
+    {q:'I sit between user and machine,\nMaking everything look clean.',a:'INTERFACE'},
+    {q:'I break programs without a sound,\nDevelopers search till I’m found.',a:'BUG'},
+    {q:'I can be kept.\nWithout being held.',a:'PROMISE'}
+];
+
+function startRound1(){
+    round1Index=0;
+    showSlide('round1');
+    loadRound1Question();
+}
+
+function loadRound1Question(){
+    if(round1Index>=round1Questions.length){
+        showSlide('techIntro');
+        return;
+    }
+    const q=round1Questions[round1Index];
+    document.getElementById('question').innerText='Q' + (round1Index+1) + ': ' + q.q;
+    document.getElementById('answer').innerHTML='';
+    resetTimer();
+    startTimer();
+}
+
+function nextQuestion(){
+    round1Index++;
+    loadRound1Question();
+}
+
+function resetTimer(){
+    stopTimer();
+    timeLeft=20;
+    document.getElementById('timer').innerText=timeLeft;
+}
+
+function startTimer(){
+    if(timerInt) return;
+    timerInt=setInterval(function(){
+        timeLeft--;
+        document.getElementById('timer').innerText=timeLeft;
+        if(timeLeft<=0){
+            stopTimer();
+            alert('⏰ Time is up!');
+        }
+    },1000);
+}
+
+function stopTimer(){
+    if(timerInt){
+        clearInterval(timerInt);
+        timerInt=null;
+    }
+}
+
+function showAnswer(){
+    const q=round1Questions[round1Index];
+    let html='<div class="answer-box">';
+    html+='<div class="answer-text">'+q.a+'</div>';
+    html+='</div>';
+    document.getElementById('answer').innerHTML=html;
+    speak(q.a);
+}
+
+const techQuestions = [
+    {html:`SQL – LEFT JOIN Nightmare<br><br><div class="table-wrap"><table class="quiz-table"><tr><th>Table A</th></tr><tr><td>ID</td></tr><tr><td>1</td></tr><tr><td>2</td></tr></table><br><table class="quiz-table"><tr><th>Table B</th></tr><tr><td>ID</td></tr><tr><td>1</td></tr><tr><td>1</td></tr><tr><td>1</td></tr><tr><td>2</td></tr><tr><td>2</td></tr></table></div><br>Query:<br><div class="mono">SELECT COUNT(*)\nFROM A\nLEFT JOIN B\nON A.ID = B.ID;</div><br>What is the result?`,options:['A) 2','B) 3','C) 5','D) 7'],a:'C) 5',explanation:'LEFT JOIN returns one row for each match. ID=1 matches 3 rows in B and ID=2 matches 2 rows in B. So total rows = 3 + 2 = 5.'},
+    {html:`<div class="table-wrap"><table class="quiz-table"><tr><th>Salary</th></tr><tr><td>100</td></tr><tr><td>100</td></tr><tr><td>100</td></tr><tr><td>90</td></tr></table></div><br>Query:<br><div class="mono">SELECT Salary,\n       ROW_NUMBER() OVER(ORDER BY Salary DESC) RN,\n       RANK() OVER(ORDER BY Salary DESC) R,\n       DENSE_RANK() OVER(ORDER BY Salary DESC) DR\nFROM Employee;</div><br>What is the rank of Salary = 90?`,options:['A) RN=4, R=4, DR=2','B) RN=2, R=2, DR=2','C) RN=4, R=2, DR=2','D) RN=4, R=4, DR=4'],a:'A) RN=4, R=4, DR=2',explanation:'Salary 100 gets RN 1,2,3 and R=1,1,1; Salary 90 gets RN=4, R=4, DR=2.'},
+    {html:`<div class="table-wrap"><table class="quiz-table"><tr><th>Value</th></tr><tr><td>NULL</td></tr><tr><td>NULL</td></tr></table></div><br>Query:<br><div class="mono">SELECT\nCOUNT(*),\nCOUNT(Value),\nSUM(Value),\nAVG(Value)\nFROM T;</div><br>What is the output?`,options:['A) 2,0,NULL,NULL','B) 2,2,0,0','C) 0,0,0,NULL','D) 2,0,0,0'],a:'A) 2,0,NULL,NULL',explanation:'COUNT(*) = 2, COUNT(Value) = 0, SUM(Value) = NULL, AVG(Value) = NULL.'},
+    {html:`<div class="mono">funcs = []\n\nfor i in range(3):\n    funcs.append(lambda: i)\n\nprint([f() for f in funcs])</div><br>What is the output?`,options:['A) [0,1,2]','B) [2,2,2]','C) [3,3,3]','D) Error'],a:'B) [2,2,2]',explanation:'Lambdas capture the variable, not its value. After the loop ends, i = 2. So all lambdas return [2,2,2].'},
