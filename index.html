@@ -1,247 +1,876 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Gantec Puzzle Arena</title>
 
 <style>
+:root{
+    --bg1:#0f172a;
+    --bg2:#1e3a8a;
+    --bg3:#7c3aed;
+    --bg4:#0ea5e9;
+    --card:rgba(255,255,255,.12);
+    --btn1:#2563eb;
+    --btn2:#1d4ed8;
+    --text:#fff;
+    --muted:rgba(255,255,255,.75);
+}
+
+*{
+    box-sizing:border-box;
+}
+
 body{
-margin:0;
-font-family:Arial,sans-serif;
-color:white;
-text-align:center;
-padding:30px;
-min-height:100vh;
-background:linear-gradient(-45deg,#0f172a,#1e3a8a,#7c3aed,#0ea5e9);
-background-size:400% 400%;
-animation:gradientMove 15s ease infinite;
+    margin:0;
+    font-family:Arial,sans-serif;
+    color:var(--text);
+    text-align:center;
+    padding:24px;
+    min-height:100vh;
+    background:linear-gradient(-45deg,var(--bg1),var(--bg2),var(--bg3),var(--bg4));
+    background-size:400% 400%;
+    animation:gradientMove 15s ease infinite;
 }
+
 .box{
-max-width:1100px;
-margin:auto;
-padding:50px;
-border-radius:28px;
-background:rgba(255,255,255,0.12);
-backdrop-filter:blur(16px);
-box-shadow:0 12px 40px rgba(0,0,0,0.35);
+    max-width:1180px;
+    margin:auto;
+    padding:40px;
+    border-radius:28px;
+    background:var(--card);
+    backdrop-filter:blur(16px);
+    box-shadow:0 12px 40px rgba(0,0,0,.35);
 }
-.hidden{display:none;}
-button{
-padding:14px 28px;
-font-size:18px;
-margin:10px;
-border:none;
-border-radius:10px;
-cursor:pointer;
-background:linear-gradient(135deg,#2563eb,#1d4ed8);
-color:white;
+
+.hidden{
+    display:none;
 }
-.timer{font-size:65px;}
-.correct-answer{font-size:30px;margin-top:20px;}
-.answer-image{width:260px;border-radius:12px;margin-top:20px;}
-#question{font-size:32px;white-space:pre-line;}
+
+button, select{
+    padding:12px 20px;
+    font-size:17px;
+    margin:8px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    background:linear-gradient(135deg,var(--btn1),var(--btn2));
+    color:#fff;
+    transition:.2s ease;
+    box-shadow:0 5px 14px rgba(0,0,0,.18);
+}
+
+button:hover, select:hover{
+    opacity:.94;
+    transform:translateY(-1px);
+}
+
+.small-start-btn{
+    padding:10px 16px;
+    font-size:15px;
+    border-radius:8px;
+}
+
+select{
+    background:#1d4ed8;
+    min-width:180px;
+}
+
+.label{
+    font-size:20px;
+    margin-top:16px;
+    margin-bottom:8px;
+}
+
+.round-title{
+    font-size:38px;
+    font-weight:800;
+    margin-bottom:6px;
+}
+
+.sub-title{
+    font-size:22px;
+    margin-bottom:18px;
+    color:var(--muted);
+}
+
+.timer{
+    font-size:68px;
+    font-weight:800;
+    margin:18px 0 8px;
+}
+
+#question, #techQuestion, #outputQuestion{
+    font-size:30px;
+    white-space:pre-line;
+    line-height:1.45;
+    margin:18px 0;
+}
+
+.answer-box{
+    margin:20px auto 0;
+    padding:18px;
+    border-radius:18px;
+    background:rgba(255,255,255,.15);
+    display:inline-block;
+    animation:fadeIn .35s ease-in-out;
+    max-width:100%;
+}
+
+.answer-image{
+    width:280px;
+    max-width:90%;
+    border-radius:16px;
+    margin-top:14px;
+    box-shadow:0 8px 22px rgba(0,0,0,.35);
+}
+
+.correct-answer{
+    font-size:28px;
+    margin-top:16px;
+    font-weight:800;
+}
+
+.explanation{
+    font-size:18px;
+    line-height:1.65;
+    margin-top:12px;
+    color:#f8fafc;
+    text-align:left;
+    max-width:760px;
+}
+
+.question-card{
+    max-width:950px;
+    margin:0 auto;
+}
+
+.options-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:12px;
+    margin:18px auto 0;
+    max-width:900px;
+}
+
+.option-btn{
+    padding:14px 16px;
+    border-radius:14px;
+    background:rgba(255,255,255,.16);
+    border:1px solid rgba(255,255,255,.18);
+    color:#fff;
+    font-size:16px;
+    line-height:1.4;
+    text-align:left;
+    cursor:default;
+    box-shadow:none;
+}
+
+.mono{
+    font-family:Consolas,Menlo,monospace;
+    white-space:pre-wrap;
+    background:rgba(15,23,42,.35);
+    padding:14px;
+    border-radius:12px;
+    line-height:1.45;
+    text-align:left;
+    overflow:auto;
+}
+
+.table-wrap{
+    overflow-x:auto;
+    margin-top:14px;
+}
+
+.quiz-table{
+    border-collapse:collapse;
+    width:100%;
+    max-width:680px;
+    margin:0 auto;
+    background:rgba(255,255,255,.06);
+    border-radius:14px;
+    overflow:hidden;
+}
+
+.quiz-table th,
+.quiz-table td{
+    border:1px solid rgba(255,255,255,.18);
+    padding:10px 14px;
+    text-align:center;
+    font-size:17px;
+}
+
+.quiz-table th{
+    background:rgba(255,255,255,.18);
+}
+
+.info-card{
+    max-width:900px;
+    margin:24px auto;
+    padding:24px;
+    border-radius:18px;
+    background:rgba(255,255,255,.12);
+    text-align:left;
+    line-height:1.9;
+    font-size:22px;
+}
+
 @keyframes gradientMove{
-0%{background-position:0%}
-50%{background-position:100%}
-100%{background-position:0%}
+    0%{background-position:0%}
+    50%{background-position:100%}
+    100%{background-position:0%}
+}
+
+@keyframes fadeIn{
+    from{opacity:0;transform:scale(.97)}
+    to{opacity:1;transform:scale(1)}
+}
+
+@media (max-width:700px){
+    body{padding:12px}
+    .box{padding:22px}
+    h1{font-size:42px !important}
+    .round-title{font-size:28px}
+    #question,#techQuestion,#outputQuestion{font-size:22px}
+    .timer{font-size:52px}
+    button,select{font-size:15px;padding:10px 14px}
+    .info-card{font-size:18px}
 }
 </style>
 </head>
-
 <body>
 <div class="box">
 
-<!-- INTRO -->
-<div id="intro">
-<h1 style="font-size:70px;">🎉 GANTEC PUZZLE ARENA 🎉</h1>
-<h2>Think Fast ⚡ Answer Smart 💡 Win Big 🏆</h2>
-<button onclick="startIntro()">▶ START</button>
-</div>
+    <!-- INTRO -->
+    <div id="intro">
+        <h1 style="font-size:64px;margin:0 0 12px;">🎉 GANTEC PUZZLE ARENA 🎉</h1>
+        <h2 style="font-size:30px;margin:10px 0;color:#f8fafc;">
+            A Fun & Interactive Team Quiz Challenge
+        </h2>
 
-<!-- RULES -->
-<div id="rules" class="hidden">
-<h1>📋 GAME RULES</h1>
-<div id="rulesText" style="font-size:28px;line-height:2;"></div>
-<button onclick="goBack('intro')">⬅ Back</button>
-<button onclick="goExample()">Next ➜</button>
-</div>
+        <p style="font-size:22px;line-height:1.8;max-width:850px;margin:20px auto 28px;color:rgba(255,255,255,0.92);">
+            Welcome to the Gantec Puzzle Arena — a fast-paced quiz game designed for online team meetings.
+            Challenge your thinking, test your skills, and enjoy multiple rounds of puzzles, technical questions, and coding output questions.
+        </p>
 
-<!-- EXAMPLE -->
-<div id="example" class="hidden">
-<h1>💡 EXAMPLE</h1>
-<h2 id="exampleQ">What gets wetter the more it dries?</h2>
-<button onclick="showExample()">Show Answer</button>
-<div id="exampleAns"></div>
-<br>
-<button onclick="goBack('rules')">⬅ Back</button>
-<button onclick="startGame()">Start Game</button>
-</div>
+        <div class="label">Choose Difficulty:</div>
+        <select id="difficultySelect">
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard" selected>Hard</option>
+        </select>
 
-<!-- GAME -->
-<div id="game" class="hidden">
-<h1 id="levelTitle"></h1>
-<h2 id="question"></h2>
-<div class="timer" id="timer">15</div>
-<button onclick="showAnswer()">Show Answer</button>
-<button onclick="nextQuestion()">Next</button>
-<br>
-<button onclick="goBack('example')">⬅ Back</button>
-<div id="answer"></div>
-</div>
+        <br>
+        <button class="small-start-btn" onclick="startGame()">▶ START</button>
+    </div>
+
+    <!-- WELCOME SLIDE -->
+    <div id="welcomeSlide" class="hidden">
+        <div class="round-title">👋 WELCOME</div>
+        <h2 style="font-size:34px;margin-top:10px;">Welcome to the Quiz Event</h2>
+
+        <p style="font-size:24px;line-height:1.8;max-width:900px;margin:24px auto;color:rgba(255,255,255,0.95);">
+            We are happy to have you here.
+            This game includes puzzle questions, technical questions, and program output questions.
+            Please read the instructions carefully before starting the challenge.
+        </p>
+
+        <div class="info-card">
+            <div>✅ Round 1: Puzzle Questions</div>
+            <div>✅ Technical Round: SQL, Python, and Theory Questions</div>
+            <div>✅ Program Output Round</div>
+            <div>✅ Final Thank You Slide</div>
+        </div>
+
+        <button onclick="showSlide('rules')">Next ➜</button>
+    </div>
+
+    <!-- RULES -->
+    <div id="rules" class="hidden">
+        <div class="round-title">📋 GAME RULES</div>
+        <h2 style="font-size:32px;margin-top:10px;">Please read the rules carefully</h2>
+
+        <div id="rulesText" style="
+            font-size:24px;
+            line-height:2;
+            max-width:900px;
+            margin:28px auto;
+            text-align:left;
+            padding:24px;
+            border-radius:18px;
+            background:rgba(255,255,255,0.12);
+        "></div>
+
+        <button onclick="showSlide('welcomeSlide')">⬅ Back</button>
+        <button onclick="goExample()">Next ➜</button>
+    </div>
+
+    <!-- EXAMPLE -->
+    <div id="example" class="hidden">
+        <div class="round-title">💡 EXAMPLE</div>
+        <h2 style="font-size:30px;margin-top:12px;">What gets wetter the more it dries?</h2>
+
+        <button onclick="showExample()">Show Answer</button>
+        <div id="exampleAns"></div>
+
+        <br>
+        <button onclick="showSlide('rules')">⬅ Back</button>
+        <button onclick="startRound1()">Start Game</button>
+    </div>
+
+    <!-- ROUND 1 -->
+    <div id="round1" class="hidden">
+        <div class="round-title">ROUND 1 - PUZZLE ROUND</div>
+        <div class="sub-title">30 Questions</div>
+
+        <h2 id="levelTitle"></h2>
+        <h2 id="question"></h2>
+
+        <div class="timer" id="timer">20</div>
+
+        <button onclick="startTimer()">Start Timer</button>
+        <button onclick="stopTimer()">Stop Timer</button>
+        <button onclick="showAnswer()">Show Answer</button>
+        <button onclick="nextQuestion()">Next</button>
+        <br>
+        <button onclick="showSlide('example')">⬅ Back</button>
+
+        <div id="answer"></div>
+    </div>
+
+    <!-- TECH INTRO -->
+    <div id="techIntro" class="hidden">
+        <div class="round-title">⚙️ TECHNICAL ROUND</div>
+        <div class="sub-title">MCQ + Tables + Code + Theory</div>
+
+        <p style="font-size:24px;line-height:1.75;max-width:850px;margin:0 auto 18px;">
+            In this round, questions will appear with proper options.
+            For SQL and coding questions, the table/code will be shown clearly.
+            Click <b>Show Answer</b> to reveal the answer and explanation.
+        </p>
+
+        <button onclick="startTechnicalRound()">Start Technical Round</button>
+        <button onclick="showSlide('round1')">⬅ Back</button>
+    </div>
+
+    <!-- TECH ROUND -->
+    <div id="techRound" class="hidden">
+        <div class="round-title">⚙️ TECHNICAL ROUND</div>
+        <div class="sub-title">
+            Question <span id="techCounter"></span> / <span id="techTotal"></span>
+        </div>
+
+        <div id="techQuestionCard" class="question-card">
+            <h2 id="techQuestion"></h2>
+            <div id="techOptions"></div>
+        </div>
+
+        <div class="timer" id="techTimer">20</div>
+
+        <button onclick="startTechTimer()">Start Timer</button>
+        <button onclick="stopTechTimer()">Stop Timer</button>
+        <button onclick="showTechAnswer()">Show Answer</button>
+        <button onclick="nextTechQuestion()">Next</button>
+        <br>
+        <button onclick="showSlide('techIntro')">⬅ Back</button>
+
+        <div id="techAnswer"></div>
+    </div>
+
+    <!-- OUTPUT ROUND -->
+    <div id="outputRound" class="hidden">
+        <div class="round-title">💻 PROGRAM OUTPUT ROUND</div>
+        <div class="sub-title">10 Questions</div>
+
+        <h2 id="outputQuestion"></h2>
+        <div class="timer" id="outputTimer">20</div>
+
+        <button onclick="startOutputTimer()">Start Timer</button>
+        <button onclick="stopOutputTimer()">Stop Timer</button>
+        <button onclick="showOutputAnswer()">Show Answer</button>
+        <button onclick="nextOutputQuestion()">Next</button>
+        <br>
+        <button onclick="showSlide('techRound')">⬅ Back</button>
+
+        <div id="outputAnswer"></div>
+    </div>
+
+    <!-- THANK YOU -->
+    <div id="thankYou" class="hidden">
+        <h1 style="font-size:64px;margin:0 0 10px;">🎉 THANK YOU 🎉</h1>
+        <h2 style="margin:10px 0 16px;">Thank you for participating in the game</h2>
+        <p style="font-size:28px;line-height:1.8;max-width:900px;margin:0 auto;">
+            We hope you enjoyed the challenge.<br>
+            Your presence and participation made this event special.<br>
+            See you again in the next fun session!
+        </p>
+        <h3 style="font-size:32px;margin-top:18px;">👏 Thank you for your participation and support! 👏</h3>
+    </div>
 
 </div>
 
 <script>
+/* =====================
+   GLOBAL STATE
+===================== */
+let selectedDifficulty = 'hard';
+let round1Index = 0;
+let techIndex = 0;
+let outputIndex = 0;
 
-/* 🔊 SPEECH QUEUE (PERFECT FIX) */
-let speaking=false;
+let timerInt = null;
+let techTimerInt = null;
+let outputTimerInt = null;
 
-function speakQueue(lines){
-    speechSynthesis.cancel();
-    let i=0;
+let timeLeft = 20;
+let techTimeLeft = 20;
+let outputTimeLeft = 20;
 
-    function speakNext(){
-        if(i>=lines.length) return;
-        let msg=new SpeechSynthesisUtterance(lines[i]);
-        msg.rate=1;
-        msg.pitch=1.05;
-        msg.onend=()=>{ i++; speakNext(); };
-        speechSynthesis.speak(msg);
+/* =====================
+   SLIDE CONTROL
+===================== */
+function showSlide(id){
+    ['intro','welcomeSlide','rules','example','round1','techIntro','techRound','outputRound','thankYou'].forEach(s => {
+        const el = document.getElementById(s);
+        if(el) el.classList.add('hidden');
+    });
+
+    const active = document.getElementById(id);
+    if(active) active.classList.remove('hidden');
+
+    stopTimer();
+    stopTechTimer();
+    stopOutputTimer();
+
+    if(id === 'rules'){
+        showRules();
     }
-    speakNext();
 }
 
-/* 🎬 INTRO */
-function startIntro(){
-intro.classList.add("hidden");
-rules.classList.remove("hidden");
-
-let introSpeech=[
-"Welcome everyone to the Gantec Puzzle Arena!",
-"Get ready for an exciting battle of brains.",
-"Think fast, answer smart, and win big!"
-];
-
-speakQueue(introSpeech);
-showRules();
+/* =====================
+   START / INTRO
+===================== */
+function startGame(){
+    selectedDifficulty = document.getElementById('difficultySelect').value;
+    showSlide('welcomeSlide');
 }
 
-/* 📋 RULES */
+/* =====================
+   RULES
+===================== */
 function showRules(){
-let rulesList=[
-"Each team must listen carefully to the question.",
-"You will have fifteen seconds to answer.",
-"Answer must be given in normal format.",
-"First correct team wins the point.",
-"There are three levels in this game.",
-"Each level has ten questions.",
-"Difficulty increases with each level.",
-"Stay sharp and enjoy the challenge!"
-];
+    let rulesList = [
+        "Each team should listen carefully to every question.",
+        "You will have 20 seconds to answer each question.",
+        "Click Show Answer if you want to reveal the correct answer.",
+        "Click Next to move to the next question or slide.",
+        "Round 1 contains puzzle questions.",
+        "After Round 1, the technical round will begin.",
+        "Technical round includes SQL, Python, and theory questions.",
+        "Then you will enter the program output round.",
+        "At the end, a thank you slide will be shown.",
+        "Enjoy the game and have fun!"
+    ];
 
-rulesText.innerHTML = rulesList.map(r=>"👉 "+r+"<br><br>").join("");
-
-setTimeout(()=> speakQueue(rulesList),5000);
+    document.getElementById('rulesText').innerHTML =
+        rulesList.map((r, i) => `<div style="margin-bottom:10px;">${i+1}. ${r}</div>`).join("");
 }
 
-/* 💡 EXAMPLE */
+/* =====================
+   EXAMPLE
+===================== */
 function goExample(){
-rules.classList.add("hidden");
-example.classList.remove("hidden");
-
-speakQueue([
-"Let's look at an example.",
-"What gets wetter the more it dries?"
-]);
+    showSlide('example');
 }
 
 function showExample(){
-exampleAns.innerHTML =
-"<img class='answer-image' src='https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=500'>" +
-"<div class='correct-answer'>TOWEL</div>";
-
-speakQueue(["The correct answer is towel."]);
+    document.getElementById('exampleAns').innerHTML = `
+        <div class="answer-box">
+            <img class="answer-image" src="https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=500" alt="TowelCorrect Answer: TOWEL</div>
+        </div>
+    `;
 }
 
-/* 🚀 START GAME */
-function startGame(){
-example.classList.add("hidden");
-game.classList.remove("hidden");
-
-speakQueue([
-"Teams get ready!",
-"Level one begins now!"
-]);
-
-loadQuestion();
-}
-
-/* 🔙 BACK */
-function goBack(page){
-intro.classList.add("hidden");
-rules.classList.add("hidden");
-example.classList.add("hidden");
-game.classList.add("hidden");
-
-document.getElementById(page).classList.remove("hidden");
-speechSynthesis.cancel();
-}
-
-/* 🎮 GAME */
-let level=1,index=0,timerInt;
-
-const levels={
-level1:[
-{q:"I live in memory forget when power dies",a:"RAM"},
-{q:"I have many keys open no locks",a:"KEYBOARD"},
-{q:"I dry your body become wet myself",a:"TOWEL"}
-]
+/* =====================
+   ROUND 1 QUESTIONS (30)
+===================== */
+const round1Questions = {
+    easy: [
+        { q:'I have many keys but open no locks. What am I?', a:'KEYBOARD' },
+        { q:'I can run thousands of applications but never move an inch. What am I?', a:'SERVER' },
+        { q:'I store memories but have no brain. What am I?', a:'HARD DRIVE' },
+        { q:'I carry my home everywhere.\nSlowly but confidently.\nWhat am I?', a:'TORTOISE' },
+        { q:'Palaces fill my streets.\nCamels are not far away.\nMy color made me famous.\nWho am I?', a:'JAIPUR' },
+        { q:'I am worn in many styles.\nAcross many states.\nYet remain timeless.\nWhat am I?', a:'SAREE' },
+        { q:'I decide your quick-thinking pace.\nIn your game I rule the race.', a:'TIMER' },
+        { q:'I protect doors you cannot see,\nHackers fear getting past me.', a:'FIREWALL' },
+        { q:'I repeat the same work again,\nTill logic says I should refrain.', a:'LOOP' },
+        { q:'I find mistakes hidden in code,\nAnd lighten the developer’s load.', a:'DEBUGGER' }
+    ],
+    medium: [
+        { q:'I rise each year but never fall,\nNo ladder needed after all.', a:'AGE' },
+        { q:'A room with no door and no wall,\nStill people love me after all.', a:'MUSHROOM' },
+        { q:'I shine by night, disappear by noon,\nSilent beauty in the sky soon.', a:'MOON' },
+        { q:'I can be broken.\nWithout being touched.', a:'PROMISE' },
+        { q:'I can be stolen.\nWithout touching anything.', a:'HEART' },
+        { q:'Invisible but always near,\nWhen I’m gone everyone feels fear.', a:'WIFI' },
+        { q:'I define goals for every team,\nSuccess begins within my theme.', a:'TARGET' },
+        { q:'I come once a year with hope and cheer,\nEmployees wait for me throughout the year.', a:'APPRAISAL' },
+        { q:'I give you a break from office chair,\nRequested in portal with extra care.', a:'LEAVE' },
+        { q:'I teach you skills to grow each day,\nLearning always leads the way.', a:'TRAINING' }
+    ],
+    hard: [
+        { q:'I judge your progress through the year,\nManagers review me with care.', a:'PERFORMANCE' },
+        { q:'I lead company vision and goal,\nTaking the highest leadership role.', a:'CEO' },
+        { q:'I sit between user and machine,\nMaking everything look clean.', a:'INTERFACE' },
+        { q:'I break programs without a sound,\nDevelopers search till I’m found.', a:'BUG' },
+        { q:'Turn me on my side, and I am everything. Cut me in half, and I am nothing. What am I?', a:'NUMBER 8' },
+        { q:'There is a word in the English language in which the first two letters signify a male, the first three letters signify a female, the first four signify a great man, and the whole word, a great woman. What is the word?', a:'HEROINE' },
+        { q:'I wear white through day and night.\nA king built me for love.\nMillions visit me every year.\nWho am I?', a:'TAJ MAHAL' },
+        { q:'I am full of holes but can still hold water. What am I?', a:'SPONGE' },
+        { q:'I grow shorter.\nEvery time I do my job.\nEventually I disappear.', a:'CANDLE' },
+        { q:'I am small and spinning.\nYet I appear at the center of pride.\nTwenty-four spokes define me.\nWhat am I?', a:'ASHOKA CHAKRA' }
+    ]
 };
 
-function loadQuestion(){
-let q=levels["level"+level][index];
-levelTitle.innerText="LEVEL "+level;
-question.innerText="Q"+(index+1)+": "+q.q;
-answer.innerHTML="";
-
-speakQueue([q.q]);
-startTimer();
+function round1Image(seed){
+    return `https://picsum.photos/seed/${encodeURIComponent(seed)}/600/340`;
 }
 
-function startTimer(){
-let t=15;
-timer.innerText=t;
-clearInterval(timerInt);
-
-timerInt=setInterval(()=>{
-t--;
-timer.innerText=t;
-if(t<=0){
-clearInterval(timerInt);
-speakQueue(["Time is up"]);
-}
-},1000);
+function startRound1(){
+    round1Index = 0;
+    showSlide('round1');
+    loadRound1Question();
 }
 
-function showAnswer(){
-let q=levels["level"+level][index];
+function loadRound1Question(){
+    const qList = round1Questions[selectedDifficulty];
 
-answer.innerHTML =
-"<img class='answer-image' src='https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500'>" +
-"<div class='correct-answer'>"+q.a+"</div>";
+    if(round1Index >= qList.length){
+        showSlide('techIntro');
+        return;
+    }
 
-speakQueue(["Correct answer is "+q.a]);
+    const q = qList[round1Index];
+    document.getElementById('levelTitle').innerText = `QUESTION ${round1Index+1} / 30`;
+    document.getElementById('question').innerText = `Q${round1Index+1}: ${q.q}`;
+    document.getElementById('answer').innerHTML = '';
+    resetTimer();
 }
 
 function nextQuestion(){
-index++;
-if(index>=levels["level"+level].length){
-alert("🏆 GAME COMPLETED");
-return;
-}
-loadQuestion();
+    round1Index++;
+    loadRound1Question();
 }
 
+function resetTimer(){
+    stopTimer();
+    timeLeft = 20;
+    document.getElementById('timer').innerText = timeLeft;
+}
+
+function startTimer(){
+    if(timerInt) return;
+
+    timerInt = setInterval(() => {
+        timeLeft--;
+        document.getElementById('timer').innerText = timeLeft;
+
+        if(timeLeft <= 0){
+            stopTimer();
+            alert('⏰ Time is up!');
+        }
+    }, 1000);
+}
+
+function stopTimer(){
+    if(timerInt){
+        clearInterval(timerInt);
+        timerInt = null;
+    }
+}
+
+function showAnswer(){
+    const q = round1Questions[selectedDifficulty][round1Index];
+    document.getElementById('answer').innerHTML = `
+        <div class="answer-box">
+            <img class="answer-image" src="${round1Image(q.a)}" alt="${q.aAnswer: ${q.a}</div>
+        </div>`;
+}
+
+/* =====================
+   TECHNICAL ROUND (MCQ)
+===================== */
+const techQuestions = [
+    {
+        html: `SQL – LEFT JOIN Nightmare<br><br>
+        <div class="table-wrap">
+          <table class="quiz-table">
+            <tr><th>Table A</th></tr>
+            <tr><td>ID</td></tr>
+            <tr><td>1</td></tr>
+            <tr><td>2</td></tr>
+          </table>
+          <br>
+          <table class="quiz-table">
+            <tr><th>Table B</th></tr>
+            <tr><td>ID</td></tr>
+            <tr><td>1</td></tr>
+            <tr><td>1</td></tr>
+            <tr><td>1</td></tr>
+            <tr><td>2</td></tr>
+            <tr><td>2</td></tr>
+          </table>
+        </div>
+        <br>
+        Query:<br>
+        <div class="mono">SELECT COUNT(*)
+FROM A
+LEFT JOIN B
+ON A.ID = B.ID;</div>
+        <br>What is the result?`,
+        options: ['A) 2','B) 3','C) 5','D) 7'],
+        a: 'C) 5',
+        explanation: 'LEFT JOIN returns one row for each match. ID=1 matches 3 rows in B and ID=2 matches 2 rows in B. So total rows = 3 + 2 = 5. ✅ Correct Answer: C) 5'
+    },
+    {
+        html: `<div class="table-wrap">
+          <table class="quiz-table">
+            <tr><th>Salary</th></tr>
+            <tr><td>100</td></tr>
+            <tr><td>100</td></tr>
+            <tr><td>100</td></tr>
+            <tr><td>90</td></tr>
+          </table>
+        </div><br>
+        Query:<br>
+        <div class="mono">SELECT Salary,
+       ROW_NUMBER() OVER(ORDER BY Salary DESC) RN,
+       RANK() OVER(ORDER BY Salary DESC) R,
+       DENSE_RANK() OVER(ORDER BY Salary DESC) DR
+FROM Employee;</div><br>
+        What is the rank of Salary = 90?`,
+        options: ['A) RN=4, R=4, DR=2','B) RN=2, R=2, DR=2','C) RN=4, R=2, DR=2','D) RN=4, R=4, DR=4'],
+        a: 'A) RN=4, R=4, DR=2',
+        explanation: 'Salary 100 gets RN 1,2,3 and R=1,1,1; Salary 90 gets RN=4, R=4, DR=2. Many people confuse RANK() and DENSE_RANK().'
+    },
+    {
+        html: `<div class="table-wrap">
+          <table class="quiz-table">
+            <tr><th>Value</th></tr>
+            <tr><td>NULL</td></tr>
+            <tr><td>NULL</td></tr>
+          </table>
+        </div><br>
+        Query:<br>
+        <div class="mono">SELECT
+COUNT(*),
+COUNT(Value),
+SUM(Value),
+AVG(Value)
+FROM T;</div><br>
+        What is the output?`,
+        options: ['A) 2,0,NULL,NULL','B) 2,2,0,0','C) 0,0,0,NULL','D) 2,0,0,0'],
+        a: 'A) 2,0,NULL,NULL',
+        explanation: 'COUNT(*) = 2, COUNT(Value) = 0, SUM(Value) = NULL, AVG(Value) = NULL.'
+    },
+    {
+        html: `<div class="mono">funcs = []
+
+for i in range(3):
+    funcs.append(lambda: i)
+
+print([f() for f in funcs])</div><br>
+        What is the output?`,
+        options: ['A) [0,1,2]','B) [2,2,2]','C) [3,3,3]','D) Error'],
+        a: 'B) [2,2,2]',
+        explanation: 'Lambdas capture the variable, not its value. After the loop ends, i = 2. So all lambdas return the final value of i, which is [2,2,2]. ⚠️ Therefore the correct answer is B, not C.'
+    },
+    {
+        html: `<div class="mono">a = [1,2]
+b = [1,2]
+
+print(a == b, a is b)</div><br>
+        What is the output?`,
+        options: ['A) True True','B) False False','C) True False','D) False True'],
+        a: 'C) True False',
+        explanation: '== compares values, is compares object identity. Different list objects can have same content.'
+    },
+    {
+        html: 'What is the full form of CPU?',
+        options: ['A) Central Process Unit','B) Central Processing Unit','C) Computer Processing Unit','D) Control Processing Unit'],
+        a: 'B) Central Processing Unit',
+        explanation: 'CPU stands for Central Processing Unit.'
+    },
+    {
+        html: 'What does HTML stand for?',
+        options: ['A) HyperText Markup Language','B) HighText Markup Language','C) Hyper Tool Markup Language','D) Home Tool Markup Language'],
+        a: 'A) HyperText Markup Language',
+        explanation: 'HTML stands for HyperText Markup Language.'
+    },
+    {
+        html: 'What does CSS stand for?',
+        options: ['A) Computer Style Sheets','B) Cascading Style Sheets','C) Creative Style System','D) Color Style Sheets'],
+        a: 'B) Cascading Style Sheets',
+        explanation: 'CSS stands for Cascading Style Sheets.'
+    },
+    {
+        html: 'What is the full form of RAM?',
+        options: ['A) Random Access Memory','B) Read Access Memory','C) Run Access Memory','D) Rapid Access Memory'],
+        a: 'A) Random Access Memory',
+        explanation: 'RAM stands for Random Access Memory.'
+    },
+    {
+        html: 'What is the full form of URL?',
+        options: ['A) Uniform Resource Locator','B) Universal Resource Link','C) Uniform Routing Language','D) Unit Resource Locator'],
+        a: 'A) Uniform Resource Locator',
+        explanation: 'URL stands for Uniform Resource Locator.'
+    }
+];
+
+function startTechnicalRound(){
+    techIndex = 0;
+    showSlide('techRound');
+    loadTechQuestion();
+}
+
+function techTotal(){
+    return techQuestions.length;
+}
+
+function loadTechQuestion(){
+    if(techIndex >= techQuestions.length){
+        showSlide('outputRound');
+        outputIndex = 0;
+        loadOutputQuestion();
+        return;
+    }
+
+    const q = techQuestions[techIndex];
+    document.getElementById('techCounter').innerText = techIndex + 1;
+    document.getElementById('techTotal').innerText = techTotal();
+    document.getElementById('techQuestion').innerHTML = q.html;
+
+    document.getElementById('techOptions').innerHTML = q.options ? `
+        <div class="options-grid">
+            ${q.options.map(opt => `<div class="option-btn">${opt}</div>`).join('')}
+        </div>` : '';
+
+    document.getElementById('techAnswer').innerHTML = '';
+    resetTechTimer();
+}
+
+function nextTechQuestion(){
+    techIndex++;
+    loadTechQuestion();
+}
+
+function resetTechTimer(){
+    stopTechTimer();
+    techTimeLeft = 20;
+    document.getElementById('techTimer').innerText = techTimeLeft;
+}
+
+function startTechTimer(){
+    if(techTimerInt) return;
+
+    techTimerInt = setInterval(() => {
+        techTimeLeft--;
+        document.getElementById('techTimer').innerText = techTimeLeft;
+
+        if(techTimeLeft <= 0){
+            stopTechTimer();
+            alert('⏰ Time is up!');
+        }
+    }, 1000);
+}
+
+function stopTechTimer(){
+    if(techTimerInt){
+        clearInterval(techTimerInt);
+        techTimerInt = null;
+    }
+}
+
+function showTechAnswer(){
+    const q = techQuestions[techIndex];
+    const img = `https://picsum.photos/seed/${encodeURIComponent(q.a)}/600/340`;
+
+    document.getElementById('techAnswer').innerHTML = `
+        <div class="answer-box">
+            <img class="answer-image" src="${img}" alt="${q.aAnswer: ${q.a}</div>
+            <div class="explanation">${(q.explanation || '').replace(/\n/g, '<br>')}</div>
+        </div>`;
+}
+
+/* =====================
+   OUTPUT ROUND
+===================== */
+const outputQuestions = [
+    { q:'What is the output of: console.log(2 + 3 * 4);', a:'14' },
+    { q:'What is the output of: console.log(\'5\' + 1);', a:'51' },
+    { q:'What is the output of: console.log(typeof null);', a:'object' },
+    { q:'What is the output of: console.log(Boolean(0));', a:'false' },
+    { q:'What is the output of: console.log(10 / 2);', a:'5' },
+    { q:'What is the output of: console.log([1,2,3].length);', a:'3' },
+    { q:'What is the output of: console.log(\'Hello\'.toUpperCase());', a:'HELLO' },
+    { q:'What is the output of: console.log(5 == \'5\');', a:'true' },
+    { q:'What is the output of: console.log(5 === \'5\');', a:'false' },
+    { q:'What is the output of: console.log(Math.floor(4.8));', a:'4' }
+];
+
+function loadOutputQuestion(){
+    if(outputIndex >= outputQuestions.length){
+        showSlide('thankYou');
+        return;
+    }
+
+    const q = outputQuestions[outputIndex];
+    document.getElementById('outputQuestion').innerText = `OUTPUT Q${outputIndex+1}: ${q.q}`;
+    document.getElementById('outputAnswer').innerHTML = '';
+    resetOutputTimer();
+}
+
+function nextOutputQuestion(){
+    outputIndex++;
+    loadOutputQuestion();
+}
+
+function resetOutputTimer(){
+    stopOutputTimer();
+    outputTimeLeft = 20;
+    document.getElementById('outputTimer').innerText = outputTimeLeft;
+}
+
+function startOutputTimer(){
+    if(outputTimerInt) return;
+
+    outputTimerInt = setInterval(() => {
+        outputTimeLeft--;
+        document.getElementById('outputTimer').innerText = outputTimeLeft;
+
+        if(outputTimeLeft <= 0){
+            stopOutputTimer();
+            alert('⏰ Time is up!');
+        }
+    }, 1000);
+}
+
+function stopOutputTimer(){
+    if(outputTimerInt){
+        clearInterval(outputTimerInt);
+        outputTimerInt = null;
+    }
+}
+
+function showOutputAnswer(){
+    const q = outputQuestions[outputIndex];
+    document.getElementById('outputAnswer').innerHTML = `
+        <div class="answer-box">
+            <img class="answer-image" src="${round1Image(q.a)}" alt="${q.aAnswer: ${q.a}</div>
+        </div>`;
+}
 </script>
 </body>
 </html>
