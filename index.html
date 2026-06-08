@@ -2,148 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta output?`,options:['A) True True','B) False False','C) True False','D) False True'],a:'C) True False',explanation:'== compares values, is compares object identity.'}<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-];
-
-function startTechnicalRound(){
-    techIndex=0;
-    showSlide('techRound');
-    loadTechQuestion();
-}
-
-function techTotal(){
-    return techQuestions.length;
-}
-
-function loadTechQuestion(){
-    if(techIndex>=techQuestions.length){
-        showSlide('outputRound');
-        outputIndex=0;
-        loadOutputQuestion();
-        return;
-    }
-    const q=techQuestions[techIndex];
-    document.getElementById('techQuestion').innerHTML=q.html;
-    let optHtml='';
-    if(q.options){
-        optHtml='<div class="options-grid">';
-        for(let i=0;i<q.options.length;i++){
-            optHtml+='<div class="option-btn">'+q.options[i]+'</div>';
-        }
-        optHtml+='</div>';
-    }
-    document.getElementById('techOptions').innerHTML=optHtml;
-    document.getElementById('techAnswer').innerHTML='';
-    resetTechTimer();
-    startTechTimer();
-}
-
-function nextTechQuestion(){
-    techIndex++;
-    loadTechQuestion();
-}
-
-function resetTechTimer(){
-    stopTechTimer();
-    techTimeLeft=20;
-    document.getElementById('techTimer').innerText=techTimeLeft;
-}
-
-function startTechTimer(){
-    if(techTimerInt) return;
-    techTimerInt=setInterval(function(){
-        techTimeLeft--;
-        document.getElementById('techTimer').innerText=techTimeLeft;
-        if(techTimeLeft<=0){
-            stopTechTimer();
-            alert('⏰ Time is up!');
-        }
-    },1000);
-}
-
-function stopTechTimer(){
-    if(techTimerInt){
-        clearInterval(techTimerInt);
-        techTimerInt=null;
-    }
-}
-
-function showTechAnswer(){
-    const q=techQuestions[techIndex];
-    let html='<div class="answer-box">';
-    html+='<div class="answer-text">'+q.a+'</div>';
-    html+='<div class="explanation">'+q.explanation+'</div>';
-    html+='</div>';
-    document.getElementById('techAnswer').innerHTML=html;
-    speak(q.a);
-}
-
-const outputQuestions = [
-    {q:'What is the output of: console.log(2 + 3 * 4);',a:'14'},
-    {q:'What is the output of: console.log(\'5\' + 1);',a:'51'},
-    {q:'What is the output of: console.log(typeof null);',a:'object'},
-    {q:'What is the output of: console.log(Boolean(0));',a:'false'},
-    {q:'What is the output of: console.log(10 / 2);',a:'5'},
-    {q:'What is the output of: console.log([1,2,3].length);',a:'3'},
-    {q:'What is the output of: console.log(\'Hello\'.toUpperCase());',a:'HELLO'},
-    {q:'What is the output of: console.log(5 == \'5\');',a:'true'},
-    {q:'What is the output of: console.log(5 === \'5\');',a:'false'},
-    {q:'What is the output of: console.log(Math.floor(4.8));',a:'4'}
-];
-
-function loadOutputQuestion(){
-    if(outputIndex>=outputQuestions.length){
-        showSlide('thankYou');
-        return;
-    }
-    const q=outputQuestions[outputIndex];
-    document.getElementById('outputQuestion').innerText='OUTPUT Q' + (outputIndex+1) + ': ' + q.q;
-    document.getElementById('outputAnswer').innerHTML='';
-    resetOutputTimer();
-    startOutputTimer();
-}
-
-function nextOutputQuestion(){
-    outputIndex++;
-    loadOutputQuestion();
-}
-
-function resetOutputTimer(){
-    stopOutputTimer();
-    outputTimeLeft=20;
-    document.getElementById('outputTimer').innerText=outputTimeLeft;
-}
-
-function startOutputTimer(){
-    if(outputTimerInt) return;
-    outputTimerInt=setInterval(function(){
-        outputTimeLeft--;
-        document.getElementById('outputTimer').innerText=outputTimeLeft;
-        if(outputTimeLeft<=0){
-            stopOutputTimer();
-            alert('⏰ Time is up!');
-        }
-    },1000);
-}
-
-function stopOutputTimer(){
-    if(outputTimerInt){
-        clearInterval(outputTimerInt);
-        outputTimerInt=null;
-    }
-}
-
-function showOutputAnswer(){
-    const q=outputQuestions[outputIndex];
-    let html='<div class="answer-box">';
-    html+='<div class="answer-text">'+q.a+'</div>';
-    html+='</div>';
-    document.getElementById('outputAnswer').innerHTML=html;
-    speak(q.a);
-}
-</script>
-</body>
-</html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Gantec Puzzle Arena</title>
 
 <style>
@@ -680,3 +539,145 @@ const techQuestions = [
     {html:`<div class="table-wrap"><table class="quiz-table"><tr><th>Salary</th></tr><tr><td>100</td></tr><tr><td>100</td></tr><tr><td>100</td></tr><tr><td>90</td></tr></table></div><br>Query:<br><div class="mono">SELECT Salary,\n       ROW_NUMBER() OVER(ORDER BY Salary DESC) RN,\n       RANK() OVER(ORDER BY Salary DESC) R,\n       DENSE_RANK() OVER(ORDER BY Salary DESC) DR\nFROM Employee;</div><br>What is the rank of Salary = 90?`,options:['A) RN=4, R=4, DR=2','B) RN=2, R=2, DR=2','C) RN=4, R=2, DR=2','D) RN=4, R=4, DR=4'],a:'A) RN=4, R=4, DR=2',explanation:'Salary 100 gets RN 1,2,3 and R=1,1,1; Salary 90 gets RN=4, R=4, DR=2.'},
     {html:`<div class="table-wrap"><table class="quiz-table"><tr><th>Value</th></tr><tr><td>NULL</td></tr><tr><td>NULL</td></tr></table></div><br>Query:<br><div class="mono">SELECT\nCOUNT(*),\nCOUNT(Value),\nSUM(Value),\nAVG(Value)\nFROM T;</div><br>What is the output?`,options:['A) 2,0,NULL,NULL','B) 2,2,0,0','C) 0,0,0,NULL','D) 2,0,0,0'],a:'A) 2,0,NULL,NULL',explanation:'COUNT(*) = 2, COUNT(Value) = 0, SUM(Value) = NULL, AVG(Value) = NULL.'},
     {html:`<div class="mono">funcs = []\n\nfor i in range(3):\n    funcs.append(lambda: i)\n\nprint([f() for f in funcs])</div><br>What is the output?`,options:['A) [0,1,2]','B) [2,2,2]','C) [3,3,3]','D) Error'],a:'B) [2,2,2]',explanation:'Lambdas capture the variable, not its value. After the loop ends, i = 2. So all lambdas return [2,2,2].'},
+    {html:`<div class="mono">a = [1,2]\nb = [1,2]\n\nprint(a == b, a is b)</div><br>What is the output?`,options:['A) True True','B) False False','C) True False','D) False True'],a:'C) True False',explanation:'== compares values, is compares object identity.'}
+];
+
+function startTechnicalRound(){
+    techIndex=0;
+    showSlide('techRound');
+    loadTechQuestion();
+}
+
+function techTotal(){
+    return techQuestions.length;
+}
+
+function loadTechQuestion(){
+    if(techIndex>=techQuestions.length){
+        showSlide('outputRound');
+        outputIndex=0;
+        loadOutputQuestion();
+        return;
+    }
+    const q=techQuestions[techIndex];
+    document.getElementById('techQuestion').innerHTML=q.html;
+    let optHtml='';
+    if(q.options){
+        optHtml='<div class="options-grid">';
+        for(let i=0;i<q.options.length;i++){
+            optHtml+='<div class="option-btn">'+q.options[i]+'</div>';
+        }
+        optHtml+='</div>';
+    }
+    document.getElementById('techOptions').innerHTML=optHtml;
+    document.getElementById('techAnswer').innerHTML='';
+    resetTechTimer();
+    startTechTimer();
+}
+
+function nextTechQuestion(){
+    techIndex++;
+    loadTechQuestion();
+}
+
+function resetTechTimer(){
+    stopTechTimer();
+    techTimeLeft=20;
+    document.getElementById('techTimer').innerText=techTimeLeft;
+}
+
+function startTechTimer(){
+    if(techTimerInt) return;
+    techTimerInt=setInterval(function(){
+        techTimeLeft--;
+        document.getElementById('techTimer').innerText=techTimeLeft;
+        if(techTimeLeft<=0){
+            stopTechTimer();
+            alert('⏰ Time is up!');
+        }
+    },1000);
+}
+
+function stopTechTimer(){
+    if(techTimerInt){
+        clearInterval(techTimerInt);
+        techTimerInt=null;
+    }
+}
+
+function showTechAnswer(){
+    const q=techQuestions[techIndex];
+    let html='<div class="answer-box">';
+    html+='<div class="answer-text">'+q.a+'</div>';
+    html+='<div class="explanation">'+q.explanation+'</div>';
+    html+='</div>';
+    document.getElementById('techAnswer').innerHTML=html;
+    speak(q.a);
+}
+
+const outputQuestions = [
+    {q:'What is the output of: console.log(2 + 3 * 4);',a:'14'},
+    {q:'What is the output of: console.log(\'5\' + 1);',a:'51'},
+    {q:'What is the output of: console.log(typeof null);',a:'object'},
+    {q:'What is the output of: console.log(Boolean(0));',a:'false'},
+    {q:'What is the output of: console.log(10 / 2);',a:'5'},
+    {q:'What is the output of: console.log([1,2,3].length);',a:'3'},
+    {q:'What is the output of: console.log(\'Hello\'.toUpperCase());',a:'HELLO'},
+    {q:'What is the output of: console.log(5 == \'5\');',a:'true'},
+    {q:'What is the output of: console.log(5 === \'5\');',a:'false'},
+    {q:'What is the output of: console.log(Math.floor(4.8));',a:'4'}
+];
+
+function loadOutputQuestion(){
+    if(outputIndex>=outputQuestions.length){
+        showSlide('thankYou');
+        return;
+    }
+    const q=outputQuestions[outputIndex];
+    document.getElementById('outputQuestion').innerText='OUTPUT Q' + (outputIndex+1) + ': ' + q.q;
+    document.getElementById('outputAnswer').innerHTML='';
+    resetOutputTimer();
+    startOutputTimer();
+}
+
+function nextOutputQuestion(){
+    outputIndex++;
+    loadOutputQuestion();
+}
+
+function resetOutputTimer(){
+    stopOutputTimer();
+    outputTimeLeft=20;
+    document.getElementById('outputTimer').innerText=outputTimeLeft;
+}
+
+function startOutputTimer(){
+    if(outputTimerInt) return;
+    outputTimerInt=setInterval(function(){
+        outputTimeLeft--;
+        document.getElementById('outputTimer').innerText=outputTimeLeft;
+        if(outputTimeLeft<=0){
+            stopOutputTimer();
+            alert('⏰ Time is up!');
+        }
+    },1000);
+}
+
+function stopOutputTimer(){
+    if(outputTimerInt){
+        clearInterval(outputTimerInt);
+        outputTimerInt=null;
+    }
+}
+
+function showOutputAnswer(){
+    const q=outputQuestions[outputIndex];
+    let html='<div class="answer-box">';
+    html+='<div class="answer-text">'+q.a+'</div>';
+    html+='</div>';
+    document.getElementById('outputAnswer').innerHTML=html;
+    speak(q.a);
+}
+</script>
+</body>
+</html>
