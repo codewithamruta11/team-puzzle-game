@@ -39,11 +39,31 @@ button{
     box-shadow:0 5px 14px rgba(0,0,0,.18);
     transition:.2s ease;
 }
-button:hover{transform:translateY(-1px);opacity:.95;}
-.small-start-btn{padding:10px 18px;font-size:15px;border-radius:8px;}
-.round-title{font-size:38px;font-weight:800;margin-bottom:10px;}
-.sub-title{font-size:22px;color:rgba(255,255,255,.78);margin-bottom:16px;}
-.timer{font-size:72px;font-weight:800;margin:18px 0 6px;}
+button:hover{
+    transform:translateY(-1px);
+    opacity:.95;
+}
+.small-start-btn{
+    padding:10px 18px;
+    font-size:15px;
+    border-radius:8px;
+}
+.round-title{
+    font-size:38px;
+    font-weight:800;
+    margin-bottom:10px;
+}
+.sub-title{
+    font-size:22px;
+    color:rgba(255,255,255,.78);
+    margin-bottom:16px;
+}
+.timer{
+    font-size:72px;
+    font-weight:800;
+    margin:18px 0 6px;
+    text-align:center;
+}
 .info-card{
     max-width:900px;
     margin:24px auto;
@@ -59,6 +79,7 @@ button:hover{transform:translateY(-1px);opacity:.95;}
     line-height:1.45;
     white-space:pre-line;
     margin:18px 0;
+    text-align:center;
 }
 .answer-box{
     margin:22px auto 0;
@@ -208,12 +229,41 @@ button:hover{transform:translateY(-1px);opacity:.95;}
     z-index:-1;
     animation:glowMove 6s ease-in-out infinite;
 }
-@keyframes gradientMove{0%{background-position:0%}50%{background-position:100%}100%{background-position:0%}}
-@keyframes fadeIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
-@keyframes fadeDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-@keyframes pulseBtn{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
-@keyframes glowMove{0%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.08)}100%{transform:translate(-50%,-50%) scale(1)}}
+.btn-row{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:10px;
+    margin-top:18px;
+}
+
+@keyframes gradientMove{
+    0%{background-position:0%}
+    50%{background-position:100%}
+    100%{background-position:0%}
+}
+@keyframes fadeIn{
+    from{opacity:0;transform:scale(.97)}
+    to{opacity:1;transform:scale(1)}
+}
+@keyframes fadeDown{
+    from{opacity:0;transform:translateY(-20px)}
+    to{opacity:1;transform:translateY(0)}
+}
+@keyframes fadeUp{
+    from{opacity:0;transform:translateY(20px)}
+    to{opacity:1;transform:translateY(0)}
+}
+@keyframes pulseBtn{
+    0%{transform:scale(1)}
+    50%{transform:scale(1.05)}
+    100%{transform:scale(1)}
+}
+@keyframes glowMove{
+    0%{transform:translate(-50%,-50%) scale(1)}
+    50%{transform:translate(-50%,-50%) scale(1.08)}
+    100%{transform:translate(-50%,-50%) scale(1)}
+}
 @media (max-width:700px){
     body{padding:12px}
     .box{padding:22px}
@@ -230,6 +280,7 @@ button:hover{transform:translateY(-1px);opacity:.95;}
 </style>
 </head>
 <body>
+
 <div class="box">
 
     <!-- INTRO -->
@@ -246,20 +297,39 @@ button:hover{transform:translateY(-1px);opacity:.95;}
         <div class="round-title">📋 GAME RULES</div>
         <h2 style="font-size:32px;margin-top:10px;">Please read the rules carefully</h2>
         <div id="rulesText" style="font-size:24px;line-height:2;max-width:900px;margin:28px auto;text-align:left;padding:24px;border-radius:18px;background:rgba(255,255,255,.12);"></div>
-        <button onclick="showSlide('intro')">⬅ Back</button>
-        <button onclick="startRound1()">Start Game</button>
+        <div class="btn-row">
+            <button onclick="showSlide('intro')">⬅ Back</button>
+            <button onclick="showSlide('example')">Next ➜</button>
+        </div>
+    </div>
+
+    <!-- EXAMPLE -->
+    <div id="example" class="hidden">
+        <div class="round-title">💡 EXAMPLE</div>
+        <h2 style="font-size:32px;margin-top:12px;">Example Puzzle Question</h2>
+        <div style="max-width:850px;margin:24px auto;padding:24px;border-radius:18px;background:rgba(255,255,255,.12);font-size:26px;line-height:1.8;">
+            I have cities but no houses.<br>
+            Rivers but no water.
+        </div>
+        <button onclick="showExample()">Show Answer</button>
+        <div id="exampleAns"></div>
+        <div class="btn-row">
+            <button onclick="showSlide('rules')">⬅ Back</button>
+            <button onclick="startRound1()">Start Game</button>
+        </div>
     </div>
 
     <!-- ROUND 1 -->
     <div id="round1" class="hidden">
-        <div class="round-title">ROUND 1 - PUZZLE ROUND</div>
-        <div class="sub-title">Question <span id="round1Counter"></span> / 30</div>
         <h2 id="question"></h2>
         <div class="timer" id="timer">20</div>
-        <button onclick="startTimer()">Start Timer</button>
-        <button onclick="stopTimer()">Stop Timer</button>
-        <button onclick="showAnswer()">Show Answer</button>
-        <button onclick="nextQuestion()">Next</button>
+        <div class="btn-row">
+            <button onclick="stopTimer(); startTimer();">Start Timer</button>
+            <button onclick="stopTimer()">Stop Timer</button>
+            <button onclick="showAnswer()">Show Answer</button>
+            <button onclick="nextQuestion()">Next</button>
+            <button onclick="showSlide('rules')">⬅ Back</button>
+        </div>
         <div id="answer"></div>
     </div>
 
@@ -271,25 +341,27 @@ button:hover{transform:translateY(-1px);opacity:.95;}
             In this round, questions will appear with proper options. For SQL and coding questions, the table/code will be shown clearly.
             Click <b>Show Answer</b> to reveal the answer and explanation.
         </p>
-        <button onclick="startTechnicalRound()">Start Technical Round</button>
-        <button onclick="showSlide('round1')">⬅ Back</button>
+        <div class="btn-row">
+            <button onclick="startTechnicalRound()">Start Technical Round</button>
+            <button onclick="showSlide('round1')">⬅ Back</button>
+        </div>
     </div>
 
     <!-- TECH ROUND -->
     <div id="techRound" class="hidden">
-        <div class="round-title">⚙️ TECHNICAL ROUND</div>
         <div class="sub-title">Question <span id="techCounter"></span> / <span id="techTotal"></span></div>
         <div id="techQuestionCard" class="question-card">
             <h2 id="techQuestion"></h2>
             <div id="techOptions"></div>
         </div>
         <div class="timer" id="techTimer">20</div>
-        <button onclick="startTechTimer()">Start Timer</button>
-        <button onclick="stopTechTimer()">Stop Timer</button>
-        <button onclick="showTechAnswer()">Show Answer</button>
-        <button onclick="nextTechQuestion()">Next</button>
-        <br>
-        <button onclick="showSlide('techIntro')">⬅ Back</button>
+        <div class="btn-row">
+            <button onclick="stopTechTimer(); startTechTimer();">Start Timer</button>
+            <button onclick="stopTechTimer()">Stop Timer</button>
+            <button onclick="showTechAnswer()">Show Answer</button>
+            <button onclick="nextTechQuestion()">Next</button>
+            <button onclick="showSlide('techIntro')">⬅ Back</button>
+        </div>
         <div id="techAnswer"></div>
     </div>
 
@@ -299,12 +371,13 @@ button:hover{transform:translateY(-1px);opacity:.95;}
         <div class="sub-title">10 Questions</div>
         <h2 id="outputQuestion"></h2>
         <div class="timer" id="outputTimer">20</div>
-        <button onclick="startOutputTimer()">Start Timer</button>
-        <button onclick="stopOutputTimer()">Stop Timer</button>
-        <button onclick="showOutputAnswer()">Show Answer</button>
-        <button onclick="nextOutputQuestion()">Next</button>
-        <br>
-        <button onclick="showSlide('techRound')">⬅ Back</button>
+        <div class="btn-row">
+            <button onclick="stopOutputTimer(); startOutputTimer();">Start Timer</button>
+            <button onclick="stopOutputTimer()">Stop Timer</button>
+            <button onclick="showOutputAnswer()">Show Answer</button>
+            <button onclick="nextOutputQuestion()">Next</button>
+            <button onclick="showSlide('techRound')">⬅ Back</button>
+        </div>
         <div id="outputAnswer"></div>
     </div>
 
@@ -327,8 +400,18 @@ let round1Index=0, techIndex=0, outputIndex=0;
 let timerInt=null, techTimerInt=null, outputTimerInt=null;
 let timeLeft=20, techTimeLeft=20, outputTimeLeft=20;
 
+function speak(text){
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = 0.95;
+    utter.pitch = 1;
+    utter.volume = 1;
+    window.speechSynthesis.speak(utter);
+}
+
 function showSlide(id){
-    const pages=['intro','rules','round1','techIntro','techRound','outputRound','thankYou'];
+    const pages=['intro','rules','example','round1','techIntro','techRound','outputRound','thankYou'];
     for(let i=0;i<pages.length;i++){
         const el=document.getElementById(pages[i]);
         if(el) el.classList.add('hidden');
@@ -338,7 +421,16 @@ function showSlide(id){
     stopTimer();
     stopTechTimer();
     stopOutputTimer();
-    if(id==='rules') showRules();
+
+    if(id==='intro'){
+        speak('Welcome to Gantec Puzzle Arena. Fast minds, smart answers, big fun.');
+    }
+    if(id==='rules'){
+        speak('Please read the rules carefully.');
+    }
+    if(id==='example'){
+        speak('Example puzzle question. I have cities but no houses. Rivers but no water.');
+    }
 }
 
 function startGame(){
@@ -346,25 +438,27 @@ function startGame(){
 }
 
 function showRules(){
-    const rulesList=[
-        '🧩 The game contains 30 Puzzle Questions and 5 Technical Questions.',
-        '⏱️ You have 20 seconds to answer each question.',
-        '📖 Read each question carefully before submitting your answer.',
-        '✅ Each correct answer earns points.',
-        '🎯 Use the Show Answer button to reveal the correct answer.',
-        '➡️ Click Next to move to the next question or slide.',
-        '💡 A separate example slide is provided before the main game starts.',
-        '🏁 After the puzzle round, the technical round will begin.',
-        '💻 Then you will enter the program output round.',
-        '🎉 A final thank you slide will appear at the end.'
+    const rulesList = [
+        "The game contains 30 Puzzle Questions and 5 Technical Questions.",
+        "⏱️ You have 20 seconds to answer each question.",
+        "📖 Read each question carefully before submitting your answer in chat .",
+        "✅ Each correct answer earns 1 points.",
+        "",
+        "💡 A separate example slide is provided before the main game starts.",
+        "🏁 After the puzzle round, the technical round will begin."
     ];
-    let html='<div style="font-size:30px;font-weight:800;margin-bottom:18px;text-align:center;">🎮 Game Rules</div>';
-    html+='<div style="display:flex;flex-direction:column;gap:12px;">';
+
+    let html = '<div style="font-size:30px;font-weight:800;margin-bottom:18px;text-align:center;">🎮 Game Rules</div>';
+    html += '<div style="display:flex;flex-direction:column;gap:12px;">';
     for(let i=0;i<rulesList.length;i++){
-        html+='<div style="padding:14px 16px;border-radius:14px;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.14);font-size:22px;line-height:1.6;">'+rulesList[i]+'</div>';
+        if(rulesList[i] === ""){
+            html += '<div style="height:8px;"></div>';
+        } else {
+            html += '<div style="padding:14px 16px;border-radius:14px;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.14);font-size:22px;line-height:1.6;">'+rulesList[i]+'</div>';
+        }
     }
-    html+='</div>';
-    document.getElementById('rulesText').innerHTML=html;
+    html += '</div>';
+    document.getElementById('rulesText').innerHTML = html;
 }
 
 const round1Questions=[
@@ -400,10 +494,6 @@ const round1Questions=[
     {q:'I can be kept.\nWithout being held.',a:'PROMISE',img:'https://images.unsplash.com/photo-1520975922284-2f9f3f2f1c4a?w=900'}
 ];
 
-function round1Image(seed){
-    return 'https://picsum.photos/seed/' + encodeURIComponent(seed) + '/600/340';
-}
-
 function startRound1(){
     round1Index=0;
     showSlide('round1');
@@ -416,10 +506,10 @@ function loadRound1Question(){
         return;
     }
     const q=round1Questions[round1Index];
-    document.getElementById('round1Counter').innerText=(round1Index+1);
     document.getElementById('question').innerText='Q' + (round1Index+1) + ': ' + q.q;
     document.getElementById('answer').innerHTML='';
     resetTimer();
+    startTimer();
 }
 
 function nextQuestion(){
@@ -454,43 +544,23 @@ function stopTimer(){
 
 function showAnswer(){
     const q=round1Questions[round1Index];
-    const img=q.img || '';
     let html='<div class="answer-box">';
-    if(img){
-        html+='<img class="answer-image" src="'+img+'" alt="'+q.a+'" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\';">';
-        html+='<div class="link-line">'+img+'</div>';
+    if(q.img){
+        html+='<div class="link-line">'+q.img+'</div>';
+        html+='<img class="answer-image" src="'+q.img+'" alt="'+q.a+'" onerror="this.style.display=\'none\';this.previousElementSibling.style.display=\'none\';">';
     }
     html+='<div class="answer-text">'+q.a+'</div>';
     html+='</div>';
     document.getElementById('answer').innerHTML=html;
+    speak(q.a);
 }
 
 const techQuestions=[
-    {html:`SQL – LEFT JOIN Nightmare<br><br><div class="table-wrap"><table class="quiz-table"><tr><th>Table A</th></tr><tr><td>ID</td></tr><tr><td>1</td></tr><tr><td>2</td></tr></table><br><table class="quiz-table"><tr><th>Table B</th></tr><tr><td>ID</td></tr><tr><td>1</td></tr><tr><td>1</td></tr><tr><td>1</td></tr><tr><td>2</td></tr><tr><td>2</td></tr></table></div><br>Query:<br><div class="mono">SELECT COUNT(*)
-FROM A
-LEFT JOIN B
-ON A.ID = B.ID;</div><br>What is the result?`,options:['A) 2','B) 3','C) 5','D) 7'],a:'C) 5',img:'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=900',explanation:'LEFT JOIN returns one row for each match. ID=1 matches 3 rows in B and ID=2 matches 2 rows in B. So total rows = 3 + 2 = 5.'},
-    {html:`<div class="table-wrap"><table class="quiz-table"><tr><th>Salary</th></tr><tr><td>100</td></tr><tr><td>100</td></tr><tr><td>100</td></tr><tr><td>90</td></tr></table></div><br>Query:<br><div class="mono">SELECT Salary,
-       ROW_NUMBER() OVER(ORDER BY Salary DESC) RN,
-       RANK() OVER(ORDER BY Salary DESC) R,
-       DENSE_RANK() OVER(ORDER BY Salary DESC) DR
-FROM Employee;</div><br>What is the rank of Salary = 90?`,options:['A) RN=4, R=4, DR=2','B) RN=2, R=2, DR=2','C) RN=4, R=2, DR=2','D) RN=4, R=4, DR=4'],a:'A) RN=4, R=4, DR=2',img:'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=900',explanation:'Salary 100 gets RN 1,2,3 and R=1,1,1; Salary 90 gets RN=4, R=4, DR=2.'},
-    {html:`<div class="table-wrap"><table class="quiz-table"><tr><th>Value</th></tr><tr><td>NULL</td></tr><tr><td>NULL</td></tr></table></div><br>Query:<br><div class="mono">SELECT
-COUNT(*),
-COUNT(Value),
-SUM(Value),
-AVG(Value)
-FROM T;</div><br>What is the output?`,options:['A) 2,0,NULL,NULL','B) 2,2,0,0','C) 0,0,0,NULL','D) 2,0,0,0'],a:'A) 2,0,NULL,NULL',img:'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900',explanation:'COUNT(*) = 2, COUNT(Value) = 0, SUM(Value) = NULL, AVG(Value) = NULL.'},
-    {html:`<div class="mono">funcs = []
-
-for i in range(3):
-    funcs.append(lambda: i)
-
-print([f() for f in funcs])</div><br>What is the output?`,options:['A) [0,1,2]','B) [2,2,2]','C) [3,3,3]','D) Error'],a:'B) [2,2,2]',img:'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900',explanation:'Lambdas capture the variable, not its value. After the loop ends, i = 2. So all lambdas return [2,2,2].'},
-    {html:`<div class="mono">a = [1,2]
-b = [1,2]
-
-print(a == b, a is b)</div><br>What is the output?`,options:['A) True True','B) False False','C) True False','D) False True'],a:'C) True False',img:'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900',explanation:'== compares values, is compares object identity.'}
+    {html:`SQL – LEFT JOIN Nightmare<br><br><div class="table-wrap"><table class="quiz-table"><tr><th>Table A</th></tr><tr><td>ID</td></tr><tr><td>1</td></tr><tr><td>2</td></tr></table><br><table class="quiz-table"><tr><th>Table B</th></tr><tr><td>ID</td></tr><tr><td>1</td></tr><tr><td>1</td></tr><tr><td>1</td></tr><tr><td>2</td></tr><tr><td>2</td></tr></table></div><br>Query:<br><div class="mono">SELECT COUNT(*)\nFROM A\nLEFT JOIN B\nON A.ID = B.ID;</div><br>What is the result?`,options:['A) 2','B) 3','C) 5','D) 7'],a:'C) 5',img:'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=900',explanation:'LEFT JOIN returns one row for each match. ID=1 matches 3 rows in B and ID=2 matches 2 rows in B. So total rows = 3 + 2 = 5.'},
+    {html:`<div class="table-wrap"><table class="quiz-table"><tr><th>Salary</th></tr><tr><td>100</td></tr><tr><td>100</td></tr><tr><td>100</td></tr><tr><td>90</td></tr></table></div><br>Query:<br><div class="mono">SELECT Salary,\n       ROW_NUMBER() OVER(ORDER BY Salary DESC) RN,\n       RANK() OVER(ORDER BY Salary DESC) R,\n       DENSE_RANK() OVER(ORDER BY Salary DESC) DR\nFROM Employee;</div><br>What is the rank of Salary = 90?`,options:['A) RN=4, R=4, DR=2','B) RN=2, R=2, DR=2','C) RN=4, R=2, DR=2','D) RN=4, R=4, DR=4'],a:'A) RN=4, R=4, DR=2',img:'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=900',explanation:'Salary 100 gets RN 1,2,3 and R=1,1,1; Salary 90 gets RN=4, R=4, DR=2.'},
+    {html:`<div class="table-wrap"><table class="quiz-table"><tr><th>Value</th></tr><tr><td>NULL</td></tr><tr><td>NULL</td></tr></table></div><br>Query:<br><div class="mono">SELECT\nCOUNT(*),\nCOUNT(Value),\nSUM(Value),\nAVG(Value)\nFROM T;</div><br>What is the output?`,options:['A) 2,0,NULL,NULL','B) 2,2,0,0','C) 0,0,0,NULL','D) 2,0,0,0'],a:'A) 2,0,NULL,NULL',img:'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900',explanation:'COUNT(*) = 2, COUNT(Value) = 0, SUM(Value) = NULL, AVG(Value) = NULL.'},
+    {html:`<div class="mono">funcs = []\n\nfor i in range(3):\n    funcs.append(lambda: i)\n\nprint([f() for f in funcs])</div><br>What is the output?`,options:['A) [0,1,2]','B) [2,2,2]','C) [3,3,3]','D) Error'],a:'B) [2,2,2]',img:'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900',explanation:'Lambdas capture the variable, not its value. After the loop ends, i = 2. So all lambdas return [2,2,2].'},
+    {html:`<div class="mono">a = [1,2]\nb = [1,2]\n\nprint(a == b, a is b)</div><br>What is the output?`,options:['A) True True','B) False False','C) True False','D) False True'],a:'C) True False',img:'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900',explanation:'== compares values, is compares object identity.'}
 ];
 
 function startTechnicalRound(){
@@ -525,6 +595,7 @@ function loadTechQuestion(){
     document.getElementById('techOptions').innerHTML=optHtml;
     document.getElementById('techAnswer').innerHTML='';
     resetTechTimer();
+    startTechTimer();
 }
 
 function nextTechQuestion(){
@@ -561,13 +632,14 @@ function showTechAnswer(){
     const q=techQuestions[techIndex];
     let html='<div class="answer-box">';
     if(q.img){
-        html+='<img class="answer-image" src="'+q.img+'" alt="'+q.a+'" onerror="this.style.display=\'none\';">';
         html+='<div class="link-line">'+q.img+'</div>';
+        html+='<img class="answer-image" src="'+q.img+'" alt="'+q.a+'" onerror="this.style.display=\'none\';this.previousElementSibling.style.display=\'none\';">';
     }
     html+='<div class="answer-text">'+q.a+'</div>';
     html+='<div class="explanation">'+q.explanation+'</div>';
     html+='</div>';
     document.getElementById('techAnswer').innerHTML=html;
+    speak(q.a);
 }
 
 const outputQuestions=[
@@ -592,6 +664,7 @@ function loadOutputQuestion(){
     document.getElementById('outputQuestion').innerText='OUTPUT Q' + (outputIndex+1) + ': ' + q.q;
     document.getElementById('outputAnswer').innerHTML='';
     resetOutputTimer();
+    startOutputTimer();
 }
 
 function nextOutputQuestion(){
@@ -626,13 +699,14 @@ function stopOutputTimer(){
 
 function showOutputAnswer(){
     const q=outputQuestions[outputIndex];
-    let img='https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900';
+    const img='https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900';
     let html='<div class="answer-box">';
-    html+='<img class="answer-image" src="'+img+'" alt="'+q.a+'" onerror="this.style.display=\'none\';">';
     html+='<div class="link-line">'+img+'</div>';
+    html+='<img class="answer-image" src="'+img+'" alt="'+q.a+'" onerror="this.style.display=\'none\';this.previousElementSibling.style.display=\'none\';">';
     html+='<div class="answer-text">'+q.a+'</div>';
     html+='</div>';
     document.getElementById('outputAnswer').innerHTML=html;
+    speak(q.a);
 }
 </script>
 </body>
