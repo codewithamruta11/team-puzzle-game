@@ -2,28 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Gantec Puzzle Arena</title>
-
-<style>
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    color:#fff;
-    min-height:100vh;
-    padding:24px;
-    background:linear-gradient(-45deg,#06101f,#173a8a,#6d28d9,#0ea5e9);
-    background-size:400% 400%;
-    animation:gradientMove 15s ease infinite;
-}
-.box{
-    max-width:1150px;
-    margin:auto;
-    padding:42px;
-    border-radius:28px;
-    background:rgba(255,255,255,.12);
-    backdrop-filter:blur(16px);
-    box-shadow:0 12px 40px rgba(0,0,0,.35);
+(0,0,0,.35);<meta name="viewport" content="width=device-width, initial-scale=1.0" />
     text-align:center;
 }
 .hidden{display:none;}
@@ -74,7 +53,7 @@ button:hover{
     line-height:1.9;
     font-size:22px;
 }
-#question,#techQuestion,#outputQuestion{
+#question,#outputQuestion{
     font-size:38px;
     line-height:1.45;
     white-space:pre-line;
@@ -135,6 +114,7 @@ button:hover{
     line-height:1.45;
     text-align:left;
     overflow:auto;
+    font-size:15px;
 }
 .table-wrap{
     overflow-x:auto;
@@ -143,8 +123,6 @@ button:hover{
 .quiz-table{
     border-collapse:collapse;
     width:100%;
-    max-width:680px;
-    margin:0 auto;
     background:rgba(255,255,255,.06);
     border-radius:14px;
     overflow:hidden;
@@ -153,7 +131,7 @@ button:hover{
     border:1px solid rgba(255,255,255,.18);
     padding:10px 14px;
     text-align:center;
-    font-size:17px;
+    font-size:16px;
 }
 .quiz-table th{
     background:rgba(255,255,255,.18);
@@ -223,7 +201,37 @@ button:hover{
     gap:10px;
     margin-top:18px;
 }
-
+.tech-layout{
+    display:flex;
+    gap:18px;
+    align-items:flex-start;
+    justify-content:center;
+    margin-top:18px;
+    flex-wrap:wrap;
+}
+.tech-question-panel{
+    flex:1 1 420px;
+    min-width:300px;
+    text-align:left;
+    background:rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:18px;
+    padding:18px;
+}
+.tech-table-panel{
+    flex:1 1 360px;
+    min-width:280px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:18px;
+    padding:18px;
+    text-align:left;
+}
+.tech-question-text{
+    font-size:22px;
+    line-height:1.6;
+    margin-bottom:12px;
+}
 @keyframes gradientMove{
     0%{background-position:0%}
     50%{background-position:100%}
@@ -256,13 +264,15 @@ button:hover{
     .box{padding:22px}
     h1{font-size:40px !important}
     .round-title{font-size:28px}
-    #question,#techQuestion,#outputQuestion{font-size:22px}
+    #question,#outputQuestion{font-size:22px}
     .timer{font-size:50px}
     button{font-size:15px;padding:10px 14px}
     .info-card{font-size:18px}
     .hero-title{font-size:42px}
     .hero-tagline{font-size:22px}
     .answer-text{font-size:28px}
+    .tech-layout{flex-direction:column}
+    .tech-question-text{font-size:18px}
 }
 </style>
 </head>
@@ -322,7 +332,7 @@ button:hover{
         <div class="round-title">⚙️ TECHNICAL ROUND</div>
         <div class="sub-title">MCQ + Tables + Code + Theory</div>
         <p style="font-size:24px;line-height:1.75;max-width:850px;margin:0 auto 18px;">
-            In this round, questions will appear with proper options. For SQL and coding questions, the table/code will be shown clearly.
+            In this round, questions will appear with proper options. For SQL and coding questions, the question and table will be shown together.
             Click <b>Show Answer</b> to reveal the answer and explanation.
         </p>
         <div class="btn-row">
@@ -334,10 +344,17 @@ button:hover{
     <!-- TECH ROUND -->
     <div id="techRound" class="hidden">
         <div class="sub-title">Question <span id="techCounter"></span> / <span id="techTotal"></span></div>
-        <div id="techQuestionCard" class="question-card">
-            <h2 id="techQuestion"></h2>
-            <div id="techOptions"></div>
+
+        <div class="tech-layout">
+            <div class="tech-question-panel">
+                <div id="techQuestionText" class="tech-question-text"></div>
+                <div id="techOptions"></div>
+            </div>
+            <div class="tech-table-panel">
+                <div id="techTable"></div>
+            </div>
         </div>
+
         <div class="timer" id="techTimer">20</div>
         <div class="btn-row">
             <button onclick="showTechAnswer()">Show Answer</button>
@@ -535,11 +552,108 @@ function showAnswer(){
 }
 
 const techQuestions = [
-    {html:`SQL – LEFT JOIN Nightmare<br><br><div class="table-wrap"><table class="quiz-table"><tr><th>Table A</th></tr><tr><td>ID</td></tr><tr><td>1</td></tr><tr><td>2</td></tr></table><br><table class="quiz-table"><tr><th>Table B</th></tr><tr><td>ID</td></tr><tr><td>1</td></tr><tr><td>1</td></tr><tr><td>1</td></tr><tr><td>2</td></tr><tr><td>2</td></tr></table></div><br>Query:<br><div class="mono">SELECT COUNT(*)\nFROM A\nLEFT JOIN B\nON A.ID = B.ID;</div><br>What is the result?`,options:['A) 2','B) 3','C) 5','D) 7'],a:'C) 5',explanation:'LEFT JOIN returns one row for each match. ID=1 matches 3 rows in B and ID=2 matches 2 rows in B. So total rows = 3 + 2 = 5.'},
-    {html:`<div class="table-wrap"><table class="quiz-table"><tr><th>Salary</th></tr><tr><td>100</td></tr><tr><td>100</td></tr><tr><td>100</td></tr><tr><td>90</td></tr></table></div><br>Query:<br><div class="mono">SELECT Salary,\n       ROW_NUMBER() OVER(ORDER BY Salary DESC) RN,\n       RANK() OVER(ORDER BY Salary DESC) R,\n       DENSE_RANK() OVER(ORDER BY Salary DESC) DR\nFROM Employee;</div><br>What is the rank of Salary = 90?`,options:['A) RN=4, R=4, DR=2','B) RN=2, R=2, DR=2','C) RN=4, R=2, DR=2','D) RN=4, R=4, DR=4'],a:'A) RN=4, R=4, DR=2',explanation:'Salary 100 gets RN 1,2,3 and R=1,1,1; Salary 90 gets RN=4, R=4, DR=2.'},
-    {html:`<div class="table-wrap"><table class="quiz-table"><tr><th>Value</th></tr><tr><td>NULL</td></tr><tr><td>NULL</td></tr></table></div><br>Query:<br><div class="mono">SELECT\nCOUNT(*),\nCOUNT(Value),\nSUM(Value),\nAVG(Value)\nFROM T;</div><br>What is the output?`,options:['A) 2,0,NULL,NULL','B) 2,2,0,0','C) 0,0,0,NULL','D) 2,0,0,0'],a:'A) 2,0,NULL,NULL',explanation:'COUNT(*) = 2, COUNT(Value) = 0, SUM(Value) = NULL, AVG(Value) = NULL.'},
-    {html:`<div class="mono">funcs = []\n\nfor i in range(3):\n    funcs.append(lambda: i)\n\nprint([f() for f in funcs])</div><br>What is the output?`,options:['A) [0,1,2]','B) [2,2,2]','C) [3,3,3]','D) Error'],a:'B) [2,2,2]',explanation:'Lambdas capture the variable, not its value. After the loop ends, i = 2. So all lambdas return [2,2,2].'},
-    {html:`<div class="mono">a = [1,2]\nb = [1,2]\n\nprint(a == b, a is b)</div><br>What is the output?`,options:['A) True True','B) False False','C) True False','D) False True'],a:'C) True False',explanation:'== compares values, is compares object identity.'}
+    {
+        question: 'SQL – LEFT JOIN Nightmare',
+        tableHtml: `
+            <div class="table-wrap">
+                <table class="quiz-table">
+                    <tr><th>Table A</th></tr>
+                    <tr><td>ID</td></tr>
+                    <tr><td>1</td></tr>
+                    <tr><td>2</td></tr>
+                </table>
+                <br>
+                <table class="quiz-table">
+                    <tr><th>Table B</th></tr>
+                    <tr><td>ID</td></tr>
+                    <tr><td>1</td></tr>
+                    <tr><td>1</td></tr>
+                    <tr><td>1</td></tr>
+                    <tr><td>2</td></tr>
+                    <tr><td>2</td></tr>
+                </table>
+            </div>
+            <br>
+            <div class="mono">SELECT COUNT(*)
+FROM A
+LEFT JOIN B
+ON A.ID = B.ID;</div>
+        `,
+        options: ['A) 2','B) 3','C) 5','D) 7'],
+        answer: 'C) 5',
+        explanation: 'LEFT JOIN returns one row for each match. ID=1 matches 3 rows in B and ID=2 matches 2 rows in B. So total rows = 3 + 2 = 5.'
+    },
+    {
+        question: 'Ranking Functions in SQL',
+        tableHtml: `
+            <div class="table-wrap">
+                <table class="quiz-table">
+                    <tr><th>Salary</th></tr>
+                    <tr><td>100</td></tr>
+                    <tr><td>100</td></tr>
+                    <tr><td>100</td></tr>
+                    <tr><td>90</td></tr>
+                </table>
+            </div>
+            <br>
+            <div class="mono">SELECT Salary,
+       ROW_NUMBER() OVER(ORDER BY Salary DESC) RN,
+       RANK() OVER(ORDER BY Salary DESC) R,
+       DENSE_RANK() OVER(ORDER BY Salary DESC) DR
+FROM Employee;</div>
+        `,
+        options: ['A) RN=4, R=4, DR=2','B) RN=2, R=2, DR=2','C) RN=4, R=2, DR=2','D) RN=4, R=4, DR=4'],
+        answer: 'A) RN=4, R=4, DR=2',
+        explanation: 'Salary 100 gets RN 1,2,3 and R=1,1,1; Salary 90 gets RN=4, R=4, DR=2.'
+    },
+    {
+        question: 'COUNT, SUM and AVG with NULL',
+        tableHtml: `
+            <div class="table-wrap">
+                <table class="quiz-table">
+                    <tr><th>Value</th></tr>
+                    <tr><td>NULL</td></tr>
+                    <tr><td>NULL</td></tr>
+                </table>
+            </div>
+            <br>
+            <div class="mono">SELECT
+COUNT(*),
+COUNT(Value),
+SUM(Value),
+AVG(Value)
+FROM T;</div>
+        `,
+        options: ['A) 2,0,NULL,NULL','B) 2,2,0,0','C) 0,0,0,NULL','D) 2,0,0,0'],
+        answer: 'A) 2,0,NULL,NULL',
+        explanation: 'COUNT(*) = 2, COUNT(Value) = 0, SUM(Value) = NULL, AVG(Value) = NULL.'
+    },
+    {
+        question: 'Python Late Binding in Lambda',
+        tableHtml: `
+            <div class="mono">funcs = []
+
+for i in range(3):
+    funcs.append(lambda: i)
+
+print([f() for f in funcs])</div>
+        `,
+        options: ['A) [0,1,2]','B) [2,2,2]','C) [3,3,3]','D) Error'],
+        answer: 'B) [2,2,2]',
+        explanation: 'Lambdas capture the variable, not its value. After the loop ends, i = 2. So all lambdas return [2,2,2].'
+    },
+    {
+        question: 'Python == vs is',
+        tableHtml: `
+            <div class="mono">a = [1,2]
+b = [1,2]
+
+print(a == b, a is b)</div>
+        `,
+        options: ['A) True True','B) False False','C) True False','D) False True'],
+        answer: 'C) True False',
+        explanation: '== compares values, is compares object identity.'
+    }
 ];
 
 function startTechnicalRound(){
@@ -548,29 +662,27 @@ function startTechnicalRound(){
     loadTechQuestion();
 }
 
-function techTotal(){
-    return techQuestions.length;
-}
-
 function loadTechQuestion(){
-    if(techIndex>=techQuestions.length){
+    if(techIndex >= techQuestions.length){
         showSlide('outputRound');
         outputIndex=0;
         loadOutputQuestion();
         return;
     }
-    const q=techQuestions[techIndex];
-    document.getElementById('techQuestion').innerHTML=q.html;
-    let optHtml='';
-    if(q.options){
-        optHtml='<div class="options-grid">';
-        for(let i=0;i<q.options.length;i++){
-            optHtml+='<div class="option-btn">'+q.options[i]+'</div>';
-        }
-        optHtml+='</div>';
+    const q = techQuestions[techIndex];
+
+    document.getElementById('techCounter').innerText = (techIndex + 1);
+    document.getElementById('techQuestionText').innerText = q.question;
+    document.getElementById('techTable').innerHTML = q.tableHtml;
+
+    let optHtml = '<div class="options-grid">';
+    for(let i=0;i<q.options.length;i++){
+        optHtml += '<div class="option-btn">' + q.options[i] + '</div>';
     }
-    document.getElementById('techOptions').innerHTML=optHtml;
-    document.getElementById('techAnswer').innerHTML='';
+    optHtml += '</div>';
+
+    document.getElementById('techOptions').innerHTML = optHtml;
+    document.getElementById('techAnswer').innerHTML = '';
     resetTechTimer();
     startTechTimer();
 }
@@ -582,16 +694,16 @@ function nextTechQuestion(){
 
 function resetTechTimer(){
     stopTechTimer();
-    techTimeLeft=20;
-    document.getElementById('techTimer').innerText=techTimeLeft;
+    techTimeLeft = 20;
+    document.getElementById('techTimer').innerText = techTimeLeft;
 }
 
 function startTechTimer(){
     if(techTimerInt) return;
-    techTimerInt=setInterval(function(){
+    techTimerInt = setInterval(function(){
         techTimeLeft--;
-        document.getElementById('techTimer').innerText=techTimeLeft;
-        if(techTimeLeft<=0){
+        document.getElementById('techTimer').innerText = techTimeLeft;
+        if(techTimeLeft <= 0){
             stopTechTimer();
             alert('⏰ Time is up!');
         }
@@ -601,18 +713,18 @@ function startTechTimer(){
 function stopTechTimer(){
     if(techTimerInt){
         clearInterval(techTimerInt);
-        techTimerInt=null;
+        techTimerInt = null;
     }
 }
 
 function showTechAnswer(){
-    const q=techQuestions[techIndex];
-    let html='<div class="answer-box">';
-    html+='<div class="answer-text">'+q.a+'</div>';
-    html+='<div class="explanation">'+q.explanation+'</div>';
-    html+='</div>';
-    document.getElementById('techAnswer').innerHTML=html;
-    speak(q.a);
+    const q = techQuestions[techIndex];
+    let html = '<div class="answer-box">';
+    html += '<div class="answer-text">' + q.answer + '</div>';
+    html += '<div class="explanation">' + q.explanation + '</div>';
+    html += '</div>';
+    document.getElementById('techAnswer').innerHTML = html;
+    speak(q.answer);
 }
 
 const outputQuestions = [
@@ -629,13 +741,13 @@ const outputQuestions = [
 ];
 
 function loadOutputQuestion(){
-    if(outputIndex>=outputQuestions.length){
+    if(outputIndex >= outputQuestions.length){
         showSlide('thankYou');
         return;
     }
-    const q=outputQuestions[outputIndex];
-    document.getElementById('outputQuestion').innerText='OUTPUT Q' + (outputIndex+1) + ': ' + q.q;
-    document.getElementById('outputAnswer').innerHTML='';
+    const q = outputQuestions[outputIndex];
+    document.getElementById('outputQuestion').innerText = 'OUTPUT Q' + (outputIndex + 1) + ': ' + q.q;
+    document.getElementById('outputAnswer').innerHTML = '';
     resetOutputTimer();
     startOutputTimer();
 }
@@ -647,16 +759,16 @@ function nextOutputQuestion(){
 
 function resetOutputTimer(){
     stopOutputTimer();
-    outputTimeLeft=20;
-    document.getElementById('outputTimer').innerText=outputTimeLeft;
+    outputTimeLeft = 20;
+    document.getElementById('outputTimer').innerText = outputTimeLeft;
 }
 
 function startOutputTimer(){
     if(outputTimerInt) return;
-    outputTimerInt=setInterval(function(){
+    outputTimerInt = setInterval(function(){
         outputTimeLeft--;
-        document.getElementById('outputTimer').innerText=outputTimeLeft;
-        if(outputTimeLeft<=0){
+        document.getElementById('outputTimer').innerText = outputTimeLeft;
+        if(outputTimeLeft <= 0){
             stopOutputTimer();
             alert('⏰ Time is up!');
         }
@@ -666,18 +778,38 @@ function startOutputTimer(){
 function stopOutputTimer(){
     if(outputTimerInt){
         clearInterval(outputTimerInt);
-        outputTimerInt=null;
+        outputTimerInt = null;
     }
 }
 
 function showOutputAnswer(){
-    const q=outputQuestions[outputIndex];
-    let html='<div class="answer-box">';
-    html+='<div class="answer-text">'+q.a+'</div>';
-    html+='</div>';
-    document.getElementById('outputAnswer').innerHTML=html;
+    const q = outputQuestions[outputIndex];
+    let html = '<div class="answer-box">';
+    html += '<div class="answer-text">' + q.a + '</div>';
+    html += '</div>';
+    document.getElementById('outputAnswer').innerHTML = html;
     speak(q.a);
 }
 </script>
 </body>
 </html>
+<title>Gantec Puzzle Arena</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    color:#fff;
+    min-height:100vh;
+    padding:24px;
+    background:linear-gradient(-45deg,#06101f,#173a8a,#6d28d9,#0ea5e9);
+    background-size:400% 400%;
+    animation:gradientMove 15s ease infinite;
+}
+.box{
+    max-width:1150px;
+    margin:auto;
+    padding:42px;
+    border-radius:28px;
+    background:rgba(255,255,255,.12);
+    backdrop-filter:blur(16px);
