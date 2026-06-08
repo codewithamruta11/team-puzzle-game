@@ -2,7 +2,19 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta nameMove 15s ease infinite;<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gantec Puzzle Arena</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    color:#fff;
+    min-height:100vh;
+    padding:24px;
+    background:linear-gradient(-45deg,#06101f,#173a8a,#6d28d9,#0ea5e9);
+    background-size:400% 400%;
+    animation:gradientMove 15s ease infinite;
 }
 .box{
     max-width:1150px;
@@ -91,12 +103,6 @@ button:hover{
     font-weight:900;
     margin-top:16px;
     line-height:1.2;
-}
-.link-line{
-    font-size:14px;
-    opacity:.85;
-    margin-top:8px;
-    word-break:break-all;
 }
 .explanation{
     font-size:18px;
@@ -407,9 +413,6 @@ function showSlide(id){
     if(id==='rules'){
         speak('Please read the rules carefully.');
     }
-    if(id==='example'){
-        // No reading for example question, only answer after click
-    }
 }
 
 function startGame(){
@@ -443,8 +446,7 @@ function showRules(){
 function showExample(){
     const img = 'https://upload.wikimedia.org/wikipedia/commons/1/1c/BlankMap-World.svg';
     let html = '<div class="answer-box">';
-    html += '<div class="link-line">'+img+'</div>';
-    html += '<img class="answer-image" src="'+img+'" alt="MAP" onerror="this.style.display=\'none\';this.previousElementSibling.style.display=\'none\';">';
+    html += '<img class="answer-image" src="'+img+'" alt="MAP" onerror="this.style.display=\'none\';">';
     html += '<div class="answer-text">MAP 🗺️</div>';
     html += '</div>';
     document.getElementById('exampleAns').innerHTML = html;
@@ -536,7 +538,6 @@ function showAnswer(){
     const q=round1Questions[round1Index];
     let html='<div class="answer-box">';
     if(q.img){
-        html+='<div class="link-line">'+q.img+'</div>';
         html+='<img class="answer-image" src="'+q.img+'" alt="'+q.a+'" onerror="this.style.display=\'none\';this.previousElementSibling.style.display=\'none\';">';
     }
     html+='<div class="answer-text">'+q.a+'</div>';
@@ -549,8 +550,8 @@ const techQuestions=[
     {html:`SQL – LEFT JOIN Nightmare<br><br><div class="table-wrap"><table class="quiz-table"><tr><th>Table A</th></tr><tr><td>ID</td></tr><tr><td>1</td></tr><tr><td>2</td></tr></table><br><table class="quiz-table"><tr><th>Table B</th></tr><tr><td>ID</td></tr><tr><td>1</td></tr><tr><td>1</td></tr><tr><td>1</td></tr><tr><td>2</td></tr><tr><td>2</td></tr></table></div><br>Query:<br><div class="mono">SELECT COUNT(*)\nFROM A\nLEFT JOIN B\nON A.ID = B.ID;</div><br>What is the result?`,options:['A) 2','B) 3','C) 5','D) 7'],a:'C) 5',img:'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=900',explanation:'LEFT JOIN returns one row for each match. ID=1 matches 3 rows in B and ID=2 matches 2 rows in B. So total rows = 3 + 2 = 5.'},
     {html:`<div class="table-wrap"><table class="quiz-table"><tr><th>Salary</th></tr><tr><td>100</td></tr><tr><td>100</td></tr><tr><td>100</td></tr><tr><td>90</td></tr></table></div><br>Query:<br><div class="mono">SELECT Salary,\n       ROW_NUMBER() OVER(ORDER BY Salary DESC) RN,\n       RANK() OVER(ORDER BY Salary DESC) R,\n       DENSE_RANK() OVER(ORDER BY Salary DESC) DR\nFROM Employee;</div><br>What is the rank of Salary = 90?`,options:['A) RN=4, R=4, DR=2','B) RN=2, R=2, DR=2','C) RN=4, R=2, DR=2','D) RN=4, R=4, DR=4'],a:'A) RN=4, R=4, DR=2',img:'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=900',explanation:'Salary 100 gets RN 1,2,3 and R=1,1,1; Salary 90 gets RN=4, R=4, DR=2.'},
     {html:`<div class="table-wrap"><table class="quiz-table"><tr><th>Value</th></tr><tr><td>NULL</td></tr><tr><td>NULL</td></tr></table></div><br>Query:<br><div class="mono">SELECT\nCOUNT(*),\nCOUNT(Value),\nSUM(Value),\nAVG(Value)\nFROM T;</div><br>What is the output?`,options:['A) 2,0,NULL,NULL','B) 2,2,0,0','C) 0,0,0,NULL','D) 2,0,0,0'],a:'A) 2,0,NULL,NULL',img:'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900',explanation:'COUNT(*) = 2, COUNT(Value) = 0, SUM(Value) = NULL, AVG(Value) = NULL.'},
-    {html:`<div class="mono">funcs = []\n\nfor i in range(3):\n    funcs.append(lambda: i)\n\nprint([f() for f in funcs])</div><br>What is the output?`,options:['A) [0,1,2]','B) [2,2,2]','C) [3,3,3]','D) Error'],a:'B) [2,2,2]',img:'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900',explanation:'Lambdas capture the variable, not its value. After the loop ends, i = 2. So all lambdas return [2,2,2].'},
-    {html:`<div class="mono">a = [1,2]\nb = [1,2]\n\nprint(a == b, a is b)</div><br>What is the output?`,options:['A) True True','B) False False','C) True False','D) False True'],a:'C) True False',img:'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900',explanation:'== compares values, is compares object identity.'}
+    {html:`<div class="mono">funcs = []\n\nfor i in range(3):\n    funcs.append(lambda: i)\n\nprint([f() for f in funcs])</div><br>What is the output?`,options:['A) [0,1,2]','B) [2,2,2]','C) [3,3,3]','D) Error'],a:'B) [2,2,2]',img:'https://images.unsplash.com/photo-1515879218367-43490279c0fa?w=900',explanation:'Lambdas capture the variable, not its value. After the loop ends, i = 2. So all lambdas return [2,2,2].'},
+    {html:`<div class="mono">a = [1,2]\nb = [1,2]\n\nprint(a == b, a is b)</div><br>What is the output?`,options:['A) True True','B) False False','C) True False','D) False True'],a:'C) True False',img:'https://images.unsplash.com/photo-1515879218367-43490279c0fa?w=900',explanation:'== compares values, is compares object identity.'}
 ];
 
 function startTechnicalRound(){
@@ -620,7 +621,6 @@ function showTechAnswer(){
     const q=techQuestions[techIndex];
     let html='<div class="answer-box">';
     if(q.img){
-        html+='<div class="link-line">'+q.img+'</div>';
         html+='<img class="answer-image" src="'+q.img+'" alt="'+q.a+'" onerror="this.style.display=\'none\';this.previousElementSibling.style.display=\'none\';">';
     }
     html+='<div class="answer-text">'+q.a+'</div>';
@@ -689,8 +689,7 @@ function showOutputAnswer(){
     const q=outputQuestions[outputIndex];
     const img='https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900';
     let html='<div class="answer-box">';
-    html+='<div class="link-line">'+img+'</div>';
-    html+='<img class="answer-image" src="'+img+'" alt="'+q.a+'" onerror="this.style.display=\'none\';this.previousElementSibling.style.display=\'none\';">';
+    html+='<img class="answer-image" src="'+img+'" alt="'+q.a+'" onerror="this.style.display=\'none\';">';
     html+='<div class="answer-text">'+q.a+'</div>';
     html+='</div>';
     document.getElementById('outputAnswer').innerHTML=html;
@@ -699,14 +698,3 @@ function showOutputAnswer(){
 </script>
 </body>
 </html>
-<title>Gantec Puzzle Arena</title>
-
-<style>
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    color:#fff;
-    min-height:100vh;
-    padding:24px;
-    background:linear-gradient(-45deg,#06101f,#173a8a,#6d28d9,#0ea5e9);
-    background-size:400% 400%;
