@@ -37,80 +37,13 @@ button{
     color:#fff;
     background:linear-gradient(135deg,#2563eb,#1d4ed8);
     box-shadow:0 5px 14px rgba(0,0,0,.18);
+    transition:.2s ease;
 }
-button:hover{
-    opacity:.95;
-}
-.hero-slide{
-    position:relative;
-    padding:92px 30px 80px;
-    overflow:hidden;
-}
-.hero-badge{
-    display:inline-block;
-    padding:10px 22px;
-    border-radius:999px;
-    background:rgba(255,255,255,.14);
-    color:#fff;
-    font-size:15px;
-    font-weight:bold;
-    letter-spacing:2px;
-    text-transform:uppercase;
-    animation:fadeDown .8s ease both;
-}
-.hero-title{
-    margin:24px 0 14px;
-    font-size:72px;
-    font-weight:900;
-    line-height:1.05;
-    letter-spacing:2px;
-    text-transform:uppercase;
-    text-shadow:0 6px 20px rgba(0,0,0,.35);
-    animation:fadeUp .9s ease both;
-}
-.hero-tagline{
-    margin:0 auto 34px;
-    font-size:30px;
-    font-weight:700;
-    color:#f8fafc;
-    letter-spacing:1px;
-    animation:fadeUp 1.1s ease both;
-}
-.hero-start-btn{
-    padding:14px 28px;
-    font-size:18px;
-    border-radius:12px;
-    font-weight:bold;
-    animation:pulseBtn 2s infinite;
-}
-.hero-glow{
-    position:absolute;
-    top:50%;
-    left:50%;
-    width:420px;
-    height:420px;
-    transform:translate(-50%,-50%);
-    border-radius:50%;
-    background:radial-gradient(circle, rgba(255,255,255,0.16), rgba(255,255,255,0.05), transparent 70%);
-    filter:blur(10px);
-    z-index:-1;
-    animation:glowMove 6s ease-in-out infinite;
-}
-.round-title{
-    font-size:38px;
-    font-weight:800;
-    margin-bottom:10px;
-}
-.sub-title{
-    font-size:22px;
-    color:rgba(255,255,255,.78);
-    margin-bottom:16px;
-}
-.timer{
-    font-size:66px;
-    font-weight:800;
-    margin:18px 0 6px;
-}
+button:hover{transform:translateY(-1px);opacity:.95;}
+.small-start-btn{padding:10px 18px;font-size:15px;border-radius:8px;}
+.round-title{font-size:38px;font-weight:800;margin-bottom:10px;}
+.sub-title{font-size:22px;color:rgba(255,255,255,.78);margin-bottom:16px;}
+.timer{font-size:72px;font-weight:800;margin:18px 0 6px;}
 .info-card{
     max-width:900px;
     margin:24px auto;
@@ -122,31 +55,39 @@ button:hover{
     font-size:22px;
 }
 #question,#techQuestion,#outputQuestion{
-    font-size:30px;
-    line-height:1.5;
+    font-size:38px;
+    line-height:1.45;
     white-space:pre-line;
     margin:18px 0;
 }
 .answer-box{
-    margin:20px auto 0;
-    padding:18px;
-    border-radius:18px;
-    background:rgba(255,255,255,.15);
+    margin:22px auto 0;
+    padding:22px;
+    border-radius:22px;
+    background:rgba(255,255,255,.16);
     display:inline-block;
     animation:fadeIn .35s ease-in-out;
     max-width:100%;
+    min-width:70%;
 }
 .answer-image{
-    width:280px;
-    max-width:90%;
-    border-radius:16px;
+    width:420px;
+    max-width:100%;
+    border-radius:18px;
     margin-top:14px;
     box-shadow:0 8px 22px rgba(0,0,0,.35);
 }
-.correct-answer{
-    font-size:28px;
-    font-weight:800;
-    margin-top:14px;
+.answer-text{
+    font-size:36px;
+    font-weight:900;
+    margin-top:16px;
+    line-height:1.2;
+}
+.link-line{
+    font-size:14px;
+    opacity:.85;
+    margin-top:8px;
+    word-break:break-all;
 }
 .explanation{
     font-size:18px;
@@ -154,10 +95,10 @@ button:hover{
     margin-top:12px;
     color:#f8fafc;
     text-align:left;
-    max-width:760px;
+    max-width:860px;
 }
 .question-card{
-    max-width:950px;
+    max-width:1050px;
     margin:0 auto;
 }
 .options-grid{
@@ -209,33 +150,70 @@ button:hover{
 .quiz-table th{
     background:rgba(255,255,255,.18);
 }
-@keyframes gradientMove{
-    0%{background-position:0%}
-    50%{background-position:100%}
-    100%{background-position:0%}
+.hero-slide{
+    position:relative;
+    padding:92px 30px 80px;
+    text-align:center;
+    overflow:hidden;
 }
-@keyframes fadeIn{
-    from{opacity:0;transform:scale(.97)}
-    to{opacity:1;transform:scale(1)}
+.hero-badge{
+    display:inline-block;
+    padding:10px 22px;
+    border-radius:999px;
+    background:rgba(255,255,255,.14);
+    color:#fff;
+    font-size:15px;
+    font-weight:bold;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    backdrop-filter:blur(8px);
+    animation:fadeDown .8s ease both;
 }
-@keyframes fadeDown{
-    from{opacity:0;transform:translateY(-20px)}
-    to{opacity:1;transform:translateY(0)}
+.hero-title{
+    margin:24px 0 14px;
+    font-size:72px;
+    font-weight:900;
+    line-height:1.05;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:#fff;
+    text-shadow:0 6px 20px rgba(0,0,0,.35);
+    animation:fadeUp .9s ease both;
 }
-@keyframes fadeUp{
-    from{opacity:0;transform:translateY(20px)}
-    to{opacity:1;transform:translateY(0)}
+.hero-tagline{
+    margin:0 auto 34px;
+    font-size:30px;
+    font-weight:700;
+    color:#f8fafc;
+    letter-spacing:1px;
+    animation:fadeUp 1.1s ease both;
 }
-@keyframes pulseBtn{
-    0%{transform:scale(1)}
-    50%{transform:scale(1.05)}
-    100%{transform:scale(1)}
+.hero-start-btn{
+    padding:14px 28px;
+    font-size:18px;
+    border-radius:12px;
+    font-weight:bold;
+    animation:pulseBtn 2s infinite;
 }
-@keyframes glowMove{
-    0%{transform:translate(-50%,-50%) scale(1)}
-    50%{transform:translate(-50%,-50%) scale(1.08)}
-    100%{transform:translate(-50%,-50%) scale(1)}
+.hero-glow{
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:420px;
+    height:420px;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(255,255,255,0.16), rgba(255,255,255,0.05), transparent 70%);
+    filter:blur(10px);
+    z-index:-1;
+    animation:glowMove 6s ease-in-out infinite;
 }
+@keyframes gradientMove{0%{background-position:0%}50%{background-position:100%}100%{background-position:0%}}
+@keyframes fadeIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulseBtn{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
+@keyframes glowMove{0%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.08)}100%{transform:translate(-50%,-50%) scale(1)}}
 @media (max-width:700px){
     body{padding:12px}
     .box{padding:22px}
@@ -247,11 +225,11 @@ button:hover{
     .info-card{font-size:18px}
     .hero-title{font-size:42px}
     .hero-tagline{font-size:22px}
+    .answer-text{font-size:28px}
 }
 </style>
 </head>
 <body>
-
 <div class="box">
 
     <!-- INTRO -->
@@ -260,24 +238,7 @@ button:hover{
         <h1 class="hero-title">GANTEC PUZZLE ARENA</h1>
         <h2 class="hero-tagline">Fast Minds. Smart Answers. Big Fun.</h2>
         <div class="hero-glow"></div>
-        <button class="hero-start-btn" onclick="startGame()">▶ START</button>
-    </div>
-
-    <!-- WELCOME -->
-    <div id="welcomeSlide" class="hidden">
-        <div class="round-title">👋 WELCOME</div>
-        <h2 style="font-size:34px;margin-top:10px;">Welcome to the Quiz Event</h2>
-        <p style="font-size:24px;line-height:1.8;max-width:900px;margin:24px auto;color:rgba(255,255,255,.95);">
-            We are happy to have you here. This game includes puzzle questions, technical questions, and program output questions.
-            Please read the instructions carefully before starting the challenge.
-        </p>
-        <div class="info-card">
-            <div>✅ Round 1: Puzzle Questions</div>
-            <div>✅ Technical Round: SQL, Python, and Theory Questions</div>
-            <div>✅ Program Output Round</div>
-            <div>✅ Final Thank You Slide</div>
-        </div>
-        <button onclick="showSlide('rules')">Next ➜</button>
+        <button class="small-start-btn hero-start-btn" onclick="startGame()">▶ START</button>
     </div>
 
     <!-- RULES -->
@@ -285,37 +246,20 @@ button:hover{
         <div class="round-title">📋 GAME RULES</div>
         <h2 style="font-size:32px;margin-top:10px;">Please read the rules carefully</h2>
         <div id="rulesText" style="font-size:24px;line-height:2;max-width:900px;margin:28px auto;text-align:left;padding:24px;border-radius:18px;background:rgba(255,255,255,.12);"></div>
-        <button onclick="showSlide('welcomeSlide')">⬅ Back</button>
-        <button onclick="showSlide('example')">Next ➜</button>
-    </div>
-
-    <!-- EXAMPLE -->
-    <div id="example" class="hidden">
-        <div class="round-title">💡 EXAMPLE</div>
-        <h2 style="font-size:32px;margin-top:12px;">Example Puzzle Question</h2>
-        <div style="max-width:850px;margin:24px auto;padding:24px;border-radius:18px;background:rgba(255,255,255,.12);font-size:26px;line-height:1.8;">
-            What gets wetter the more it dries?
-        </div>
-        <button onclick="showExample()">Show Answer</button>
-        <div id="exampleAns"></div>
-        <br>
-        <button onclick="showSlide('rules')">⬅ Back</button>
+        <button onclick="showSlide('intro')">⬅ Back</button>
         <button onclick="startRound1()">Start Game</button>
     </div>
 
     <!-- ROUND 1 -->
     <div id="round1" class="hidden">
         <div class="round-title">ROUND 1 - PUZZLE ROUND</div>
-        <div class="sub-title">30 Questions</div>
-        <h2 id="levelTitle"></h2>
+        <div class="sub-title">Question <span id="round1Counter"></span> / 30</div>
         <h2 id="question"></h2>
         <div class="timer" id="timer">20</div>
         <button onclick="startTimer()">Start Timer</button>
         <button onclick="stopTimer()">Stop Timer</button>
         <button onclick="showAnswer()">Show Answer</button>
         <button onclick="nextQuestion()">Next</button>
-        <br>
-        <button onclick="showSlide('example')">⬅ Back</button>
         <div id="answer"></div>
     </div>
 
@@ -384,7 +328,7 @@ let timerInt=null, techTimerInt=null, outputTimerInt=null;
 let timeLeft=20, techTimeLeft=20, outputTimeLeft=20;
 
 function showSlide(id){
-    const pages=['intro','welcomeSlide','rules','example','round1','techIntro','techRound','outputRound','thankYou'];
+    const pages=['intro','rules','round1','techIntro','techRound','outputRound','thankYou'];
     for(let i=0;i<pages.length;i++){
         const el=document.getElementById(pages[i]);
         if(el) el.classList.add('hidden');
@@ -398,7 +342,7 @@ function showSlide(id){
 }
 
 function startGame(){
-    showSlide('welcomeSlide');
+    showSlide('rules');
 }
 
 function showRules(){
@@ -414,55 +358,46 @@ function showRules(){
         '💻 Then you will enter the program output round.',
         '🎉 A final thank you slide will appear at the end.'
     ];
-
-    let html = '<div style="font-size:30px;font-weight:800;margin-bottom:18px;text-align:center;">🎮 Game Rules</div>';
-    html += '<div style="display:flex;flex-direction:column;gap:12px;">';
+    let html='<div style="font-size:30px;font-weight:800;margin-bottom:18px;text-align:center;">🎮 Game Rules</div>';
+    html+='<div style="display:flex;flex-direction:column;gap:12px;">';
     for(let i=0;i<rulesList.length;i++){
-        html += '<div style="padding:14px 16px;border-radius:14px;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.14);font-size:22px;line-height:1.6;">' + rulesList[i] + '</div>';
+        html+='<div style="padding:14px 16px;border-radius:14px;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.14);font-size:22px;line-height:1.6;">'+rulesList[i]+'</div>';
     }
-    html += '</div>';
-    document.getElementById('rulesText').innerHTML = html;
+    html+='</div>';
+    document.getElementById('rulesText').innerHTML=html;
 }
 
-function showExample(){
-    document.getElementById('exampleAns').innerHTML = `
-        <div class="answer-box">
-            https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=500
-            <div class="correct-answer">✅ Correct Answer: TOWEL</div>
-        </div>`;
-}
-
-const round1Questions = [
-    {q:'I have many keys but open no locks. What am I?',a:'KEYBOARD'},
-    {q:'I can run thousands of applications but never move an inch. What am I?',a:'SERVER'},
-    {q:'I store memories but have no brain. What am I?',a:'HARD DRIVE'},
-    {q:'I carry my home everywhere.\nSlowly but confidently.\nWhat am I?',a:'TORTOISE'},
-    {q:'Palaces fill my streets.\nCamels are not far away.\nMy color made me famous.\nWho am I?',a:'JAIPUR'},
-    {q:'I am worn in many styles.\nAcross many states.\nYet remain timeless.\nWhat am I?',a:'SAREE'},
-    {q:'I decide your quick-thinking pace.\nIn your game I rule the race.',a:'TIMER'},
-    {q:'I protect doors you cannot see,\nHackers fear getting past me.',a:'FIREWALL'},
-    {q:'I repeat the same work again,\nTill logic says I should refrain.',a:'LOOP'},
-    {q:'I find mistakes hidden in code,\nAnd lighten the developer’s load.',a:'DEBUGGER'},
-    {q:'I rise each year but never fall,\nNo ladder needed after all.',a:'AGE'},
-    {q:'A room with no door and no wall,\nStill people love me after all.',a:'MUSHROOM'},
-    {q:'I shine by night, disappear by noon,\nSilent beauty in the sky soon.',a:'MOON'},
-    {q:'I can be broken.\nWithout being touched.',a:'PROMISE'},
-    {q:'I can be stolen.\nWithout touching anything.',a:'HEART'},
-    {q:'Invisible but always near,\nWhen I’m gone everyone feels fear.',a:'WIFI'},
-    {q:'I define goals for every team,\nSuccess begins within my theme.',a:'TARGET'},
-    {q:'I come once a year with hope and cheer,\nEmployees wait for me throughout the year.',a:'APPRAISAL'},
-    {q:'I give you a break from office chair,\nRequested in portal with extra care.',a:'LEAVE'},
-    {q:'I teach you skills to grow each day,\nLearning always leads the way.',a:'TRAINING'},
-    {q:'I am small and spinning.\nYet I appear at the center of pride.\nTwenty-four spokes define me.\nWhat am I?',a:'ASHOKA CHAKRA'},
-    {q:'I am full of holes but can still hold water. What am I?',a:'SPONGE'},
-    {q:'I wear white through day and night.\nA king built me for love.\nMillions visit me every year.\nWho am I?',a:'TAJ MAHAL'},
-    {q:'There is a word in the English language in which the first two letters signify a male, the first three letters signify a female, the first four signify a great man, and the whole word, a great woman. What is the word?',a:'HEROINE'},
-    {q:'Turn me on my side, and I am everything. Cut me in half, and I am nothing. What am I?',a:'NUMBER 8'},
-    {q:'I lead company vision and goal,\nTaking the highest leadership role.',a:'CEO'},
-    {q:'I judge your progress through the year,\nManagers review me with care.',a:'PERFORMANCE'},
-    {q:'I sit between user and machine,\nMaking everything look clean.',a:'INTERFACE'},
-    {q:'I break programs without a sound,\nDevelopers search till I’m found.',a:'BUG'},
-    {q:'I can be kept.\nWithout being held.',a:'PROMISE'}
+const round1Questions=[
+    {q:'I have many keys but open no locks. What am I?',a:'KEYBOARD',img:'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=900'},
+    {q:'I can run thousands of applications but never move an inch. What am I?',a:'SERVER',img:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900'},
+    {q:'I store memories but have no brain. What am I?',a:'HARD DRIVE',img:'https://images.unsplash.com/photo-1518770660439-4636190af475?w=900'},
+    {q:'I carry my home everywhere.\nSlowly but confidently.\nWhat am I?',a:'TORTOISE',img:'https://images.unsplash.com/photo-1501706362039-c6e80948e7b0?w=900'},
+    {q:'Palaces fill my streets.\nCamels are not far away.\nMy color made me famous.\nWho am I?',a:'JAIPUR',img:'https://images.unsplash.com/photo-1548013146-72479768bada?w=900'},
+    {q:'I am worn in many styles.\nAcross many states.\nYet remain timeless.\nWhat am I?',a:'SAREE',img:'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900'},
+    {q:'I decide your quick-thinking pace.\nIn your game I rule the race.',a:'TIMER',img:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900'},
+    {q:'I protect doors you cannot see,\nHackers fear getting past me.',a:'FIREWALL',img:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900'},
+    {q:'I repeat the same work again,\nTill logic says I should refrain.',a:'LOOP',img:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900'},
+    {q:'I find mistakes hidden in code,\nAnd lighten the developer’s load.',a:'DEBUGGER',img:'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900'},
+    {q:'I rise each year but never fall,\nNo ladder needed after all.',a:'AGE',img:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=900'},
+    {q:'A room with no door and no wall,\nStill people love me after all.',a:'MUSHROOM',img:'https://images.unsplash.com/photo-1547592180-85f173990554?w=900'},
+    {q:'I shine by night, disappear by noon,\nSilent beauty in the sky soon.',a:'MOON',img:'https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?w=900'},
+    {q:'I can be broken.\nWithout being touched.',a:'PROMISE',img:'https://images.unsplash.com/photo-1520975922284-2f9f3f2f1c4a?w=900'},
+    {q:'I can be stolen.\nWithout touching anything.',a:'HEART',img:'https://images.unsplash.com/photo-1529692236671-f1a8f3a8b6f2?w=900'},
+    {q:'Invisible but always near,\nWhen I’m gone everyone feels fear.',a:'WIFI',img:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900'},
+    {q:'I define goals for every team,\nSuccess begins within my theme.',a:'TARGET',img:'https://images.unsplash.com/photo-1552664730-d307ca884978?w=900'},
+    {q:'I come once a year with hope and cheer,\nEmployees wait for me throughout the year.',a:'APPRAISAL',img:'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900'},
+    {q:'I give you a break from office chair,\nRequested in portal with extra care.',a:'LEAVE',img:'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900'},
+    {q:'I teach you skills to grow each day,\nLearning always leads the way.',a:'TRAINING',img:'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900'},
+    {q:'I am small and spinning.\nYet I appear at the center of pride.\nTwenty-four spokes define me.\nWhat am I?',a:'ASHOKA CHAKRA',img:'https://images.unsplash.com/photo-1477901492169-d59f3f63d6c0?w=900'},
+    {q:'I am full of holes but can still hold water. What am I?',a:'SPONGE',img:'https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=900'},
+    {q:'I wear white through day and night.\nA king built me for love.\nMillions visit me every year.\nWho am I?',a:'TAJ MAHAL',img:'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=900'},
+    {q:'There is a word in the English language in which the first two letters signify a male, the first three letters signify a female, the first four signify a great man, and the whole word, a great woman. What is the word?',a:'HEROINE',img:'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=900'},
+    {q:'Turn me on my side, and I am everything. Cut me in half, and I am nothing. What am I?',a:'NUMBER 8',img:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900'},
+    {q:'I lead company vision and goal,\nTaking the highest leadership role.',a:'CEO',img:'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=900'},
+    {q:'I judge your progress through the year,\nManagers review me with care.',a:'PERFORMANCE',img:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900'},
+    {q:'I sit between user and machine,\nMaking everything look clean.',a:'INTERFACE',img:'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900'},
+    {q:'I break programs without a sound,\nDevelopers search till I’m found.',a:'BUG',img:'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900'},
+    {q:'I can be kept.\nWithout being held.',a:'PROMISE',img:'https://images.unsplash.com/photo-1520975922284-2f9f3f2f1c4a?w=900'}
 ];
 
 function round1Image(seed){
@@ -481,7 +416,7 @@ function loadRound1Question(){
         return;
     }
     const q=round1Questions[round1Index];
-    document.getElementById('levelTitle').innerText='QUESTION ' + (round1Index+1) + ' / 30';
+    document.getElementById('round1Counter').innerText=(round1Index+1);
     document.getElementById('question').innerText='Q' + (round1Index+1) + ': ' + q.q;
     document.getElementById('answer').innerHTML='';
     resetTimer();
@@ -519,108 +454,43 @@ function stopTimer(){
 
 function showAnswer(){
     const q=round1Questions[round1Index];
-    document.getElementById('answer').innerHTML=
-        '<div class="answer-box">' +
-        '<img class="answer-image" src="' + round1Image(q.a) + '" alt="' + q.a + '">' +
-        '<div class="correct-answer">✅ Answer: ' + q.a + '</div>' +
-        '</div>';
+    const img=q.img || '';
+    let html='<div class="answer-box">';
+    if(img){
+        html+='<img class="answer-image" src="'+img+'" alt="'+q.a+'" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\';">';
+        html+='<div class="link-line">'+img+'</div>';
+    }
+    html+='<div class="answer-text">'+q.a+'</div>';
+    html+='</div>';
+    document.getElementById('answer').innerHTML=html;
 }
 
-/* TECH ROUND - 5 QUESTIONS ONLY */
-const techQuestions = [
-    {
-        html:`SQL – LEFT JOIN Nightmare<br><br>
-        <div class="table-wrap">
-            <table class="quiz-table">
-                <tr><th>Table A</th></tr>
-                <tr><td>ID</td></tr>
-                <tr><td>1</td></tr>
-                <tr><td>2</td></tr>
-            </table>
-            <br>
-            <table class="quiz-table">
-                <tr><th>Table B</th></tr>
-                <tr><td>ID</td></tr>
-                <tr><td>1</td></tr>
-                <tr><td>1</td></tr>
-                <tr><td>1</td></tr>
-                <tr><td>2</td></tr>
-                <tr><td>2</td></tr>
-            </table>
-        </div><br>
-        Query:<br>
-        <div class="mono">SELECT COUNT(*)
+const techQuestions=[
+    {html:`SQL – LEFT JOIN Nightmare<br><br><div class="table-wrap"><table class="quiz-table"><tr><th>Table A</th></tr><tr><td>ID</td></tr><tr><td>1</td></tr><tr><td>2</td></tr></table><br><table class="quiz-table"><tr><th>Table B</th></tr><tr><td>ID</td></tr><tr><td>1</td></tr><tr><td>1</td></tr><tr><td>1</td></tr><tr><td>2</td></tr><tr><td>2</td></tr></table></div><br>Query:<br><div class="mono">SELECT COUNT(*)
 FROM A
 LEFT JOIN B
-ON A.ID = B.ID;</div><br>
-        What is the result?`,
-        options:['A) 2','B) 3','C) 5','D) 7'],
-        a:'C) 5',
-        explanation:'LEFT JOIN returns one row for each match. ID=1 matches 3 rows in B and ID=2 matches 2 rows in B. So total rows = 3 + 2 = 5. ✅ Correct Answer: C) 5'
-    },
-    {
-        html:`<div class="table-wrap">
-            <table class="quiz-table">
-                <tr><th>Salary</th></tr>
-                <tr><td>100</td></tr>
-                <tr><td>100</td></tr>
-                <tr><td>100</td></tr>
-                <tr><td>90</td></tr>
-            </table>
-        </div><br>
-        Query:<br>
-        <div class="mono">SELECT Salary,
+ON A.ID = B.ID;</div><br>What is the result?`,options:['A) 2','B) 3','C) 5','D) 7'],a:'C) 5',img:'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=900',explanation:'LEFT JOIN returns one row for each match. ID=1 matches 3 rows in B and ID=2 matches 2 rows in B. So total rows = 3 + 2 = 5.'},
+    {html:`<div class="table-wrap"><table class="quiz-table"><tr><th>Salary</th></tr><tr><td>100</td></tr><tr><td>100</td></tr><tr><td>100</td></tr><tr><td>90</td></tr></table></div><br>Query:<br><div class="mono">SELECT Salary,
        ROW_NUMBER() OVER(ORDER BY Salary DESC) RN,
        RANK() OVER(ORDER BY Salary DESC) R,
        DENSE_RANK() OVER(ORDER BY Salary DESC) DR
-FROM Employee;</div><br>
-        What is the rank of Salary = 90?`,
-        options:['A) RN=4, R=4, DR=2','B) RN=2, R=2, DR=2','C) RN=4, R=2, DR=2','D) RN=4, R=4, DR=4'],
-        a:'A) RN=4, R=4, DR=2',
-        explanation:'Salary 100 gets RN 1,2,3 and R=1,1,1; Salary 90 gets RN=4, R=4, DR=2.'
-    },
-    {
-        html:`<div class="table-wrap">
-            <table class="quiz-table">
-                <tr><th>Value</th></tr>
-                <tr><td>NULL</td></tr>
-                <tr><td>NULL</td></tr>
-            </table>
-        </div><br>
-        Query:<br>
-        <div class="mono">SELECT
+FROM Employee;</div><br>What is the rank of Salary = 90?`,options:['A) RN=4, R=4, DR=2','B) RN=2, R=2, DR=2','C) RN=4, R=2, DR=2','D) RN=4, R=4, DR=4'],a:'A) RN=4, R=4, DR=2',img:'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=900',explanation:'Salary 100 gets RN 1,2,3 and R=1,1,1; Salary 90 gets RN=4, R=4, DR=2.'},
+    {html:`<div class="table-wrap"><table class="quiz-table"><tr><th>Value</th></tr><tr><td>NULL</td></tr><tr><td>NULL</td></tr></table></div><br>Query:<br><div class="mono">SELECT
 COUNT(*),
 COUNT(Value),
 SUM(Value),
 AVG(Value)
-FROM T;</div><br>
-        What is the output?`,
-        options:['A) 2,0,NULL,NULL','B) 2,2,0,0','C) 0,0,0,NULL','D) 2,0,0,0'],
-        a:'A) 2,0,NULL,NULL',
-        explanation:'COUNT(*) = 2, COUNT(Value) = 0, SUM(Value) = NULL, AVG(Value) = NULL.'
-    },
-    {
-        html:`<div class="mono">funcs = []
+FROM T;</div><br>What is the output?`,options:['A) 2,0,NULL,NULL','B) 2,2,0,0','C) 0,0,0,NULL','D) 2,0,0,0'],a:'A) 2,0,NULL,NULL',img:'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900',explanation:'COUNT(*) = 2, COUNT(Value) = 0, SUM(Value) = NULL, AVG(Value) = NULL.'},
+    {html:`<div class="mono">funcs = []
 
 for i in range(3):
     funcs.append(lambda: i)
 
-print([f() for f in funcs])</div><br>
-        What is the output?`,
-        options:['A) [0,1,2]','B) [2,2,2]','C) [3,3,3]','D) Error'],
-        a:'B) [2,2,2]',
-        explanation:'Lambdas capture the variable, not its value. After the loop ends, i = 2. So all lambdas return [2,2,2].'
-    },
-    {
-        html:`<div class="mono">a = [1,2]
+print([f() for f in funcs])</div><br>What is the output?`,options:['A) [0,1,2]','B) [2,2,2]','C) [3,3,3]','D) Error'],a:'B) [2,2,2]',img:'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900',explanation:'Lambdas capture the variable, not its value. After the loop ends, i = 2. So all lambdas return [2,2,2].'},
+    {html:`<div class="mono">a = [1,2]
 b = [1,2]
 
-print(a == b, a is b)</div><br>
-        What is the output?`,
-        options:['A) True True','B) False False','C) True False','D) False True'],
-        a:'C) True False',
-        explanation:'== compares values, is compares object identity.'
-    }
+print(a == b, a is b)</div><br>What is the output?`,options:['A) True True','B) False False','C) True False','D) False True'],a:'C) True False',img:'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900',explanation:'== compares values, is compares object identity.'}
 ];
 
 function startTechnicalRound(){
@@ -644,14 +514,13 @@ function loadTechQuestion(){
     document.getElementById('techCounter').innerText=(techIndex+1);
     document.getElementById('techTotal').innerText=techTotal();
     document.getElementById('techQuestion').innerHTML=q.html;
-
     let optHtml='';
     if(q.options){
-        optHtml = '<div class="options-grid">';
+        optHtml='<div class="options-grid">';
         for(let i=0;i<q.options.length;i++){
-            optHtml += '<div class="option-btn">' + q.options[i] + '</div>';
+            optHtml+='<div class="option-btn">'+q.options[i]+'</div>';
         }
-        optHtml += '</div>';
+        optHtml+='</div>';
     }
     document.getElementById('techOptions').innerHTML=optHtml;
     document.getElementById('techAnswer').innerHTML='';
@@ -690,16 +559,18 @@ function stopTechTimer(){
 
 function showTechAnswer(){
     const q=techQuestions[techIndex];
-    document.getElementById('techAnswer').innerHTML=
-        '<div class="answer-box">' +
-        '<img class="answer-image" src="' + round1Image(q.a) + '" alt="' + q.a + '">' +
-        '<div class="correct-answer">✅ Answer: ' + q.a + '</div>' +
-        '<div class="explanation">' + q.explanation + '</div>' +
-        '</div>';
+    let html='<div class="answer-box">';
+    if(q.img){
+        html+='<img class="answer-image" src="'+q.img+'" alt="'+q.a+'" onerror="this.style.display=\'none\';">';
+        html+='<div class="link-line">'+q.img+'</div>';
+    }
+    html+='<div class="answer-text">'+q.a+'</div>';
+    html+='<div class="explanation">'+q.explanation+'</div>';
+    html+='</div>';
+    document.getElementById('techAnswer').innerHTML=html;
 }
 
-/* OUTPUT ROUND */
-const outputQuestions = [
+const outputQuestions=[
     {q:'What is the output of: console.log(2 + 3 * 4);',a:'14'},
     {q:'What is the output of: console.log(\'5\' + 1);',a:'51'},
     {q:'What is the output of: console.log(typeof null);',a:'object'},
@@ -755,13 +626,14 @@ function stopOutputTimer(){
 
 function showOutputAnswer(){
     const q=outputQuestions[outputIndex];
-    document.getElementById('outputAnswer').innerHTML=
-        '<div class="answer-box">' +
-        '<img class="answer-image" src="' + round1Image(q.a) + '" alt="' + q.a + '">' +
-        '<div class="correct-answer">✅ Answer: ' + q.a + '</div>' +
-        '</div>';
+    let img='https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900';
+    let html='<div class="answer-box">';
+    html+='<img class="answer-image" src="'+img+'" alt="'+q.a+'" onerror="this.style.display=\'none\';">';
+    html+='<div class="link-line">'+img+'</div>';
+    html+='<div class="answer-text">'+q.a+'</div>';
+    html+='</div>';
+    document.getElementById('outputAnswer').innerHTML=html;
 }
 </script>
-
 </body>
 </html>
