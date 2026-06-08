@@ -2,19 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Gantec Puzzle Arena</title>
-
-<style>
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    color:#fff;
-    min-height:100vh;
-    padding:24px;
-    background:linear-gradient(-45deg,#06101f,#173a8a,#6d28d9,#0ea5e9);
-    background-size:400% 400%;
-    animation:gradientMove 15s ease infinite;
+;<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 }
 .box{
     max-width:1150px;
@@ -453,7 +441,7 @@ function showExample(){
     speak('Map');
 }
 
-const round1Questions=[
+const round1Questions = [
     {q:'I have many keys but open no locks. What am I?',a:'KEYBOARD',img:'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=900'},
     {q:'I can run thousands of applications but never move an inch. What am I?',a:'SERVER',img:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900'},
     {q:'I store memories but have no brain. What am I?',a:'HARD DRIVE',img:'https://images.unsplash.com/photo-1518770660439-4636190af475?w=900'},
@@ -538,7 +526,7 @@ function showAnswer(){
     const q=round1Questions[round1Index];
     let html='<div class="answer-box">';
     if(q.img){
-        html+='<img class="answer-image" src="'+q.img+'" alt="'+q.a+'" onerror="this.style.display=\'none\';this.previousElementSibling.style.display=\'none\';">';
+        html+='<img class="answer-image" src="'+q.img+'" alt="'+q.a+'" onerror="this.style.display=\'none\';">';
     }
     html+='<div class="answer-text">'+q.a+'</div>';
     html+='</div>';
@@ -546,7 +534,7 @@ function showAnswer(){
     speak(q.a);
 }
 
-const techQuestions=[
+const techQuestions = [
     {html:`SQL – LEFT JOIN Nightmare<br><br><div class="table-wrap"><table class="quiz-table"><tr><th>Table A</th></tr><tr><td>ID</td></tr><tr><td>1</td></tr><tr><td>2</td></tr></table><br><table class="quiz-table"><tr><th>Table B</th></tr><tr><td>ID</td></tr><tr><td>1</td></tr><tr><td>1</td></tr><tr><td>1</td></tr><tr><td>2</td></tr><tr><td>2</td></tr></table></div><br>Query:<br><div class="mono">SELECT COUNT(*)\nFROM A\nLEFT JOIN B\nON A.ID = B.ID;</div><br>What is the result?`,options:['A) 2','B) 3','C) 5','D) 7'],a:'C) 5',img:'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=900',explanation:'LEFT JOIN returns one row for each match. ID=1 matches 3 rows in B and ID=2 matches 2 rows in B. So total rows = 3 + 2 = 5.'},
     {html:`<div class="table-wrap"><table class="quiz-table"><tr><th>Salary</th></tr><tr><td>100</td></tr><tr><td>100</td></tr><tr><td>100</td></tr><tr><td>90</td></tr></table></div><br>Query:<br><div class="mono">SELECT Salary,\n       ROW_NUMBER() OVER(ORDER BY Salary DESC) RN,\n       RANK() OVER(ORDER BY Salary DESC) R,\n       DENSE_RANK() OVER(ORDER BY Salary DESC) DR\nFROM Employee;</div><br>What is the rank of Salary = 90?`,options:['A) RN=4, R=4, DR=2','B) RN=2, R=2, DR=2','C) RN=4, R=2, DR=2','D) RN=4, R=4, DR=4'],a:'A) RN=4, R=4, DR=2',img:'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=900',explanation:'Salary 100 gets RN 1,2,3 and R=1,1,1; Salary 90 gets RN=4, R=4, DR=2.'},
     {html:`<div class="table-wrap"><table class="quiz-table"><tr><th>Value</th></tr><tr><td>NULL</td></tr><tr><td>NULL</td></tr></table></div><br>Query:<br><div class="mono">SELECT\nCOUNT(*),\nCOUNT(Value),\nSUM(Value),\nAVG(Value)\nFROM T;</div><br>What is the output?`,options:['A) 2,0,NULL,NULL','B) 2,2,0,0','C) 0,0,0,NULL','D) 2,0,0,0'],a:'A) 2,0,NULL,NULL',img:'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900',explanation:'COUNT(*) = 2, COUNT(Value) = 0, SUM(Value) = NULL, AVG(Value) = NULL.'},
@@ -621,7 +609,7 @@ function showTechAnswer(){
     const q=techQuestions[techIndex];
     let html='<div class="answer-box">';
     if(q.img){
-        html+='<img class="answer-image" src="'+q.img+'" alt="'+q.a+'" onerror="this.style.display=\'none\';this.previousElementSibling.style.display=\'none\';">';
+        html+='<img class="answer-image" src="'+q.img+'" alt="'+q.a+'" onerror="this.style.display=\'none\';">';
     }
     html+='<div class="answer-text">'+q.a+'</div>';
     html+='<div class="explanation">'+q.explanation+'</div>';
@@ -630,7 +618,7 @@ function showTechAnswer(){
     speak(q.a);
 }
 
-const outputQuestions=[
+const outputQuestions = [
     {q:'What is the output of: console.log(2 + 3 * 4);',a:'14'},
     {q:'What is the output of: console.log(\'5\' + 1);',a:'51'},
     {q:'What is the output of: console.log(typeof null);',a:'object'},
@@ -687,9 +675,7 @@ function stopOutputTimer(){
 
 function showOutputAnswer(){
     const q=outputQuestions[outputIndex];
-    const img='https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=900';
     let html='<div class="answer-box">';
-    html+='<img class="answer-image" src="'+img+'" alt="'+q.a+'" onerror="this.style.display=\'none\';">';
     html+='<div class="answer-text">'+q.a+'</div>';
     html+='</div>';
     document.getElementById('outputAnswer').innerHTML=html;
@@ -698,3 +684,15 @@ function showOutputAnswer(){
 </script>
 </body>
 </html>
+``
+<title>Gantec Puzzle Arena</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    color:#fff;
+    min-height:100vh;
+    padding:24px;
+    background:linear-gradient(-45deg,#06101f,#173a8a,#6d28d9,#0ea5e9);
+    background-size:400% 400%;
