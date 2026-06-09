@@ -89,8 +89,7 @@
             background:linear-gradient(135deg,#ef4444,#dc2626);
         }
 
-        #question,
-        #outputQuestion{
+        #question{
             font-size:38px;
             line-height:1.45;
             white-space:pre-line;
@@ -336,7 +335,7 @@
             .box{padding:22px}
             h1{font-size:40px!important}
             .round-title{font-size:28px}
-            #question,#outputQuestion{font-size:22px}
+            #question{font-size:22px}
             .timer{font-size:80px}
             button{font-size:15px;padding:10px 14px}
             .hero-title{font-size:42px}
@@ -442,21 +441,6 @@
         <div id="techAnswer"></div>
     </div>
 
-    <!-- OUTPUT ROUND -->
-    <div id="outputRound" class="hidden">
-        <div class="round-title">💻 PROGRAM OUTPUT ROUND</div>
-        <div class="sub-title">10 Questions</div>
-        <h2 id="outputQuestion"></h2>
-        <div class="timer" id="outputTimerDisplay">20</div>
-        <button class="timer-btn" id="outputTimer" onclick="toggleTimer('output')">▶</button>
-        <div class="btn-row">
-            <button onclick="showOutputAnswer()">Show Answer</button>
-            <button onclick="nextOutputQuestion()">Next</button>
-            <button onclick="backFromOutputRound()">⬅ Back</button>
-        </div>
-        <div id="outputAnswer"></div>
-    </div>
-
     <!-- THANK YOU -->
     <div id="thankYou" class="hidden">
         <h1 style="font-size:64px;margin:0 0 10px;">🎉 THANK YOU 🎉</h1>
@@ -474,13 +458,9 @@
 <script>
 let round1Index = 0;
 let techIndex = 0;
-let outputIndex = 0;
 
 let timerInt = null;
-let outputTimerInt = null;
-
 let timeLeft = 20;
-let outputTimeLeft = 20;
 
 let currentSlide = 'intro';
 let previousSlide = 'intro';
@@ -489,14 +469,14 @@ function speak(text){
     if(!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
     const utter = new SpeechSynthesisUtterance(text);
-    utter.rate = 0.95;
+    utter.rate = 0.75;   // slow reading
     utter.pitch = 1;
     utter.volume = 1;
     window.speechSynthesis.speak(utter);
 }
 
 function showSlide(id){
-    const pages = ['intro','rules','example','round1','techIntro','techRound','outputRound','thankYou'];
+    const pages = ['intro','rules','example','round1','techIntro','techRound','thankYou'];
 
     if(currentSlide !== id){
         previousSlide = currentSlide;
@@ -512,7 +492,6 @@ function showSlide(id){
     if(active) active.classList.remove('hidden');
 
     stopTimer('main');
-    stopTimer('output');
 
     if(id === 'rules'){
         showRules();
@@ -543,7 +522,7 @@ function backFromRound1(){
 }
 
 function backFromTechIntro(){
-    showSlide(previousSlide === 'round1' ? 'round1' : 'example');
+    showSlide(previousSlide);
 }
 
 function backFromTechRound(){
@@ -553,15 +532,6 @@ function backFromTechRound(){
         return;
     }
     showSlide('techIntro');
-}
-
-function backFromOutputRound(){
-    if(outputIndex > 0){
-        outputIndex--;
-        loadOutputQuestion();
-        return;
-    }
-    showSlide('techRound');
 }
 
 function startGame(){
@@ -661,13 +631,6 @@ function resetTimer(type){
         document.getElementById('timer').innerText = '▶';
         document.getElementById('timer').classList.remove('stop');
     }
-
-    if(type === 'output'){
-        outputTimeLeft = 20;
-        document.getElementById('outputTimerDisplay').innerText = outputTimeLeft;
-        document.getElementById('outputTimer').innerText = '▶';
-        document.getElementById('outputTimer').classList.remove('stop');
-    }
 }
 
 function toggleTimer(type){
@@ -679,17 +642,6 @@ function toggleTimer(type){
         } else {
             if(timeLeft <= 0) timeLeft = 20;
             startTimer('main');
-        }
-    }
-
-    if(type === 'output'){
-        if(outputTimerInt){
-            stopTimer('output');
-            document.getElementById('outputTimer').innerText = '▶';
-            document.getElementById('outputTimer').classList.remove('stop');
-        } else {
-            if(outputTimeLeft <= 0) outputTimeLeft = 20;
-            startTimer('output');
         }
     }
 }
@@ -714,37 +666,12 @@ function startTimer(type){
             }
         },1000);
     }
-
-    if(type === 'output'){
-        if(outputTimerInt) return;
-
-        document.getElementById('outputTimer').innerText = '⏸';
-        document.getElementById('outputTimer').classList.add('stop');
-
-        outputTimerInt = setInterval(function(){
-            outputTimeLeft--;
-            document.getElementById('outputTimerDisplay').innerText = outputTimeLeft;
-
-            if(outputTimeLeft <= 0){
-                stopTimer('output');
-                document.getElementById('outputTimerDisplay').innerText = '0';
-                document.getElementById('outputTimer').innerText = '▶';
-                document.getElementById('outputTimer').classList.remove('stop');
-                outputTimeLeft = 20;
-            }
-        },1000);
-    }
 }
 
 function stopTimer(type){
     if(type === 'main' && timerInt){
         clearInterval(timerInt);
         timerInt = null;
-    }
-
-    if(type === 'output' && outputTimerInt){
-        clearInterval(outputTimerInt);
-        outputTimerInt = null;
     }
 }
 
@@ -761,54 +688,28 @@ function startTechnicalRound(){
     loadTechQuestion();
 }
 
+/* =========================================================
+   KEEP YOUR ORIGINAL 5 TECHNICAL QUESTIONS ONLY HERE
+   Do NOT add more than 5 questions
+   ========================================================= */
+
 const techQuestions = [
-    {
-        question:'SQL – LEFT JOIN Nightmare',
-        tableHtml:'<div class="table-wrap"><table class="quiz-table"><tr><th>Table A</th></tr><tr><td>ID</td></tr><tr><td>1</td></tr><tr><td>2</td></tr></table><br><table class="quiz-table"><tr><th>Table B</th></tr><tr><td>ID</td></tr><tr><td>1</td></tr><tr><td>1</td></tr><tr><td>1</td></tr><tr><td>2</td></tr><tr><td>2</td></tr></table></div><br><div class="mono">SELECT COUNT(*)\nFROM A\nLEFT JOIN B\nON A.ID = B.ID;</div>',
-        options:['A) 2','B) 3','C) 5','D) 7'],
-        answer:'C) 5',
-        explanation:'LEFT JOIN returns one row for each match. ID=1 matches 3 rows in B and ID=2 matches 2 rows in B. So total rows = 3 + 2 = 5.'
-    },
-    {
-        question:'Ranking Functions in SQL',
-        tableHtml:'<div class="table-wrap"><table class="quiz-table"><tr><th>Salary</th></tr><tr><td>100</td></tr><tr><td>100</td></tr><tr><td>100</td></tr><tr><td>90</td></tr></table></div><br><div class="mono">SELECT Salary,\n       ROW_NUMBER() OVER(ORDER BY Salary DESC) RN,\n       RANK() OVER(ORDER BY Salary DESC) R,\n       DENSE_RANK() OVER(ORDER BY Salary DESC) DR\nFROM Employee;</div>',
-        options:['A) RN=4, R=4, DR=2','B) RN=2, R=2, DR=2','C) RN=4, R=2, DR=2','D) RN=4, R=4, DR=4'],
-        answer:'A) RN=4, R=4, DR=2',
-        explanation:'Salary 100 gets RN 1,2,3 and R=1,1,1; Salary 90 gets RN=4, R=4, DR=2.'
-    },
-    {
-        question:'COUNT, SUM and AVG with NULL',
-        tableHtml:'<div class="table-wrap"><table class="quiz-table"><tr><th>Value</th></tr><tr><td>NULL</td></tr><tr><td>NULL</td></tr></table></div><br><div class="mono">SELECT\nCOUNT(*),\nCOUNT(Value),\nSUM(Value),\nAVG(Value)\nFROM T;</div>',
-        options:['A) 2,0,NULL,NULL','B) 2,2,0,0','C) 0,0,0,NULL','D) 2,0,0,0'],
-        answer:'A) 2,0,NULL,NULL',
-        explanation:'COUNT(*) = 2, COUNT(Value) = 0, SUM(Value) = NULL, AVG(Value) = NULL.'
-    },
-    {
-        question:'Python Late Binding in Lambda',
-        tableHtml:'<div class="mono">funcs = []\n\nfor i in range(3):\n    funcs.append(lambda: i)\n\nprint([f() for f in funcs])</div>',
-        options:['A) [0,1,2]','B) [2,2,2]','C) [3,3,3]','D) Error'],
-        answer:'B) [2,2,2]',
-        explanation:'Lambdas capture the variable, not its value. After the loop ends, i = 2. So all lambdas return [2,2,2].'
-    },
-    {
-        question:'Python == vs is',
-        tableHtml:'<div class="mono">a = [1,2]\nb = [1,2]\n\nprint(a == b, a is b)</div>',
-        options:['A) True True','B) False False','C) True False','D) False True'],
-        answer:'C) True False',
-        explanation:'== compares values, is compares object identity.'
-    }
+    /* PASTE YOUR ORIGINAL TECH QUESTION 1 HERE */
+    /* PASTE YOUR ORIGINAL TECH QUESTION 2 HERE */
+    /* PASTE YOUR ORIGINAL TECH QUESTION 3 HERE */
+    /* PASTE YOUR ORIGINAL TECH QUESTION 4 HERE */
+    /* PASTE YOUR ORIGINAL TECH QUESTION 5 HERE */
 ];
 
 function loadTechQuestion(){
     if(techIndex >= techQuestions.length){
-        showSlide('outputRound');
-        outputIndex = 0;
-        loadOutputQuestion();
+        showSlide('thankYou');
         return;
     }
 
     const q = techQuestions[techIndex];
-    document.getElementById('techQuestionText').innerText = q.question;
+
+    document.getElementById('techQuestionText').innerText = 'Question ' + (techIndex + 1) + ': ' + q.question;
     document.getElementById('techTable').innerHTML = q.tableHtml;
 
     let optHtml = '<div class="options-grid">';
@@ -831,43 +732,6 @@ function showTechAnswer(){
     document.getElementById('techAnswer').innerHTML =
         '<div class="answer-box"><div class="answer-text">' + q.answer + '</div><div class="explanation">' + q.explanation + '</div></div>';
     speak(q.answer);
-}
-
-const outputQuestions = [
-    {q:'What is the output of: console.log(2 + 3 * 4);',a:'14'},
-    {q:'What is the output of: console.log("5" + 1);',a:'51'},
-    {q:'What is the output of: console.log(typeof null);',a:'object'},
-    {q:'What is the output of: console.log(Boolean(0));',a:'false'},
-    {q:'What is the output of: console.log(10 / 2);',a:'5'},
-    {q:'What is the output of: console.log([1,2,3].length);',a:'3'},
-    {q:'What is the output of: console.log("Hello".toUpperCase());',a:'HELLO'},
-    {q:'What is the output of: console.log(5 == "5");',a:'true'},
-    {q:'What is the output of: console.log(5 === "5");',a:'false'},
-    {q:'What is the output of: console.log(Math.floor(4.8));',a:'4'}
-];
-
-function loadOutputQuestion(){
-    if(outputIndex >= outputQuestions.length){
-        showSlide('thankYou');
-        return;
-    }
-
-    const q = outputQuestions[outputIndex];
-    document.getElementById('outputQuestion').innerText = 'OUTPUT Q' + (outputIndex + 1) + ': ' + q.q;
-    document.getElementById('outputAnswer').innerHTML = '';
-    resetTimer('output');
-}
-
-function nextOutputQuestion(){
-    outputIndex++;
-    loadOutputQuestion();
-}
-
-function showOutputAnswer(){
-    const q = outputQuestions[outputIndex];
-    document.getElementById('outputAnswer').innerHTML =
-        '<div class="answer-box"><div class="answer-text">' + q.a + '</div></div>';
-    speak(q.a);
 }
 </script>
 </body>
