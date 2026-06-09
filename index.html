@@ -6,6 +6,10 @@
 <title>Unlock the Mystery</title>
 
 <style>
+*{
+    box-sizing:border-box;
+}
+
 body{
     margin:0;
     font-family:Arial,sans-serif;
@@ -16,6 +20,7 @@ body{
     background-size:400% 400%;
     animation:gradientMove 15s ease infinite;
 }
+
 .box{
     position:relative;
     max-width:1150px;
@@ -28,10 +33,14 @@ body{
     box-shadow:0 12px 40px rgba(0,0,0,.35);
     text-align:center;
 }
-.hidden{display:none;}
+
+/* VERY IMPORTANT FIX */
+.hidden{
+    display:none !important;
+}
 
 button{
-    padding:9px 16px;
+    padding:8px 16px;
     font-size:14px;
     margin:5px;
     border:none;
@@ -42,24 +51,28 @@ button{
     box-shadow:0 5px 14px rgba(0,0,0,.18);
     transition:.2s ease;
 }
+
 button:hover{
     transform:translateY(-1px);
     opacity:.95;
 }
+
 .btn-row{
     display:flex;
     flex-wrap:wrap;
     justify-content:center;
     align-items:center;
     gap:8px;
+    margin-top:20px;
+}
+
+.bottom-nav{
     margin-top:24px;
 }
-.bottom-nav{
-    margin-top:34px;
-}
+
 .hero-start-btn{
-    padding:10px 20px;
-    font-size:15px;
+    padding:9px 18px;
+    font-size:14px;
     border-radius:999px;
     font-weight:bold;
     animation:pulseBtn 2s infinite;
@@ -70,13 +83,14 @@ button:hover{
     font-weight:800;
     margin-bottom:10px;
 }
+
 .sub-title{
     font-size:22px;
     color:rgba(255,255,255,.78);
     margin-bottom:16px;
 }
 
-/* Timer right side */
+/* Timer */
 .timer-wrap{
     position:absolute;
     top:22px;
@@ -86,6 +100,7 @@ button:hover{
     gap:12px;
     z-index:10;
 }
+
 .timer{
     font-size:54px;
     font-weight:900;
@@ -94,9 +109,11 @@ button:hover{
     min-width:70px;
     text-align:center;
 }
+
 .timer.show{
     display:block;
 }
+
 .timer-icon-btn{
     width:56px;
     height:56px;
@@ -109,117 +126,16 @@ button:hover{
     justify-content:center;
     background:linear-gradient(135deg,#22c55e,#16a34a);
 }
+
 .timer-icon-btn.running{
     background:linear-gradient(135deg,#f59e0b,#d97706);
-}
-
-#question{
-    font-size:38px;
-    line-height:1.45;
-    white-space:pre-line;
-    margin:0;
-    text-align:center;
-}
-.question-card{
-    padding:34px 28px;
-    border-radius:26px;
-    background:linear-gradient(135deg,rgba(255,255,255,.18),rgba(255,255,255,.08));
-    border:1px solid rgba(255,255,255,.20);
-    box-shadow:0 18px 42px rgba(0,0,0,.22);
-    max-width:950px;
-    margin:70px auto 20px;
-}
-.answer-box{
-    margin:22px auto 0;
-    padding:26px;
-    border-radius:24px;
-    background:linear-gradient(135deg,rgba(255,255,255,.20),rgba(255,255,255,.10));
-    border:1px solid rgba(255,255,255,.22);
-    display:inline-block;
-    animation:fadeIn .35s ease-in-out;
-    max-width:100%;
-    min-width:60%;
-    box-shadow:0 18px 42px rgba(0,0,0,.20);
-}
-.answer-img{
-    width:150px;
-    height:150px;
-    object-fit:contain;
-    display:block;
-    margin:0 auto 12px;
-    border-radius:24px;
-    background:rgba(255,255,255,.12);
-    padding:12px;
-}
-.answer-text{
-    font-size:36px;
-    font-weight:900;
-    margin-top:12px;
-    line-height:1.2;
-}
-.explanation{
-    font-size:18px;
-    line-height:1.65;
-    margin-top:12px;
-    color:#f8fafc;
-    text-align:left;
-    max-width:860px;
-}
-.options-grid{
-    display:grid;
-    grid-template-columns:1fr;
-    gap:12px;
-    margin:18px auto 0;
-    max-width:900px;
-}
-.option-btn{
-    padding:14px 16px;
-    border-radius:14px;
-    background:rgba(255,255,255,.16);
-    border:1px solid rgba(255,255,255,.18);
-    color:#fff;
-    font-size:16px;
-    line-height:1.4;
-    text-align:left;
-}
-.mono{
-    font-family:Consolas,Menlo,monospace;
-    white-space:pre-wrap;
-    background:rgba(15,23,42,.35);
-    padding:14px;
-    border-radius:12px;
-    line-height:1.45;
-    text-align:left;
-    overflow:auto;
-    font-size:15px;
-}
-.table-wrap{
-    overflow-x:auto;
-    margin-top:14px;
-}
-.quiz-table{
-    border-collapse:collapse;
-    width:100%;
-    background:rgba(255,255,255,.06);
-    border-radius:14px;
-    overflow:hidden;
-}
-.quiz-table th,
-.quiz-table td{
-    border:1px solid rgba(255,255,255,.18);
-    padding:10px 14px;
-    text-align:center;
-    font-size:16px;
-}
-.quiz-table th{
-    background:rgba(255,255,255,.18);
 }
 
 /* First slide */
 .hero-slide{
     position:relative;
     min-height:560px;
-    padding:40px 30px 20px;
+    padding:40px 30px 22px;
     text-align:center;
     overflow:hidden;
     display:flex;
@@ -227,6 +143,7 @@ button:hover{
     align-items:center;
     justify-content:center;
 }
+
 .hero-title{
     margin:18px 0 14px;
     font-size:76px;
@@ -238,6 +155,7 @@ button:hover{
     text-shadow:0 6px 20px rgba(0,0,0,.35);
     animation:fadeUp .9s ease both;
 }
+
 .hero-tagline{
     margin:0 auto 28px;
     font-size:30px;
@@ -246,10 +164,11 @@ button:hover{
     letter-spacing:1px;
     animation:fadeUp 1.1s ease both;
 }
+
 .hero-actions{
-    margin-top:auto;
-    margin-bottom:8px;
+    margin-top:35px;
 }
+
 .hero-glow{
     position:absolute;
     top:50%;
@@ -263,6 +182,7 @@ button:hover{
     z-index:-1;
     animation:glowMove 6s ease-in-out infinite;
 }
+
 .puzzle-icons{
     display:flex;
     justify-content:center;
@@ -270,6 +190,7 @@ button:hover{
     flex-wrap:wrap;
     margin:28px auto 12px;
 }
+
 .puzzle-icon-card{
     width:88px;
     height:88px;
@@ -284,22 +205,143 @@ button:hover{
     backdrop-filter:blur(10px);
     animation:floatIcon 3s ease-in-out infinite;
 }
+
 .puzzle-icon-card:nth-child(2){animation-delay:.4s;}
 .puzzle-icon-card:nth-child(3){animation-delay:.8s;}
 .puzzle-icon-card:nth-child(4){animation-delay:1.2s;}
 
+/* Question */
+#question{
+    font-size:38px;
+    line-height:1.45;
+    white-space:pre-line;
+    margin:0;
+    text-align:center;
+}
+
+.question-card{
+    padding:30px 28px;
+    border-radius:26px;
+    background:linear-gradient(135deg,rgba(255,255,255,.18),rgba(255,255,255,.08));
+    border:1px solid rgba(255,255,255,.20);
+    box-shadow:0 18px 42px rgba(0,0,0,.22);
+    max-width:950px;
+    margin:90px auto 20px;
+}
+
+/* Answer */
+.answer-box{
+    margin:18px auto 0;
+    padding:18px 28px;
+    border-radius:22px;
+    background:linear-gradient(135deg,rgba(255,255,255,.20),rgba(255,255,255,.10));
+    border:1px solid rgba(255,255,255,.22);
+    display:inline-block;
+    animation:fadeIn .35s ease-in-out;
+    max-width:520px;
+    min-width:320px;
+    box-shadow:0 14px 34px rgba(0,0,0,.20);
+}
+
+.answer-img{
+    width:120px;
+    height:120px;
+    object-fit:contain;
+    display:block;
+    margin:0 auto 10px;
+    border-radius:22px;
+    background:rgba(255,255,255,.12);
+    padding:10px;
+}
+
+.answer-text{
+    font-size:30px;
+    font-weight:900;
+    margin-top:8px;
+    line-height:1.2;
+}
+
+.explanation{
+    font-size:18px;
+    line-height:1.65;
+    margin-top:12px;
+    color:#f8fafc;
+    text-align:left;
+    max-width:860px;
+}
+
+/* Rules */
 .rule-card-title{
     font-size:34px;
     font-weight:900;
     margin-bottom:8px;
     text-align:center;
 }
+
 .rule-card-subtitle{
     font-size:18px;
     color:rgba(255,255,255,.82);
     text-align:center;
     margin-bottom:22px;
 }
+
+/* Technical round */
+.options-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+    margin:18px auto 0;
+    max-width:900px;
+}
+
+.option-btn{
+    padding:14px 16px;
+    border-radius:14px;
+    background:rgba(255,255,255,.16);
+    border:1px solid rgba(255,255,255,.18);
+    color:#fff;
+    font-size:16px;
+    line-height:1.4;
+    text-align:left;
+}
+
+.mono{
+    font-family:Consolas,Menlo,monospace;
+    white-space:pre-wrap;
+    background:rgba(15,23,42,.35);
+    padding:14px;
+    border-radius:12px;
+    line-height:1.45;
+    text-align:left;
+    overflow:auto;
+    font-size:15px;
+}
+
+.table-wrap{
+    overflow-x:auto;
+    margin-top:14px;
+}
+
+.quiz-table{
+    border-collapse:collapse;
+    width:100%;
+    background:rgba(255,255,255,.06);
+    border-radius:14px;
+    overflow:hidden;
+}
+
+.quiz-table th,
+.quiz-table td{
+    border:1px solid rgba(255,255,255,.18);
+    padding:10px 14px;
+    text-align:center;
+    font-size:16px;
+}
+
+.quiz-table th{
+    background:rgba(255,255,255,.18);
+}
+
 .tech-layout{
     display:flex;
     gap:18px;
@@ -308,6 +350,7 @@ button:hover{
     margin-top:18px;
     flex-wrap:wrap;
 }
+
 .tech-question-panel{
     flex:1 1 520px;
     min-width:300px;
@@ -317,6 +360,7 @@ button:hover{
     border-radius:18px;
     padding:18px;
 }
+
 .tech-options-panel{
     flex:1 1 330px;
     min-width:280px;
@@ -326,12 +370,14 @@ button:hover{
     padding:18px;
     text-align:left;
 }
+
 .tech-question-text{
     font-size:22px;
     line-height:1.6;
     margin-bottom:12px;
     font-weight:800;
 }
+
 .tech-intro-box{
     font-size:64px;
     font-weight:900;
@@ -342,29 +388,35 @@ button:hover{
     padding:24px;
 }
 
+/* Animations */
 @keyframes gradientMove{
     0%{background-position:0%}
     50%{background-position:100%}
     100%{background-position:0%}
 }
+
 @keyframes fadeIn{
     from{opacity:0;transform:scale(.97)}
     to{opacity:1;transform:scale(1)}
 }
+
 @keyframes fadeUp{
     from{opacity:0;transform:translateY(20px)}
     to{opacity:1;transform:translateY(0)}
 }
+
 @keyframes pulseBtn{
     0%{transform:scale(1)}
     50%{transform:scale(1.05)}
     100%{transform:scale(1)}
 }
+
 @keyframes glowMove{
     0%{transform:translate(-50%,-50%) scale(1)}
     50%{transform:translate(-50%,-50%) scale(1.08)}
     100%{transform:translate(-50%,-50%) scale(1)}
 }
+
 @keyframes floatIcon{
     0%{transform:translateY(0)}
     50%{transform:translateY(-10px)}
@@ -385,8 +437,9 @@ button:hover{
     .hero-slide{min-height:530px;padding:24px 12px 10px}
     .hero-title{font-size:42px}
     .hero-tagline{font-size:22px}
-    .answer-text{font-size:28px}
-    .answer-img{width:120px;height:120px}
+    .answer-text{font-size:26px}
+    .answer-img{width:105px;height:105px}
+    .answer-box{min-width:260px;max-width:95%}
     .puzzle-icon-card{
         width:68px;
         height:68px;
@@ -405,7 +458,7 @@ button:hover{
 
     <div id="intro" class="hero-slide">
         <h1 class="hero-title">Unlock the Mystery</h1>
-        <h2 class="hero-tagline">Think Fast. Solve Smart. Win Big.</h2>
+        <h2 class="hero-tagline">Think Smart. Type Fast. Win Big.</h2>
 
         <div class="puzzle-icons">
             <div class="puzzle-icon-card">🔐</div>
@@ -461,6 +514,7 @@ button:hover{
             <button onclick="nextQuestion()">Next ➜</button>
             <button onclick="backFromRound1()">⬅ Back</button>
         </div>
+
         <div id="answer"></div>
     </div>
 
@@ -522,11 +576,15 @@ function showSlide(id){
 
     for(let i=0;i<pages.length;i++){
         const el = document.getElementById(pages[i]);
-        if(el) el.classList.add('hidden');
+        if(el){
+            el.classList.add('hidden');
+        }
     }
 
     const active = document.getElementById(id);
-    if(active) active.classList.remove('hidden');
+    if(active){
+        active.classList.remove('hidden');
+    }
 
     stopTimer();
 
@@ -537,7 +595,7 @@ function showSlide(id){
 }
 
 function startGame(){
-    speak('Unlock the Mystery. Think fast, solve smart, win big.');
+    speak('Unlock the Mystery. Think smart, type fast, win big.');
 }
 
 function showRules(){
@@ -560,32 +618,37 @@ function showRules(){
     document.getElementById('rulesText').innerHTML = html;
 }
 
-function createAnswerImage(icon, label){
+/* Correct answer image generator */
+function createAnswerImage(icon){
     const svg =
-        '<svg xmlns="http://www.w3.org/2000/svg" width="220" height="220" viewBox="0 0 220 220">' +
+        '<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">' +
         '<defs>' +
         '<linearGradient id="g" x1="0" y1="0" x2="1" y2="1">' +
-        '<stop offset="0%" stop-color="#60a5fa"/>' +
-        '<stop offset="50%" stop-color="#a78bfa"/>' +
-        '<stop offset="100%" stop-color="#22d3ee"/>' +
+        '<stop offset="0%" stop-color="#38bdf8"/>' +
+        '<stop offset="45%" stop-color="#818cf8"/>' +
+        '<stop offset="100%" stop-color="#c084fc"/>' +
         '</linearGradient>' +
+        '<filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">' +
+        '<feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#000000" flood-opacity="0.25"/>' +
+        '</filter>' +
         '</defs>' +
-        '<rect width="220" height="220" rx="34" fill="url(#g)"/>' +
-        '<circle cx="110" cy="92" r="58" fill="rgba(255,255,255,0.20)"/>' +
-        '<text x="110" y="112" font-size="68" text-anchor="middle" dominant-baseline="middle">' + icon + '</text>' +
-        '<text x="110" y="178" font-family="Arial" font-size="20" font-weight="700" fill="white" text-anchor="middle">' + label + '</text>' +
+        '<rect width="240" height="240" rx="42" fill="url(#g)"/>' +
+        '<circle cx="120" cy="120" r="74" fill="rgba(255,255,255,0.22)"/>' +
+        '<circle cx="120" cy="120" r="54" fill="rgba(255,255,255,0.18)"/>' +
+        '<text x="120" y="128" font-size="78" text-anchor="middle" dominant-baseline="middle" filter="url(#shadow)">' + icon + '</text>' +
         '</svg>';
 
     return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
 }
 
 function showExample(){
-    const img = createAnswerImage('🗺️','MAP');
+    const img = createAnswerImage('🗺️');
     document.getElementById('exampleAns').innerHTML =
         '<div class="answer-box">' +
         '<img class="answer-img" src="' + img + '" alt="MAP">' +
         '<div class="answer-text">MAP</div>' +
         '</div>';
+
     speak('Map');
 }
 
@@ -596,7 +659,7 @@ const round1Questions = [
     {q:'I have a face and two hands but no arms or legs. What am I?', a:'CLOCK', icon:'⏰'},
     {q:'I am full of holes but can still hold water. What am I?', a:'SPONGE', icon:'🧽'},
     {q:'What has one eye but cannot see?', a:'NEEDLE', icon:'🪡'},
-    {q:'What gets wetter the more it dries?', a:'TOWEL', icon:'🏖️'},
+    {q:'What gets wetter the more it dries?', a:'TOWEL', icon:'🧺'},
     {q:'What has a neck but no head?', a:'BOTTLE', icon:'🍾'},
     {q:'What has teeth but cannot bite?', a:'COMB', icon:'💇'},
     {q:'What comes down but never goes up?', a:'RAIN', icon:'🌧️'},
@@ -605,7 +668,7 @@ const round1Questions = [
     {q:'I connect millions of computers but cannot shake hands. What am I?', a:'INTERNET', icon:'🌐'},
     {q:'I store memories but have no brain. What am I?', a:'HARD DRIVE', icon:'💾'},
     {q:'The more of me you delete, the faster things often become. What am I?', a:'CACHE', icon:'⚡'},
-    {q:'I protect your account, but people often forget me. What am I?', a:'PASSWORD', icon:'🔑'},
+    {q:'I protect your account, but people often forget me. What am I?', a:'PASSWORD', icon:'🔐'},
     {q:'I live in the cloud but never get wet. What am I?', a:'CLOUD STORAGE', icon:'☁️'},
     {q:'I translate human instructions into something computers understand. What am I?', a:'PROGRAMMING LANGUAGE', icon:'💻'},
     {q:'I can run thousands of applications but never move an inch. What am I?', a:'SERVER', icon:'🖥️'},
@@ -724,7 +787,7 @@ function stopTimer(){
 
 function showAnswer(){
     const q = round1Questions[round1Index];
-    const img = createAnswerImage(q.icon, q.a);
+    const img = createAnswerImage(q.icon);
 
     document.getElementById('answer').innerHTML =
         '<div class="answer-box">' +
