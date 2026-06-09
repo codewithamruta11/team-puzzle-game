@@ -19,6 +19,7 @@ body{
 .box{
     position:relative;
     max-width:1150px;
+    min-height:650px;
     margin:auto;
     padding:42px;
     border-radius:28px;
@@ -28,12 +29,13 @@ body{
     text-align:center;
 }
 .hidden{display:none;}
+
 button{
-    padding:12px 22px;
-    font-size:17px;
-    margin:8px;
+    padding:9px 16px;
+    font-size:14px;
+    margin:5px;
     border:none;
-    border-radius:10px;
+    border-radius:999px;
     cursor:pointer;
     color:#fff;
     background:linear-gradient(135deg,#2563eb,#1d4ed8);
@@ -44,6 +46,25 @@ button:hover{
     transform:translateY(-1px);
     opacity:.95;
 }
+.btn-row{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+    margin-top:24px;
+}
+.bottom-nav{
+    margin-top:34px;
+}
+.hero-start-btn{
+    padding:10px 20px;
+    font-size:15px;
+    border-radius:999px;
+    font-weight:bold;
+    animation:pulseBtn 2s infinite;
+}
+
 .round-title{
     font-size:38px;
     font-weight:800;
@@ -77,11 +98,11 @@ button:hover{
     display:block;
 }
 .timer-icon-btn{
-    width:62px;
-    height:62px;
+    width:56px;
+    height:56px;
     border-radius:50%;
     padding:0;
-    font-size:28px;
+    font-size:24px;
     font-weight:900;
     display:inline-flex;
     align-items:center;
@@ -96,23 +117,44 @@ button:hover{
     font-size:38px;
     line-height:1.45;
     white-space:pre-line;
-    margin:70px 0 18px;
+    margin:0;
     text-align:center;
+}
+.question-card{
+    padding:34px 28px;
+    border-radius:26px;
+    background:linear-gradient(135deg,rgba(255,255,255,.18),rgba(255,255,255,.08));
+    border:1px solid rgba(255,255,255,.20);
+    box-shadow:0 18px 42px rgba(0,0,0,.22);
+    max-width:950px;
+    margin:70px auto 20px;
 }
 .answer-box{
     margin:22px auto 0;
-    padding:22px;
-    border-radius:22px;
-    background:rgba(255,255,255,.16);
+    padding:26px;
+    border-radius:24px;
+    background:linear-gradient(135deg,rgba(255,255,255,.20),rgba(255,255,255,.10));
+    border:1px solid rgba(255,255,255,.22);
     display:inline-block;
     animation:fadeIn .35s ease-in-out;
     max-width:100%;
-    min-width:70%;
+    min-width:60%;
+    box-shadow:0 18px 42px rgba(0,0,0,.20);
+}
+.answer-img{
+    width:150px;
+    height:150px;
+    object-fit:contain;
+    display:block;
+    margin:0 auto 12px;
+    border-radius:24px;
+    background:rgba(255,255,255,.12);
+    padding:12px;
 }
 .answer-text{
     font-size:36px;
     font-weight:900;
-    margin-top:16px;
+    margin-top:12px;
     line-height:1.2;
 }
 .explanation{
@@ -172,28 +214,22 @@ button:hover{
 .quiz-table th{
     background:rgba(255,255,255,.18);
 }
+
+/* First slide */
 .hero-slide{
     position:relative;
-    padding:92px 30px 80px;
+    min-height:560px;
+    padding:40px 30px 20px;
     text-align:center;
     overflow:hidden;
-}
-.hero-badge{
-    display:inline-block;
-    padding:10px 22px;
-    border-radius:999px;
-    background:rgba(255,255,255,.14);
-    color:#fff;
-    font-size:15px;
-    font-weight:bold;
-    letter-spacing:2px;
-    text-transform:uppercase;
-    backdrop-filter:blur(8px);
-    animation:fadeDown .8s ease both;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
 }
 .hero-title{
-    margin:24px 0 14px;
-    font-size:72px;
+    margin:18px 0 14px;
+    font-size:76px;
     font-weight:900;
     line-height:1.05;
     letter-spacing:2px;
@@ -203,19 +239,16 @@ button:hover{
     animation:fadeUp .9s ease both;
 }
 .hero-tagline{
-    margin:0 auto 34px;
+    margin:0 auto 28px;
     font-size:30px;
     font-weight:700;
     color:#f8fafc;
     letter-spacing:1px;
     animation:fadeUp 1.1s ease both;
 }
-.hero-start-btn{
-    padding:14px 28px;
-    font-size:18px;
-    border-radius:12px;
-    font-weight:bold;
-    animation:pulseBtn 2s infinite;
+.hero-actions{
+    margin-top:auto;
+    margin-bottom:8px;
 }
 .hero-glow{
     position:absolute;
@@ -230,12 +263,42 @@ button:hover{
     z-index:-1;
     animation:glowMove 6s ease-in-out infinite;
 }
-.btn-row{
+.puzzle-icons{
     display:flex;
-    flex-wrap:wrap;
     justify-content:center;
-    gap:10px;
-    margin-top:18px;
+    gap:18px;
+    flex-wrap:wrap;
+    margin:28px auto 12px;
+}
+.puzzle-icon-card{
+    width:88px;
+    height:88px;
+    border-radius:24px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:42px;
+    background:rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.22);
+    box-shadow:0 12px 28px rgba(0,0,0,.20);
+    backdrop-filter:blur(10px);
+    animation:floatIcon 3s ease-in-out infinite;
+}
+.puzzle-icon-card:nth-child(2){animation-delay:.4s;}
+.puzzle-icon-card:nth-child(3){animation-delay:.8s;}
+.puzzle-icon-card:nth-child(4){animation-delay:1.2s;}
+
+.rule-card-title{
+    font-size:34px;
+    font-weight:900;
+    margin-bottom:8px;
+    text-align:center;
+}
+.rule-card-subtitle{
+    font-size:18px;
+    color:rgba(255,255,255,.82);
+    text-align:center;
+    margin-bottom:22px;
 }
 .tech-layout{
     display:flex;
@@ -275,9 +338,10 @@ button:hover{
     letter-spacing:2px;
     text-transform:uppercase;
     text-align:center;
-    margin:28px auto;
+    margin:80px auto 28px;
     padding:24px;
 }
+
 @keyframes gradientMove{
     0%{background-position:0%}
     50%{background-position:100%}
@@ -286,10 +350,6 @@ button:hover{
 @keyframes fadeIn{
     from{opacity:0;transform:scale(.97)}
     to{opacity:1;transform:scale(1)}
-}
-@keyframes fadeDown{
-    from{opacity:0;transform:translateY(-20px)}
-    to{opacity:1;transform:translateY(0)}
 }
 @keyframes fadeUp{
     from{opacity:0;transform:translateY(20px)}
@@ -305,19 +365,34 @@ button:hover{
     50%{transform:translate(-50%,-50%) scale(1.08)}
     100%{transform:translate(-50%,-50%) scale(1)}
 }
+@keyframes floatIcon{
+    0%{transform:translateY(0)}
+    50%{transform:translateY(-10px)}
+    100%{transform:translateY(0)}
+}
+
 @media(max-width:700px){
     body{padding:12px}
-    .box{padding:22px}
+    .box{padding:22px;min-height:620px}
     h1{font-size:40px!important}
     .round-title{font-size:28px}
-    #question{font-size:22px;margin-top:85px}
+    #question{font-size:22px}
+    .question-card{margin-top:85px;padding:24px 18px}
     .timer{font-size:42px}
     .timer-wrap{top:14px;right:14px}
-    button{font-size:15px;padding:10px 14px}
+    button{font-size:13px;padding:8px 13px}
     .timer-icon-btn{width:52px;height:52px;font-size:22px}
+    .hero-slide{min-height:530px;padding:24px 12px 10px}
     .hero-title{font-size:42px}
     .hero-tagline{font-size:22px}
     .answer-text{font-size:28px}
+    .answer-img{width:120px;height:120px}
+    .puzzle-icon-card{
+        width:68px;
+        height:68px;
+        font-size:32px;
+        border-radius:18px;
+    }
     .tech-layout{flex-direction:column}
     .tech-question-text{font-size:18px}
     .tech-intro-box{font-size:36px}
@@ -329,35 +404,43 @@ button:hover{
 <div class="box">
 
     <div id="intro" class="hero-slide">
-        <div class="hero-badge">WELCOME TO</div>
         <h1 class="hero-title">Unlock the Mystery</h1>
-        <h2 class="hero-tagline">Fast Minds. Smart Answers. Big Fun.</h2>
+        <h2 class="hero-tagline">Think Fast. Solve Smart. Win Big.</h2>
+
+        <div class="puzzle-icons">
+            <div class="puzzle-icon-card">🔐</div>
+            <div class="puzzle-icon-card">🧩</div>
+            <div class="puzzle-icon-card">💡</div>
+            <div class="puzzle-icon-card">🏆</div>
+        </div>
+
         <div class="hero-glow"></div>
-        <div class="btn-row">
-            <button class="hero-start-btn" onclick="startGame()">▶ START</button>
+
+        <div class="btn-row hero-actions">
+            <button class="hero-start-btn" onclick="startGame()">▶ Start</button>
             <button onclick="showSlide('rules')">Next ➜</button>
         </div>
     </div>
 
     <div id="rules" class="hidden">
-        <div class="round-title">📋 GAME RULES</div>
+        <div class="round-title">📋 Game Rules</div>
         <h2>Please read the rules carefully</h2>
         <div id="rulesText" style="font-size:24px;line-height:2;max-width:900px;margin:28px auto;text-align:left;padding:24px;border-radius:18px;background:rgba(255,255,255,.12);"></div>
-        <div class="btn-row">
+        <div class="btn-row bottom-nav">
             <button onclick="showSlide('intro')">⬅ Back</button>
             <button onclick="showSlide('example')">Next ➜</button>
         </div>
     </div>
 
     <div id="example" class="hidden">
-        <div class="round-title">💡 EXAMPLE</div>
+        <div class="round-title">💡 Example</div>
         <div style="max-width:850px;margin:24px auto;padding:24px;border-radius:18px;background:rgba(255,255,255,.12);font-size:26px;line-height:1.8;">
             I have cities but no houses.<br>
             Rivers but no water.
         </div>
         <button onclick="showExample()">Show Answer</button>
         <div id="exampleAns"></div>
-        <div class="btn-row">
+        <div class="btn-row bottom-nav">
             <button onclick="showSlide('rules')">⬅ Back</button>
             <button onclick="startRound1()">Start Game</button>
         </div>
@@ -369,19 +452,21 @@ button:hover{
             <button id="timerStartBtn" class="timer-icon-btn" onclick="toggleTimer()">▶</button>
         </div>
 
-        <h2 id="question"></h2>
+        <div class="question-card">
+            <h2 id="question"></h2>
+        </div>
 
-        <div class="btn-row">
+        <div class="btn-row bottom-nav">
             <button onclick="showAnswer()">Show Answer</button>
-            <button onclick="nextQuestion()">Next</button>
+            <button onclick="nextQuestion()">Next ➜</button>
             <button onclick="backFromRound1()">⬅ Back</button>
         </div>
         <div id="answer"></div>
     </div>
 
     <div id="techIntro" class="hidden">
-        <div class="tech-intro-box">TECHNICAL ROUND</div>
-        <div class="btn-row">
+        <div class="tech-intro-box">Technical Round</div>
+        <div class="btn-row bottom-nav">
             <button onclick="startTechnicalRound()">Start Technical Round</button>
             <button onclick="showSlide('round1')">⬅ Back</button>
         </div>
@@ -401,9 +486,9 @@ button:hover{
             </div>
         </div>
 
-        <div class="btn-row">
+        <div class="btn-row bottom-nav">
             <button onclick="showTechAnswer()">Show Answer</button>
-            <button onclick="nextTechQuestion()">Next</button>
+            <button onclick="nextTechQuestion()">Next ➜</button>
             <button onclick="backFromTechRound()">⬅ Back</button>
         </div>
 
@@ -411,7 +496,7 @@ button:hover{
     </div>
 
     <div id="thankYou" class="hidden">
-        <h1 style="font-size:72px;margin:40px 0;">Thank you</h1>
+        <h1 style="font-size:72px;margin:120px 0 30px;">Thank You</h1>
     </div>
 
 </div>
@@ -452,7 +537,7 @@ function showSlide(id){
 }
 
 function startGame(){
-    speak('Welcome to Unlock the Mystery. Fast minds, smart answers, big fun.');
+    speak('Unlock the Mystery. Think fast, solve smart, win big.');
 }
 
 function showRules(){
@@ -460,12 +545,11 @@ function showRules(){
         'The game contains 20 Puzzle Questions and 5 Technical Questions.',
         '⏱️ You have 20 seconds to answer each question.',
         '📖 Read each question carefully before submitting your answer in chat.',
-        '✅ Each correct answer earns 1 point.',
-        '💡 A separate example slide is provided before the main game starts.',
-        '🏁 After the puzzle round, the technical round will begin.'
+        '✅ Each correct answer earns 1 point.'
     ];
 
-    let html = '<div style="font-size:30px;font-weight:800;margin-bottom:18px;text-align:center;">🎮 Game Rules</div>';
+    let html = '<div class="rule-card-title">🎮 Game Rules</div>';
+    html += '<div class="rule-card-subtitle">Read the instructions carefully before starting the challenge.</div>';
     html += '<div style="display:flex;flex-direction:column;gap:12px;">';
 
     for(let i=0;i<rulesList.length;i++){
@@ -476,93 +560,56 @@ function showRules(){
     document.getElementById('rulesText').innerHTML = html;
 }
 
+function createAnswerImage(icon, label){
+    const svg =
+        '<svg xmlns="http://www.w3.org/2000/svg" width="220" height="220" viewBox="0 0 220 220">' +
+        '<defs>' +
+        '<linearGradient id="g" x1="0" y1="0" x2="1" y2="1">' +
+        '<stop offset="0%" stop-color="#60a5fa"/>' +
+        '<stop offset="50%" stop-color="#a78bfa"/>' +
+        '<stop offset="100%" stop-color="#22d3ee"/>' +
+        '</linearGradient>' +
+        '</defs>' +
+        '<rect width="220" height="220" rx="34" fill="url(#g)"/>' +
+        '<circle cx="110" cy="92" r="58" fill="rgba(255,255,255,0.20)"/>' +
+        '<text x="110" y="112" font-size="68" text-anchor="middle" dominant-baseline="middle">' + icon + '</text>' +
+        '<text x="110" y="178" font-family="Arial" font-size="20" font-weight="700" fill="white" text-anchor="middle">' + label + '</text>' +
+        '</svg>';
+
+    return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+}
+
 function showExample(){
+    const img = createAnswerImage('🗺️','MAP');
     document.getElementById('exampleAns').innerHTML =
-        '<div class="answer-box"><div class="answer-text">MAP 🗺️</div></div>';
+        '<div class="answer-box">' +
+        '<img class="answer-img" src="' + img + '" alt="MAP">' +
+        '<div class="answer-text">MAP</div>' +
+        '</div>';
     speak('Map');
 }
 
 const round1Questions = [
-    {
-        q:'I have many keys but open no locks. What am I?',
-        a:'KEYBOARD'
-    },
-    {
-        q:'I have hands but cannot clap. What am I?',
-        a:'CLOCK'
-    },
-    {
-        q:'I go up but never come down. What am I?',
-        a:'AGE'
-    },
-    {
-        q:'I have a face and two hands but no arms or legs. What am I?',
-        a:'CLOCK'
-    },
-    {
-        q:'I am full of holes but can still hold water. What am I?',
-        a:'SPONGE'
-    },
-    {
-        q:'What has one eye but cannot see?',
-        a:'NEEDLE'
-    },
-    {
-        q:'What gets wetter the more it dries?',
-        a:'TOWEL'
-    },
-    {
-        q:'What has a neck but no head?',
-        a:'BOTTLE'
-    },
-    {
-        q:'What has teeth but cannot bite?',
-        a:'COMB'
-    },
-    {
-        q:'What comes down but never goes up?',
-        a:'RAIN'
-    },
-    {
-        q:'I have many windows but no house. What am I?',
-        a:'MICROSOFT WINDOWS'
-    },
-    {
-        q:'I am a bug that everyone wants to find, but no one wants in production. What am I?',
-        a:'SOFTWARE BUG'
-    },
-    {
-        q:'I connect millions of computers but cannot shake hands. What am I?',
-        a:'INTERNET'
-    },
-    {
-        q:'I store memories but have no brain. What am I?',
-        a:'HARD DRIVE'
-    },
-    {
-        q:'The more of me you delete, the faster things often become. What am I?',
-        a:'CACHE'
-    },
-    {
-        q:'I protect your account, but people often forget me. What am I?',
-        a:'PASSWORD'
-    },
-    {
-        q:'I live in the cloud but never get wet. What am I?',
-        a:'CLOUD STORAGE'
-    },
-    {
-        q:'I translate human instructions into something computers understand. What am I?',
-        a:'PROGRAMMING LANGUAGE'
-    },
-    {
-        q:'I can run thousands of applications but never move an inch. What am I?',
-        a:'SERVER'
-    },
-    {
-        q:'I am always debugging your code, but I never write any. What am I?',
-        a:'DEVELOPER 😄'
-    }
+    {q:'I have many keys but open no locks. What am I?', a:'KEYBOARD', icon:'⌨️'},
+    {q:'I have hands but cannot clap. What am I?', a:'CLOCK', icon:'🕒'},
+    {q:'I go up but never come down. What am I?', a:'AGE', icon:'🎂'},
+    {q:'I have a face and two hands but no arms or legs. What am I?', a:'CLOCK', icon:'⏰'},
+    {q:'I am full of holes but can still hold water. What am I?', a:'SPONGE', icon:'🧽'},
+    {q:'What has one eye but cannot see?', a:'NEEDLE', icon:'🪡'},
+    {q:'What gets wetter the more it dries?', a:'TOWEL', icon:'🏖️'},
+    {q:'What has a neck but no head?', a:'BOTTLE', icon:'🍾'},
+    {q:'What has teeth but cannot bite?', a:'COMB', icon:'💇'},
+    {q:'What comes down but never goes up?', a:'RAIN', icon:'🌧️'},
+    {q:'I have many windows but no house. What am I?', a:'MICROSOFT WINDOWS', icon:'🪟'},
+    {q:'I am a bug that everyone wants to find, but no one wants in production. What am I?', a:'SOFTWARE BUG', icon:'🐞'},
+    {q:'I connect millions of computers but cannot shake hands. What am I?', a:'INTERNET', icon:'🌐'},
+    {q:'I store memories but have no brain. What am I?', a:'HARD DRIVE', icon:'💾'},
+    {q:'The more of me you delete, the faster things often become. What am I?', a:'CACHE', icon:'⚡'},
+    {q:'I protect your account, but people often forget me. What am I?', a:'PASSWORD', icon:'🔑'},
+    {q:'I live in the cloud but never get wet. What am I?', a:'CLOUD STORAGE', icon:'☁️'},
+    {q:'I translate human instructions into something computers understand. What am I?', a:'PROGRAMMING LANGUAGE', icon:'💻'},
+    {q:'I can run thousands of applications but never move an inch. What am I?', a:'SERVER', icon:'🖥️'},
+    {q:'I am always debugging your code, but I never write any. What am I?', a:'DEVELOPER', icon:'👩‍💻'}
 ];
 
 function startRound1(){
@@ -677,9 +724,13 @@ function stopTimer(){
 
 function showAnswer(){
     const q = round1Questions[round1Index];
+    const img = createAnswerImage(q.icon, q.a);
 
     document.getElementById('answer').innerHTML =
-        '<div class="answer-box"><div class="answer-text">' + q.a + '</div></div>';
+        '<div class="answer-box">' +
+        '<img class="answer-img" src="' + img + '" alt="' + q.a + '">' +
+        '<div class="answer-text">' + q.a + '</div>' +
+        '</div>';
 
     speak(q.a);
 }
