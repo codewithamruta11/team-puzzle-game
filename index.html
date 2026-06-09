@@ -327,7 +327,10 @@
         <h1 class="hero-title">GANTEC PUZZLE ARENA</h1>
         <h2 class="hero-tagline">Fast Minds. Smart Answers. Big Fun.</h2>
         <div class="hero-glow"></div>
-        <button class="hero-start-btn" onclick="startGame()">▶ START</button>
+        <div class="btn-row">
+            <button class="hero-start-btn" onclick="startGame()">▶ START</button>
+            <button onclick="showSlide('rules')">Next ➜</button>
+        </div>
     </div>
 
     <!-- RULES -->
@@ -471,10 +474,8 @@ function showSlide(id){
 }
 
 function startGame(){
+    showSlide('intro');
     speak('Welcome to Gantec Puzzle Arena. Fast minds, smart answers, big fun.');
-    setTimeout(function(){
-        showSlide('rules');
-    },700);
 }
 
 function showRules(){
@@ -507,8 +508,34 @@ function showExample(){
 const round1Questions=[
     {q:'I have many keys but open no locks. What am I?',a:'KEYBOARD'},
     {q:'I can run thousands of applications but never move an inch. What am I?',a:'SERVER'},
-    {q:'I store memories but have no brain. What am I?',a:'HARD DRIVE'}
-    // keep rest of your questions here
+    {q:'I store memories but have no brain. What am I?',a:'HARD DRIVE'},
+    {q:'I carry my home everywhere.\nSlowly but confidently.\nWhat am I?',a:'TORTOISE'},
+    {q:'Palaces fill my streets.\nCamels are not far away.\nMy color made me famous.\nWho am I?',a:'JAIPUR'},
+    {q:'I am worn in many styles.\nAcross many states.\nYet remain timeless.\nWhat am I?',a:'SAREE'},
+    {q:'I decide your quick-thinking pace.\nIn your game I rule the race.',a:'TIMER'},
+    {q:'I protect doors you cannot see,\nHackers fear getting past me.',a:'FIREWALL'},
+    {q:'I repeat the same work again,\nTill logic says I should refrain.',a:'LOOP'},
+    {q:'I find mistakes hidden in code,\nAnd lighten the developer’s load.',a:'DEBUGGER'},
+    {q:'I rise each year but never fall,\nNo ladder needed after all.',a:'AGE'},
+    {q:'A room with no door and no wall,\nStill people love me after all.',a:'MUSHROOM'},
+    {q:'I shine by night, disappear by noon,\nSilent beauty in the sky soon.',a:'MOON'},
+    {q:'I can be broken.\nWithout being touched.',a:'PROMISE'},
+    {q:'I can be stolen.\nWithout touching anything.',a:'HEART'},
+    {q:'Invisible but always near,\nWhen I’m gone everyone feels fear.',a:'WIFI'},
+    {q:'I define goals for every team,\nSuccess begins within my theme.',a:'TARGET'},
+    {q:'I come once a year with hope and cheer,\nEmployees wait for me throughout the year.',a:'APPRAISAL'},
+    {q:'I give you a break from office chair,\nRequested in portal with extra care.',a:'LEAVE'},
+    {q:'I teach you skills to grow each day,\nLearning always leads the way.',a:'TRAINING'},
+    {q:'I am small and spinning.\nYet I appear at the center of pride.\nTwenty-four spokes define me.\nWhat am I?',a:'ASHOKA CHAKRA'},
+    {q:'I am full of holes but can still hold water. What am I?',a:'SPONGE'},
+    {q:'I wear white through day and night.\nA king built me for love.\nMillions visit me every year.\nWho am I?',a:'TAJ MAHAL'},
+    {q:'There is a word in the English language in which the first two letters signify a male, the first three letters signify a female, the first four signify a great man, and the whole word, a great woman. What is the word?',a:'HEROINE'},
+    {q:'Turn me on my side, and I am everything. Cut me in half, and I am nothing. What am I?',a:'NUMBER 8'},
+    {q:'I lead company vision and goal,\nTaking the highest leadership role.',a:'CEO'},
+    {q:'I judge your progress through the year,\nManagers review me with care.',a:'PERFORMANCE'},
+    {q:'I sit between user and machine,\nMaking everything look clean.',a:'INTERFACE'},
+    {q:'I break programs without a sound,\nDevelopers search till I’m found.',a:'BUG'},
+    {q:'I can be kept.\nWithout being held.',a:'PROMISE'}
 ];
 
 function startRound1(){
@@ -576,8 +603,35 @@ const techQuestions=[
         options:['A) 2','B) 3','C) 5','D) 7'],
         answer:'C) 5',
         explanation:'LEFT JOIN returns one row for each match. ID=1 matches 3 rows in B and ID=2 matches 2 rows in B. So total rows = 3 + 2 = 5.'
+    },
+    {
+        question:'Ranking Functions in SQL',
+        tableHtml:'<div class="table-wrap"><table class="quiz-table"><tr><th>Salary</th></tr><tr><td>100</td></tr><tr><td>100</td></tr><tr><td>100</td></tr><tr><td>90</td></tr></table></div><br><div class="mono">SELECT Salary,\n       ROW_NUMBER() OVER(ORDER BY Salary DESC) RN,\n       RANK() OVER(ORDER BY Salary DESC) R,\n       DENSE_RANK() OVER(ORDER BY Salary DESC) DR\nFROM Employee;</div>',
+        options:['A) RN=4, R=4, DR=2','B) RN=2, R=2, DR=2','C) RN=4, R=2, DR=2','D) RN=4, R=4, DR=4'],
+        answer:'A) RN=4, R=4, DR=2',
+        explanation:'Salary 100 gets RN 1,2,3 and R=1,1,1; Salary 90 gets RN=4, R=4, DR=2.'
+    },
+    {
+        question:'COUNT, SUM and AVG with NULL',
+        tableHtml:'<div class="table-wrap"><table class="quiz-table"><tr><th>Value</th></tr><tr><td>NULL</td></tr><tr><td>NULL</td></tr></table></div><br><div class="mono">SELECT\nCOUNT(*),\nCOUNT(Value),\nSUM(Value),\nAVG(Value)\nFROM T;</div>',
+        options:['A) 2,0,NULL,NULL','B) 2,2,0,0','C) 0,0,0,NULL','D) 2,0,0,0'],
+        answer:'A) 2,0,NULL,NULL',
+        explanation:'COUNT(*) = 2, COUNT(Value) = 0, SUM(Value) = NULL, AVG(Value) = NULL.'
+    },
+    {
+        question:'Python Late Binding in Lambda',
+        tableHtml:'<div class="mono">funcs = []\n\nfor i in range(3):\n    funcs.append(lambda: i)\n\nprint([f() for f in funcs])</div>',
+        options:['A) [0,1,2]','B) [2,2,2]','C) [3,3,3]','D) Error'],
+        answer:'B) [2,2,2]',
+        explanation:'Lambdas capture the variable, not its value. After the loop ends, i = 2. So all lambdas return [2,2,2].'
+    },
+    {
+        question:'Python == vs is',
+        tableHtml:'<div class="mono">a = [1,2]\nb = [1,2]\n\nprint(a == b, a is b)</div>',
+        options:['A) True True','B) False False','C) True False','D) False True'],
+        answer:'C) True False',
+        explanation:'== compares values, is compares object identity.'
     }
-    // keep rest of your technical questions here
 ];
 
 function startTechnicalRound(){
@@ -656,8 +710,14 @@ function showTechAnswer(){
 const outputQuestions=[
     {q:'What is the output of: console.log(2 + 3 * 4);',a:'14'},
     {q:'What is the output of: console.log("5" + 1);',a:'51'},
-    {q:'What is the output of: console.log(typeof null);',a:'object'}
-    // keep rest of your output questions here
+    {q:'What is the output of: console.log(typeof null);',a:'object'},
+    {q:'What is the output of: console.log(Boolean(0));',a:'false'},
+    {q:'What is the output of: console.log(10 / 2);',a:'5'},
+    {q:'What is the output of: console.log([1,2,3].length);',a:'3'},
+    {q:'What is the output of: console.log("Hello".toUpperCase());',a:'HELLO'},
+    {q:'What is the output of: console.log(5 == "5");',a:'true'},
+    {q:'What is the output of: console.log(5 === "5");',a:'false'},
+    {q:'What is the output of: console.log(Math.floor(4.8));',a:'4'}
 ];
 
 function loadOutputQuestion(){
