@@ -50,15 +50,6 @@
             opacity:.95;
         }
 
-        .small-timer-btn{
-            padding:8px 14px;
-            font-size:14px;
-            border-radius:8px;
-            min-width:120px;
-            margin:14px auto 6px;
-            display:inline-block;
-        }
-
         .round-title{
             font-size:38px;
             font-weight:800;
@@ -72,11 +63,30 @@
         }
 
         .timer{
-            font-size:110px;
+            font-size:140px;
             font-weight:900;
-            margin:18px 0 10px;
+            margin:12px 0 8px;
             text-align:center;
             line-height:1;
+        }
+
+        .timer-btn{
+            width:64px;
+            height:64px;
+            border-radius:50%;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            font-size:28px;
+            font-weight:900;
+            padding:0;
+            margin:8px auto 10px;
+            background:linear-gradient(135deg,#22c55e,#16a34a);
+            box-shadow:0 8px 18px rgba(0,0,0,.25);
+        }
+
+        .timer-btn.stop{
+            background:linear-gradient(135deg,#ef4444,#dc2626);
         }
 
         #question,
@@ -317,13 +327,18 @@
             h1{font-size:40px!important}
             .round-title{font-size:28px}
             #question,#outputQuestion{font-size:22px}
-            .timer{font-size:60px}
+            .timer{font-size:80px}
             button{font-size:15px;padding:10px 14px}
             .hero-title{font-size:42px}
             .hero-tagline{font-size:22px}
             .answer-text{font-size:28px}
             .tech-layout{flex-direction:column}
             .tech-question-text{font-size:18px}
+            .timer-btn{
+                width:52px;
+                height:52px;
+                font-size:22px;
+            }
         }
     </style>
 </head>
@@ -372,7 +387,8 @@
     <!-- PUZZLE ROUND -->
     <div id="round1" class="hidden">
         <h2 id="question"></h2>
-        <button class="small-timer-btn" id="timer" onclick="toggleTimer('main')">Start Timer</button>
+        <div class="timer" id="timerDisplay">20</div>
+        <button class="timer-btn" id="timer" onclick="toggleTimer('main')">▶</button>
         <div class="btn-row">
             <button onclick="showAnswer()">Show Answer</button>
             <button onclick="nextQuestion()">Next</button>
@@ -394,7 +410,8 @@
             </div>
         </div>
 
-        <button class="small-timer-btn" id="techTimer" onclick="toggleTimer('tech')">Start Timer</button>
+        <div class="timer" id="techTimerDisplay">20</div>
+        <button class="timer-btn" id="techTimer" onclick="toggleTimer('tech')">▶</button>
 
         <div class="btn-row">
             <button onclick="showTechAnswer()">Show Answer</button>
@@ -410,7 +427,8 @@
         <div class="round-title">💻 PROGRAM OUTPUT ROUND</div>
         <div class="sub-title">10 Questions</div>
         <h2 id="outputQuestion"></h2>
-        <button class="small-timer-btn" id="outputTimer" onclick="toggleTimer('output')">Start Timer</button>
+        <div class="timer" id="outputTimerDisplay">20</div>
+        <button class="timer-btn" id="outputTimer" onclick="toggleTimer('output')">▶</button>
         <div class="btn-row">
             <button onclick="showOutputAnswer()">Show Answer</button>
             <button onclick="nextOutputQuestion()">Next</button>
@@ -583,17 +601,23 @@ function resetTimer(type){
 
     if(type === 'main'){
         timeLeft = 20;
-        document.getElementById('timer').innerText = 'Start Timer';
+        document.getElementById('timerDisplay').innerText = timeLeft;
+        document.getElementById('timer').innerText = '▶';
+        document.getElementById('timer').classList.remove('stop');
     }
 
     if(type === 'tech'){
         techTimeLeft = 20;
-        document.getElementById('techTimer').innerText = 'Start Timer';
+        document.getElementById('techTimerDisplay').innerText = techTimeLeft;
+        document.getElementById('techTimer').innerText = '▶';
+        document.getElementById('techTimer').classList.remove('stop');
     }
 
     if(type === 'output'){
         outputTimeLeft = 20;
-        document.getElementById('outputTimer').innerText = 'Start Timer';
+        document.getElementById('outputTimerDisplay').innerText = outputTimeLeft;
+        document.getElementById('outputTimer').innerText = '▶';
+        document.getElementById('outputTimer').classList.remove('stop');
     }
 }
 
@@ -601,7 +625,8 @@ function toggleTimer(type){
     if(type === 'main'){
         if(timerInt){
             stopTimer('main');
-            document.getElementById('timer').innerText = 'Start Timer';
+            document.getElementById('timer').innerText = '▶';
+            document.getElementById('timer').classList.remove('stop');
         } else {
             startTimer('main');
         }
@@ -610,7 +635,8 @@ function toggleTimer(type){
     if(type === 'tech'){
         if(techTimerInt){
             stopTimer('tech');
-            document.getElementById('techTimer').innerText = 'Start Timer';
+            document.getElementById('techTimer').innerText = '▶';
+            document.getElementById('techTimer').classList.remove('stop');
         } else {
             startTimer('tech');
         }
@@ -619,7 +645,8 @@ function toggleTimer(type){
     if(type === 'output'){
         if(outputTimerInt){
             stopTimer('output');
-            document.getElementById('outputTimer').innerText = 'Start Timer';
+            document.getElementById('outputTimer').innerText = '▶';
+            document.getElementById('outputTimer').classList.remove('stop');
         } else {
             startTimer('output');
         }
@@ -630,14 +657,18 @@ function startTimer(type){
     if(type === 'main'){
         if(timerInt) return;
 
-        document.getElementById('timer').innerText = timeLeft;
+        document.getElementById('timer').innerText = '⏸';
+        document.getElementById('timer').classList.add('stop');
+
         timerInt = setInterval(function(){
             timeLeft--;
-            document.getElementById('timer').innerText = timeLeft;
+            document.getElementById('timerDisplay').innerText = timeLeft;
 
             if(timeLeft <= 0){
                 stopTimer('main');
-                document.getElementById('timer').innerText = 'Time Up';
+                document.getElementById('timerDisplay').innerText = '0';
+                document.getElementById('timer').innerText = '▶';
+                document.getElementById('timer').classList.remove('stop');
                 alert('⏰ Time is up!');
             }
         },1000);
@@ -646,14 +677,18 @@ function startTimer(type){
     if(type === 'tech'){
         if(techTimerInt) return;
 
-        document.getElementById('techTimer').innerText = techTimeLeft;
+        document.getElementById('techTimer').innerText = '⏸';
+        document.getElementById('techTimer').classList.add('stop');
+
         techTimerInt = setInterval(function(){
             techTimeLeft--;
-            document.getElementById('techTimer').innerText = techTimeLeft;
+            document.getElementById('techTimerDisplay').innerText = techTimeLeft;
 
             if(techTimeLeft <= 0){
                 stopTimer('tech');
-                document.getElementById('techTimer').innerText = 'Time Up';
+                document.getElementById('techTimerDisplay').innerText = '0';
+                document.getElementById('techTimer').innerText = '▶';
+                document.getElementById('techTimer').classList.remove('stop');
                 alert('⏰ Time is up!');
             }
         },1000);
@@ -662,14 +697,18 @@ function startTimer(type){
     if(type === 'output'){
         if(outputTimerInt) return;
 
-        document.getElementById('outputTimer').innerText = outputTimeLeft;
+        document.getElementById('outputTimer').innerText = '⏸';
+        document.getElementById('outputTimer').classList.add('stop');
+
         outputTimerInt = setInterval(function(){
             outputTimeLeft--;
-            document.getElementById('outputTimer').innerText = outputTimeLeft;
+            document.getElementById('outputTimerDisplay').innerText = outputTimeLeft;
 
             if(outputTimeLeft <= 0){
                 stopTimer('output');
-                document.getElementById('outputTimer').innerText = 'Time Up';
+                document.getElementById('outputTimerDisplay').innerText = '0';
+                document.getElementById('outputTimer').innerText = '▶';
+                document.getElementById('outputTimer').classList.remove('stop');
                 alert('⏰ Time is up!');
             }
         },1000);
