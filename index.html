@@ -1,359 +1,293 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gantec Puzzle Arena</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gantec Puzzle Arena</title>
 
-    <style>
-        body{
-            margin:0;
-            font-family:Arial, sans-serif;
-            color:#fff;
-            min-height:100vh;
-            padding:24px;
-            background:linear-gradient(-45deg,#06101f,#173a8a,#6d28d9,#0ea5e9);
-            background-size:400% 400%;
-            animation:gradientMove 15s ease infinite;
-        }
-
-        .box{
-            max-width:1150px;
-            margin:auto;
-            padding:42px;
-            border-radius:28px;
-            background:rgba(255,255,255,.12);
-            backdrop-filter:blur(16px);
-            box-shadow:0 12px 40px rgba(0,0,0,.35);
-            text-align:center;
-        }
-
-        .hidden{
-            display:none;
-        }
-
-        button{
-            padding:12px 22px;
-            font-size:17px;
-            margin:8px;
-            border:none;
-            border-radius:10px;
-            cursor:pointer;
-            color:#fff;
-            background:linear-gradient(135deg,#2563eb,#1d4ed8);
-            box-shadow:0 5px 14px rgba(0,0,0,.18);
-            transition:.2s ease;
-        }
-
-        button:hover{
-            transform:translateY(-1px);
-            opacity:.95;
-        }
-
-        .round-title{
-            font-size:38px;
-            font-weight:800;
-            margin-bottom:10px;
-        }
-
-        .sub-title{
-            font-size:22px;
-            color:rgba(255,255,255,.78);
-            margin-bottom:16px;
-        }
-
-        .timer{
-            font-size:140px;
-            font-weight:900;
-            margin:12px 0 8px;
-            text-align:center;
-            line-height:1;
-        }
-
-        .timer-btn{
-            width:64px;
-            height:64px;
-            border-radius:50%;
-            display:inline-flex;
-            align-items:center;
-            justify-content:center;
-            font-size:28px;
-            font-weight:900;
-            padding:0;
-            margin:8px auto 10px;
-            background:linear-gradient(135deg,#22c55e,#16a34a);
-            box-shadow:0 8px 18px rgba(0,0,0,.25);
-        }
-
-        .timer-btn.stop{
-            background:linear-gradient(135deg,#ef4444,#dc2626);
-        }
-
-        #question{
-            font-size:38px;
-            line-height:1.45;
-            white-space:pre-line;
-            margin:18px 0;
-            text-align:center;
-        }
-
-        .answer-box{
-            margin:22px auto 0;
-            padding:22px;
-            border-radius:22px;
-            background:rgba(255,255,255,.16);
-            display:inline-block;
-            animation:fadeIn .35s ease-in-out;
-            max-width:100%;
-            min-width:70%;
-        }
-
-        .answer-text{
-            font-size:36px;
-            font-weight:900;
-            margin-top:16px;
-            line-height:1.2;
-        }
-
-        .explanation{
-            font-size:18px;
-            line-height:1.65;
-            margin-top:12px;
-            color:#f8fafc;
-            text-align:left;
-            max-width:860px;
-        }
-
-        .options-grid{
-            display:grid;
-            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-            gap:12px;
-            margin:18px auto 0;
-            max-width:900px;
-        }
-
-        .option-btn{
-            padding:14px 16px;
-            border-radius:14px;
-            background:rgba(255,255,255,.16);
-            border:1px solid rgba(255,255,255,.18);
-            color:#fff;
-            font-size:16px;
-            line-height:1.4;
-            text-align:left;
-        }
-
-        .mono{
-            font-family:Consolas, Menlo, monospace;
-            white-space:pre-wrap;
-            background:rgba(15,23,42,.35);
-            padding:14px;
-            border-radius:12px;
-            line-height:1.45;
-            text-align:left;
-            overflow:auto;
-            font-size:15px;
-        }
-
-        .table-wrap{
-            overflow-x:auto;
-            margin-top:14px;
-        }
-
-        .quiz-table{
-            border-collapse:collapse;
-            width:100%;
-            background:rgba(255,255,255,.06);
-            border-radius:14px;
-            overflow:hidden;
-        }
-
-        .quiz-table th,
-        .quiz-table td{
-            border:1px solid rgba(255,255,255,.18);
-            padding:10px 14px;
-            text-align:center;
-            font-size:16px;
-        }
-
-        .quiz-table th{
-            background:rgba(255,255,255,.18);
-        }
-
-        .hero-slide{
-            position:relative;
-            padding:92px 30px 80px;
-            text-align:center;
-            overflow:hidden;
-        }
-
-        .hero-badge{
-            display:inline-block;
-            padding:10px 22px;
-            border-radius:999px;
-            background:rgba(255,255,255,.14);
-            color:#fff;
-            font-size:15px;
-            font-weight:bold;
-            letter-spacing:2px;
-            text-transform:uppercase;
-            backdrop-filter:blur(8px);
-            animation:fadeDown .8s ease both;
-        }
-
-        .hero-title{
-            margin:24px 0 14px;
-            font-size:72px;
-            font-weight:900;
-            line-height:1.05;
-            letter-spacing:2px;
-            text-transform:uppercase;
-            color:#fff;
-            text-shadow:0 6px 20px rgba(0,0,0,.35);
-            animation:fadeUp .9s ease both;
-        }
-
-        .hero-tagline{
-            margin:0 auto 34px;
-            font-size:30px;
-            font-weight:700;
-            color:#f8fafc;
-            letter-spacing:1px;
-            animation:fadeUp 1.1s ease both;
-        }
-
-        .hero-start-btn{
-            padding:14px 28px;
-            font-size:18px;
-            border-radius:12px;
-            font-weight:bold;
-            animation:pulseBtn 2s infinite;
-        }
-
-        .hero-glow{
-            position:absolute;
-            top:50%;
-            left:50%;
-            width:420px;
-            height:420px;
-            transform:translate(-50%,-50%);
-            border-radius:50%;
-            background:radial-gradient(circle,rgba(255,255,255,.16),rgba(255,255,255,.05),transparent 70%);
-            filter:blur(10px);
-            z-index:-1;
-            animation:glowMove 6s ease-in-out infinite;
-        }
-
-        .btn-row{
-            display:flex;
-            flex-wrap:wrap;
-            justify-content:center;
-            gap:10px;
-            margin-top:18px;
-        }
-
-        .tech-layout{
-            display:flex;
-            gap:18px;
-            align-items:flex-start;
-            justify-content:center;
-            margin-top:18px;
-            flex-wrap:wrap;
-        }
-
-        .tech-question-panel{
-            flex:1 1 500px;
-            min-width:300px;
-            text-align:left;
-            background:rgba(255,255,255,.10);
-            border:1px solid rgba(255,255,255,.14);
-            border-radius:18px;
-            padding:18px;
-        }
-
-        .tech-options-panel{
-            flex:1 1 360px;
-            min-width:280px;
-            text-align:left;
-            background:rgba(255,255,255,.08);
-            border:1px solid rgba(255,255,255,.14);
-            border-radius:18px;
-            padding:18px;
-        }
-
-        .tech-question-text{
-            font-size:22px;
-            line-height:1.6;
-            margin-bottom:12px;
-        }
-
-        .tech-intro-box{
-            font-size:64px;
-            font-weight:900;
-            letter-spacing:2px;
-            text-transform:uppercase;
-            text-align:center;
-            margin:28px auto;
-            padding:24px;
-        }
-
-        @keyframes gradientMove{
-            0%{background-position:0%}
-            50%{background-position:100%}
-            100%{background-position:0%}
-        }
-
-        @keyframes fadeIn{
-            from{opacity:0;transform:scale(.97)}
-            to{opacity:1;transform:scale(1)}
-        }
-
-        @keyframes fadeDown{
-            from{opacity:0;transform:translateY(-20px)}
-            to{opacity:1;transform:translateY(0)}
-        }
-
-        @keyframes fadeUp{
-            from{opacity:0;transform:translateY(20px)}
-            to{opacity:1;transform:translateY(0)}
-        }
-
-        @keyframes pulseBtn{
-            0%{transform:scale(1)}
-            50%{transform:scale(1.05)}
-            100%{transform:scale(1)}
-        }
-
-        @keyframes glowMove{
-            0%{transform:translate(-50%,-50%) scale(1)}
-            50%{transform:translate(-50%,-50%) scale(1.08)}
-            100%{transform:translate(-50%,-50%) scale(1)}
-        }
-
-        @media(max-width:700px){
-            body{padding:12px}
-            .box{padding:22px}
-            h1{font-size:40px!important}
-            .round-title{font-size:28px}
-            #question{font-size:22px}
-            .timer{font-size:80px}
-            button{font-size:15px;padding:10px 14px}
-            .hero-title{font-size:42px}
-            .hero-tagline{font-size:22px}
-            .answer-text{font-size:28px}
-            .tech-layout{flex-direction:column}
-            .tech-question-text{font-size:18px}
-            .timer-btn{
-                width:52px;
-                height:52px;
-                font-size:22px;
-            }
-            .tech-intro-box{
-                font-size:36px;
-                padding:20px;
-            }
-        }
-    </style>
+<style>
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    color:#fff;
+    min-height:100vh;
+    padding:24px;
+    background:linear-gradient(-45deg,#06101f,#173a8a,#6d28d9,#0ea5e9);
+    background-size:400% 400%;
+    animation:gradientMove 15s ease infinite;
+}
+.box{
+    max-width:1150px;
+    margin:auto;
+    padding:42px;
+    border-radius:28px;
+    background:rgba(255,255,255,.12);
+    backdrop-filter:blur(16px);
+    box-shadow:0 12px 40px rgba(0,0,0,.35);
+    text-align:center;
+}
+.hidden{display:none;}
+button{
+    padding:12px 22px;
+    font-size:17px;
+    margin:8px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    color:#fff;
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+    box-shadow:0 5px 14px rgba(0,0,0,.18);
+    transition:.2s ease;
+}
+button:hover{
+    transform:translateY(-1px);
+    opacity:.95;
+}
+.round-title{
+    font-size:38px;
+    font-weight:800;
+    margin-bottom:10px;
+}
+.sub-title{
+    font-size:22px;
+    color:rgba(255,255,255,.78);
+    margin-bottom:16px;
+}
+.timer{
+    font-size:72px;
+    font-weight:800;
+    margin:18px 0 6px;
+    text-align:center;
+}
+#question{
+    font-size:38px;
+    line-height:1.45;
+    white-space:pre-line;
+    margin:18px 0;
+    text-align:center;
+}
+.answer-box{
+    margin:22px auto 0;
+    padding:22px;
+    border-radius:22px;
+    background:rgba(255,255,255,.16);
+    display:inline-block;
+    animation:fadeIn .35s ease-in-out;
+    max-width:100%;
+    min-width:70%;
+}
+.answer-text{
+    font-size:36px;
+    font-weight:900;
+    margin-top:16px;
+    line-height:1.2;
+}
+.explanation{
+    font-size:18px;
+    line-height:1.65;
+    margin-top:12px;
+    color:#f8fafc;
+    text-align:left;
+    max-width:860px;
+}
+.options-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+    margin:18px auto 0;
+    max-width:900px;
+}
+.option-btn{
+    padding:14px 16px;
+    border-radius:14px;
+    background:rgba(255,255,255,.16);
+    border:1px solid rgba(255,255,255,.18);
+    color:#fff;
+    font-size:16px;
+    line-height:1.4;
+    text-align:left;
+}
+.mono{
+    font-family:Consolas,Menlo,monospace;
+    white-space:pre-wrap;
+    background:rgba(15,23,42,.35);
+    padding:14px;
+    border-radius:12px;
+    line-height:1.45;
+    text-align:left;
+    overflow:auto;
+    font-size:15px;
+}
+.table-wrap{
+    overflow-x:auto;
+    margin-top:14px;
+}
+.quiz-table{
+    border-collapse:collapse;
+    width:100%;
+    background:rgba(255,255,255,.06);
+    border-radius:14px;
+    overflow:hidden;
+}
+.quiz-table th,
+.quiz-table td{
+    border:1px solid rgba(255,255,255,.18);
+    padding:10px 14px;
+    text-align:center;
+    font-size:16px;
+}
+.quiz-table th{
+    background:rgba(255,255,255,.18);
+}
+.hero-slide{
+    position:relative;
+    padding:92px 30px 80px;
+    text-align:center;
+    overflow:hidden;
+}
+.hero-badge{
+    display:inline-block;
+    padding:10px 22px;
+    border-radius:999px;
+    background:rgba(255,255,255,.14);
+    color:#fff;
+    font-size:15px;
+    font-weight:bold;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    backdrop-filter:blur(8px);
+    animation:fadeDown .8s ease both;
+}
+.hero-title{
+    margin:24px 0 14px;
+    font-size:72px;
+    font-weight:900;
+    line-height:1.05;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:#fff;
+    text-shadow:0 6px 20px rgba(0,0,0,.35);
+    animation:fadeUp .9s ease both;
+}
+.hero-tagline{
+    margin:0 auto 34px;
+    font-size:30px;
+    font-weight:700;
+    color:#f8fafc;
+    letter-spacing:1px;
+    animation:fadeUp 1.1s ease both;
+}
+.hero-start-btn{
+    padding:14px 28px;
+    font-size:18px;
+    border-radius:12px;
+    font-weight:bold;
+    animation:pulseBtn 2s infinite;
+}
+.hero-glow{
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:420px;
+    height:420px;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(255,255,255,.16),rgba(255,255,255,.05),transparent 70%);
+    filter:blur(10px);
+    z-index:-1;
+    animation:glowMove 6s ease-in-out infinite;
+}
+.btn-row{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:10px;
+    margin-top:18px;
+}
+.tech-layout{
+    display:flex;
+    gap:18px;
+    align-items:flex-start;
+    justify-content:center;
+    margin-top:18px;
+    flex-wrap:wrap;
+}
+.tech-question-panel{
+    flex:1 1 520px;
+    min-width:300px;
+    text-align:left;
+    background:rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:18px;
+    padding:18px;
+}
+.tech-options-panel{
+    flex:1 1 330px;
+    min-width:280px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:18px;
+    padding:18px;
+    text-align:left;
+}
+.tech-question-text{
+    font-size:22px;
+    line-height:1.6;
+    margin-bottom:12px;
+    font-weight:800;
+}
+.tech-intro-box{
+    font-size:64px;
+    font-weight:900;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    text-align:center;
+    margin:28px auto;
+    padding:24px;
+}
+@keyframes gradientMove{
+    0%{background-position:0%}
+    50%{background-position:100%}
+    100%{background-position:0%}
+}
+@keyframes fadeIn{
+    from{opacity:0;transform:scale(.97)}
+    to{opacity:1;transform:scale(1)}
+}
+@keyframes fadeDown{
+    from{opacity:0;transform:translateY(-20px)}
+    to{opacity:1;transform:translateY(0)}
+}
+@keyframes fadeUp{
+    from{opacity:0;transform:translateY(20px)}
+    to{opacity:1;transform:translateY(0)}
+}
+@keyframes pulseBtn{
+    0%{transform:scale(1)}
+    50%{transform:scale(1.05)}
+    100%{transform:scale(1)}
+}
+@keyframes glowMove{
+    0%{transform:translate(-50%,-50%) scale(1)}
+    50%{transform:translate(-50%,-50%) scale(1.08)}
+    100%{transform:translate(-50%,-50%) scale(1)}
+}
+@media(max-width:700px){
+    body{padding:12px}
+    .box{padding:22px}
+    h1{font-size:40px!important}
+    .round-title{font-size:28px}
+    #question{font-size:22px}
+    .timer{font-size:50px}
+    button{font-size:15px;padding:10px 14px}
+    .hero-title{font-size:42px}
+    .hero-tagline{font-size:22px}
+    .answer-text{font-size:28px}
+    .tech-layout{flex-direction:column}
+    .tech-question-text{font-size:18px}
+    .tech-intro-box{font-size:36px}
+}
+</style>
 </head>
 
 <body>
@@ -377,7 +311,7 @@
         <h2>Please read the rules carefully</h2>
         <div id="rulesText" style="font-size:24px;line-height:2;max-width:900px;margin:28px auto;text-align:left;padding:24px;border-radius:18px;background:rgba(255,255,255,.12);"></div>
         <div class="btn-row">
-            <button onclick="goBack()">⬅ Back</button>
+            <button onclick="showSlide('intro')">⬅ Back</button>
             <button onclick="showSlide('example')">Next ➜</button>
         </div>
     </div>
@@ -392,7 +326,7 @@
         <button onclick="showExample()">Show Answer</button>
         <div id="exampleAns"></div>
         <div class="btn-row">
-            <button onclick="backFromExample()">⬅ Back</button>
+            <button onclick="showSlide('rules')">⬅ Back</button>
             <button onclick="startRound1()">Start Game</button>
         </div>
     </div>
@@ -401,7 +335,6 @@
     <div id="round1" class="hidden">
         <h2 id="question"></h2>
         <div class="timer" id="timerDisplay">20</div>
-        <button class="timer-btn" id="timer" onclick="toggleTimer('main')">▶</button>
         <div class="btn-row">
             <button onclick="showAnswer()">Show Answer</button>
             <button onclick="nextQuestion()">Next</button>
@@ -415,12 +348,14 @@
         <div class="tech-intro-box">TECHNICAL ROUND</div>
         <div class="btn-row">
             <button onclick="startTechnicalRound()">Start Technical Round</button>
-            <button onclick="backFromTechIntro()">⬅ Back</button>
+            <button onclick="showSlide('round1')">⬅ Back</button>
         </div>
     </div>
 
     <!-- TECH ROUND -->
     <div id="techRound" class="hidden">
+        <div class="sub-title">Question <span id="techCounter"></span> / <span id="techTotal"></span></div>
+
         <div class="tech-layout">
             <div class="tech-question-panel">
                 <div id="techQuestionText" class="tech-question-text"></div>
@@ -458,18 +393,14 @@
 <script>
 let round1Index = 0;
 let techIndex = 0;
-
 let timerInt = null;
 let timeLeft = 20;
-
-let currentSlide = 'intro';
-let previousSlide = 'intro';
 
 function speak(text){
     if(!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
     const utter = new SpeechSynthesisUtterance(text);
-    utter.rate = 0.75;   // slow reading
+    utter.rate = 0.85;
     utter.pitch = 1;
     utter.volume = 1;
     window.speechSynthesis.speak(utter);
@@ -477,11 +408,6 @@ function speak(text){
 
 function showSlide(id){
     const pages = ['intro','rules','example','round1','techIntro','techRound','thankYou'];
-
-    if(currentSlide !== id){
-        previousSlide = currentSlide;
-    }
-    currentSlide = id;
 
     for(let i=0;i<pages.length;i++){
         const el = document.getElementById(pages[i]);
@@ -491,7 +417,7 @@ function showSlide(id){
     const active = document.getElementById(id);
     if(active) active.classList.remove('hidden');
 
-    stopTimer('main');
+    stopTimer();
 
     if(id === 'rules'){
         showRules();
@@ -499,43 +425,7 @@ function showSlide(id){
     }
 }
 
-function goBack(){
-    showSlide(previousSlide);
-}
-
-function backFromExample(){
-    if(round1Index > 0){
-        round1Index--;
-        loadRound1Question();
-        return;
-    }
-    showSlide('rules');
-}
-
-function backFromRound1(){
-    if(round1Index > 0){
-        round1Index--;
-        loadRound1Question();
-        return;
-    }
-    showSlide('example');
-}
-
-function backFromTechIntro(){
-    showSlide(previousSlide);
-}
-
-function backFromTechRound(){
-    if(techIndex > 0){
-        techIndex--;
-        loadTechQuestion();
-        return;
-    }
-    showSlide('techIntro');
-}
-
 function startGame(){
-    showSlide('intro');
     speak('Welcome to Gantec Puzzle Arena. Fast minds, smart answers, big fun.');
 }
 
@@ -566,6 +456,7 @@ function showExample(){
     speak('Map');
 }
 
+/* ---------------- PUZZLE QUESTIONS: 30 ---------------- */
 const round1Questions = [
     {q:'I have many keys but open no locks. What am I?',a:'KEYBOARD'},
     {q:'I can run thousands of applications but never move an inch. What am I?',a:'SERVER'},
@@ -612,9 +503,13 @@ function loadRound1Question(){
     }
 
     const q = round1Questions[round1Index];
-    document.getElementById('question').innerText = 'Q' + (round1Index + 1) + ': ' + q.q;
+
+    document.getElementById('question').innerText =
+        'Q' + (round1Index + 1) + ': ' + q.q;
+
     document.getElementById('answer').innerHTML = '';
-    resetTimer('main');
+    resetTimer();
+    startTimer();
 }
 
 function nextQuestion(){
@@ -622,54 +517,37 @@ function nextQuestion(){
     loadRound1Question();
 }
 
-function resetTimer(type){
-    stopTimer(type);
+function backFromRound1(){
+    if(round1Index > 0){
+        round1Index--;
+        loadRound1Question();
+    }else{
+        showSlide('example');
+    }
+}
 
-    if(type === 'main'){
-        timeLeft = 20;
+function resetTimer(){
+    stopTimer();
+    timeLeft = 20;
+    document.getElementById('timerDisplay').innerText = timeLeft;
+}
+
+function startTimer(){
+    if(timerInt) return;
+
+    timerInt = setInterval(function(){
+        timeLeft--;
         document.getElementById('timerDisplay').innerText = timeLeft;
-        document.getElementById('timer').innerText = '▶';
-        document.getElementById('timer').classList.remove('stop');
-    }
-}
 
-function toggleTimer(type){
-    if(type === 'main'){
-        if(timerInt){
-            stopTimer('main');
-            document.getElementById('timer').innerText = '▶';
-            document.getElementById('timer').classList.remove('stop');
-        } else {
-            if(timeLeft <= 0) timeLeft = 20;
-            startTimer('main');
+        if(timeLeft <= 0){
+            stopTimer();
+            alert('⏰ Time is up!');
         }
-    }
+    },1000);
 }
 
-function startTimer(type){
-    if(type === 'main'){
-        if(timerInt) return;
-
-        document.getElementById('timer').innerText = '⏸';
-        document.getElementById('timer').classList.add('stop');
-
-        timerInt = setInterval(function(){
-            timeLeft--;
-            document.getElementById('timerDisplay').innerText = timeLeft;
-
-            if(timeLeft <= 0){
-                stopTimer('main');
-                document.getElementById('timerDisplay').innerText = '0';
-                document.getElementById('timer').innerText = '▶';
-                document.getElementById('timer').classList.remove('stop');
-                timeLeft = 20;
-            }
-        },1000);
-    }
-}
-
-function stopTimer(type){
-    if(type === 'main' && timerInt){
+function stopTimer(){
+    if(timerInt){
         clearInterval(timerInt);
         timerInt = null;
     }
@@ -677,29 +555,152 @@ function stopTimer(type){
 
 function showAnswer(){
     const q = round1Questions[round1Index];
+
     document.getElementById('answer').innerHTML =
         '<div class="answer-box"><div class="answer-text">' + q.a + '</div></div>';
+
     speak(q.a);
 }
+
+/* ---------------- TECHNICAL QUESTIONS: 5 ---------------- */
+const techQuestions = [
+    {
+        question:'SQL – LEFT JOIN Nightmare',
+        tableHtml:`
+            <div class="table-wrap">
+                <table class="quiz-table">
+                    <tr><th>Table A</th></tr>
+                    <tr><td>ID</td></tr>
+                    <tr><td>1</td></tr>
+                    <tr><td>2</td></tr>
+                </table>
+
+                <br>
+
+                <table class="quiz-table">
+                    <tr><th>Table B</th></tr>
+                    <tr><td>ID</td></tr>
+                    <tr><td>1</td></tr>
+                    <tr><td>1</td></tr>
+                    <tr><td>1</td></tr>
+                    <tr><td>2</td></tr>
+                    <tr><td>2</td></tr>
+                </table>
+            </div>
+
+            <br>
+
+            <div class="mono">SELECT COUNT(*)
+FROM A
+LEFT JOIN B
+ON A.ID = B.ID;</div>
+        `,
+        options:['A) 2','B) 3','C) 5','D) 7'],
+        answer:'C) 5',
+        explanation:'LEFT JOIN returns one row for each match. ID=1 matches 3 rows in B and ID=2 matches 2 rows in B. So total rows = 3 + 2 = 5.'
+    },
+    {
+        question:'SQL – Ranking Functions',
+        tableHtml:`
+            <div class="table-wrap">
+                <table class="quiz-table">
+                    <tr><th>Salary</th></tr>
+                    <tr><td>100</td></tr>
+                    <tr><td>100</td></tr>
+                    <tr><td>100</td></tr>
+                    <tr><td>90</td></tr>
+                </table>
+            </div>
+
+            <br>
+
+            <div class="mono">SELECT Salary,
+       ROW_NUMBER() OVER(ORDER BY Salary DESC) RN,
+       RANK() OVER(ORDER BY Salary DESC) R,
+       DENSE_RANK() OVER(ORDER BY Salary DESC) DR
+FROM Employee;</div>
+        `,
+        options:[
+            'A) RN=4, R=4, DR=2',
+            'B) RN=2, R=2, DR=2',
+            'C) RN=4, R=2, DR=2',
+            'D) RN=4, R=4, DR=4'
+        ],
+        answer:'A) RN=4, R=4, DR=2',
+        explanation:'ROW_NUMBER gives unique numbers. RANK skips positions after ties. DENSE_RANK does not skip. Salary 90 gets RN=4, R=4, DR=2.'
+    },
+    {
+        question:'SQL – COUNT, SUM and AVG with NULL',
+        tableHtml:`
+            <div class="table-wrap">
+                <table class="quiz-table">
+                    <tr><th>Value</th></tr>
+                    <tr><td>NULL</td></tr>
+                    <tr><td>NULL</td></tr>
+                </table>
+            </div>
+
+            <br>
+
+            <div class="mono">SELECT
+COUNT(*),
+COUNT(Value),
+SUM(Value),
+AVG(Value)
+FROM T;</div>
+        `,
+        options:[
+            'A) 2, 0, NULL, NULL',
+            'B) 2, 2, 0, 0',
+            'C) 0, 0, 0, NULL',
+            'D) 2, 0, 0, 0'
+        ],
+        answer:'A) 2, 0, NULL, NULL',
+        explanation:'COUNT(*) counts all rows. COUNT(Value) ignores NULL values. SUM and AVG return NULL when all values are NULL.'
+    },
+    {
+        question:'Python – Late Binding in Lambda',
+        tableHtml:`
+            <div class="mono">funcs = []
+
+for i in range(3):
+    funcs.append(lambda: i)
+
+print([f() for f in funcs])</div>
+        `,
+        options:[
+            'A) [0, 1, 2]',
+            'B) [2, 2, 2]',
+            'C) [3, 3, 3]',
+            'D) Error'
+        ],
+        answer:'B) [2, 2, 2]',
+        explanation:'Python lambdas capture the variable, not the value at each loop step. After the loop ends, i is 2, so all functions return 2.'
+    },
+    {
+        question:'Python – Difference Between == and is',
+        tableHtml:`
+            <div class="mono">a = [1, 2]
+b = [1, 2]
+
+print(a == b, a is b)</div>
+        `,
+        options:[
+            'A) True True',
+            'B) False False',
+            'C) True False',
+            'D) False True'
+        ],
+        answer:'C) True False',
+        explanation:'== compares values. is compares memory identity. Both lists have the same values, but they are different objects.'
+    }
+];
 
 function startTechnicalRound(){
     techIndex = 0;
     showSlide('techRound');
     loadTechQuestion();
 }
-
-/* =========================================================
-   KEEP YOUR ORIGINAL 5 TECHNICAL QUESTIONS ONLY HERE
-   Do NOT add more than 5 questions
-   ========================================================= */
-
-const techQuestions = [
-    /* PASTE YOUR ORIGINAL TECH QUESTION 1 HERE */
-    /* PASTE YOUR ORIGINAL TECH QUESTION 2 HERE */
-    /* PASTE YOUR ORIGINAL TECH QUESTION 3 HERE */
-    /* PASTE YOUR ORIGINAL TECH QUESTION 4 HERE */
-    /* PASTE YOUR ORIGINAL TECH QUESTION 5 HERE */
-];
 
 function loadTechQuestion(){
     if(techIndex >= techQuestions.length){
@@ -709,13 +710,20 @@ function loadTechQuestion(){
 
     const q = techQuestions[techIndex];
 
-    document.getElementById('techQuestionText').innerText = 'Question ' + (techIndex + 1) + ': ' + q.question;
+    document.getElementById('techCounter').innerText = techIndex + 1;
+    document.getElementById('techTotal').innerText = techQuestions.length;
+
+    document.getElementById('techQuestionText').innerText =
+        'Question ' + (techIndex + 1) + ': ' + q.question;
+
     document.getElementById('techTable').innerHTML = q.tableHtml;
 
     let optHtml = '<div class="options-grid">';
+
     for(let i=0;i<q.options.length;i++){
         optHtml += '<div class="option-btn">' + q.options[i] + '</div>';
     }
+
     optHtml += '</div>';
 
     document.getElementById('techOptions').innerHTML = optHtml;
@@ -727,10 +735,25 @@ function nextTechQuestion(){
     loadTechQuestion();
 }
 
+function backFromTechRound(){
+    if(techIndex > 0){
+        techIndex--;
+        loadTechQuestion();
+    }else{
+        showSlide('techIntro');
+    }
+}
+
 function showTechAnswer(){
     const q = techQuestions[techIndex];
+
     document.getElementById('techAnswer').innerHTML =
-        '<div class="answer-box"><div class="answer-text">' + q.answer + '</div><div class="explanation">' + q.explanation + '</div></div>';
+        '<div class="answer-box"><div class="answer-text">' +
+        q.answer +
+        '</div><div class="explanation">' +
+        q.explanation +
+        '</div></div>';
+
     speak(q.answer);
 }
 </script>
