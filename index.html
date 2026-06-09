@@ -71,6 +71,14 @@
             margin-bottom:16px;
         }
 
+        .timer{
+            font-size:110px;
+            font-weight:900;
+            margin:18px 0 10px;
+            text-align:center;
+            line-height:1;
+        }
+
         #question,
         #outputQuestion{
             font-size:38px;
@@ -309,6 +317,7 @@
             h1{font-size:40px!important}
             .round-title{font-size:28px}
             #question,#outputQuestion{font-size:22px}
+            .timer{font-size:60px}
             button{font-size:15px;padding:10px 14px}
             .hero-title{font-size:42px}
             .hero-tagline{font-size:22px}
@@ -738,7 +747,6 @@ function loadTechQuestion(){
     }
 
     const q = techQuestions[techIndex];
-
     document.getElementById('techQuestionText').innerText = q.question;
     document.getElementById('techTable').innerHTML = q.tableHtml;
 
