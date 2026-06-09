@@ -69,6 +69,19 @@
             text-align:center;
         }
 
+        .clickable-timer{
+            cursor:pointer;
+            user-select:none;
+            color:#f8fafc;
+            text-shadow:0 4px 12px rgba(0,0,0,.4);
+        }
+
+        .clickable-timer:hover{
+            transform:scale(1.02);
+            transition:0.2s ease;
+            opacity:0.95;
+        }
+
         #question,
         #outputQuestion{
             font-size:38px;
@@ -362,7 +375,7 @@
     <!-- PUZZLE ROUND -->
     <div id="round1" class="hidden">
         <h2 id="question"></h2>
-        <div class="timer" id="timer">20</div>
+        <div class="timer clickable-timer" id="timer" onclick="toggleTimer('main')">Click to Start Timer</div>
         <div class="btn-row">
             <button onclick="showAnswer()">Show Answer</button>
             <button onclick="nextQuestion()">Next</button>
@@ -371,24 +384,8 @@
         <div id="answer"></div>
     </div>
 
-    <!-- TECH INTRO -->
-    <div id="techIntro" class="hidden">
-        <div class="round-title">⚙️ TECHNICAL ROUND</div>
-        <div class="sub-title">MCQ + Tables + Code + Theory</div>
-        <p style="font-size:24px;line-height:1.75;max-width:850px;margin:0 auto 18px;">
-            In this round, questions will appear with proper options. For SQL and coding questions, the question and table will be shown together.
-            Click <b>Show Answer</b> to reveal the answer and explanation.
-        </p>
-        <div class="btn-row">
-            <button onclick="startTechnicalRound()">Start Technical Round</button>
-            <button onclick="showSlide('round1')">⬅ Back</button>
-        </div>
-    </div>
-
     <!-- TECH ROUND -->
     <div id="techRound" class="hidden">
-        <div class="sub-title">Question <span id="techCounter"></span> / <span id="techTotal"></span></div>
-
         <div class="tech-layout">
             <div class="tech-question-panel">
                 <div id="techQuestionText" class="tech-question-text"></div>
@@ -400,12 +397,14 @@
             </div>
         </div>
 
-        <div class="timer" id="techTimer">20</div>
+        <div class="timer clickable-timer" id="techTimer" onclick="toggleTimer('tech')">Click to Start Timer</div>
+
         <div class="btn-row">
             <button onclick="showTechAnswer()">Show Answer</button>
             <button onclick="nextTechQuestion()">Next</button>
-            <button onclick="showSlide('techIntro')">⬅ Back</button>
+            <button onclick="showSlide('round1')">⬅ Back</button>
         </div>
+
         <div id="techAnswer"></div>
     </div>
 
@@ -414,7 +413,7 @@
         <div class="round-title">💻 PROGRAM OUTPUT ROUND</div>
         <div class="sub-title">10 Questions</div>
         <h2 id="outputQuestion"></h2>
-        <div class="timer" id="outputTimer">20</div>
+        <div class="timer clickable-timer" id="outputTimer" onclick="toggleTimer('output')">Click to Start Timer</div>
         <div class="btn-row">
             <button onclick="showOutputAnswer()">Show Answer</button>
             <button onclick="nextOutputQuestion()">Next</button>
@@ -438,9 +437,17 @@
 </div>
 
 <script>
-let round1Index=0, techIndex=0, outputIndex=0;
-let timerInt=null, techTimerInt=null, outputTimerInt=null;
-let timeLeft=20, techTimeLeft=20, outputTimeLeft=20;
+let round1Index = 0;
+let techIndex = 0;
+let outputIndex = 0;
+
+let timerInt = null;
+let techTimerInt = null;
+let outputTimerInt = null;
+
+let timeLeft = 20;
+let techTimeLeft = 20;
+let outputTimeLeft = 20;
 
 function speak(text){
     if(!('speechSynthesis' in window)) return;
@@ -453,21 +460,21 @@ function speak(text){
 }
 
 function showSlide(id){
-    const pages=['intro','rules','example','round1','techIntro','techRound','outputRound','thankYou'];
+    const pages = ['intro','rules','example','round1','techRound','outputRound','thankYou'];
 
     for(let i=0;i<pages.length;i++){
-        const el=document.getElementById(pages[i]);
+        const el = document.getElementById(pages[i]);
         if(el) el.classList.add('hidden');
     }
 
-    const active=document.getElementById(id);
+    const active = document.getElementById(id);
     if(active) active.classList.remove('hidden');
 
-    stopTimer();
-    stopTechTimer();
-    stopOutputTimer();
+    stopTimer('main');
+    stopTimer('tech');
+    stopTimer('output');
 
-    if(id==='rules'){
+    if(id === 'rules'){
         showRules();
         speak('Please read the rules carefully.');
     }
@@ -479,7 +486,7 @@ function startGame(){
 }
 
 function showRules(){
-    const rulesList=[
+    const rulesList = [
         'The game contains 30 Puzzle Questions and 5 Technical Questions.',
         '⏱️ You have 20 seconds to answer each question.',
         '📖 Read each question carefully before submitting your answer in chat.',
@@ -488,24 +495,24 @@ function showRules(){
         '🏁 After the puzzle round, the technical round will begin.'
     ];
 
-    let html='<div style="font-size:30px;font-weight:800;margin-bottom:18px;text-align:center;">🎮 Game Rules</div>';
-    html+='<div style="display:flex;flex-direction:column;gap:12px;">';
+    let html = '<div style="font-size:30px;font-weight:800;margin-bottom:18px;text-align:center;">🎮 Game Rules</div>';
+    html += '<div style="display:flex;flex-direction:column;gap:12px;">';
 
     for(let i=0;i<rulesList.length;i++){
-        html+='<div style="padding:14px 16px;border-radius:14px;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.14);font-size:22px;line-height:1.6;">'+rulesList[i]+'</div>';
+        html += '<div style="padding:14px 16px;border-radius:14px;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.14);font-size:22px;line-height:1.6;">' + rulesList[i] + '</div>';
     }
 
-    html+='</div>';
-    document.getElementById('rulesText').innerHTML=html;
+    html += '</div>';
+    document.getElementById('rulesText').innerHTML = html;
 }
 
 function showExample(){
-    document.getElementById('exampleAns').innerHTML=
+    document.getElementById('exampleAns').innerHTML =
         '<div class="answer-box"><div class="answer-text">MAP 🗺️</div></div>';
     speak('Map');
 }
 
-const round1Questions=[
+const round1Questions = [
     {q:'I have many keys but open no locks. What am I?',a:'KEYBOARD'},
     {q:'I can run thousands of applications but never move an inch. What am I?',a:'SERVER'},
     {q:'I store memories but have no brain. What am I?',a:'HARD DRIVE'},
@@ -539,22 +546,22 @@ const round1Questions=[
 ];
 
 function startRound1(){
-    round1Index=0;
+    round1Index = 0;
     showSlide('round1');
     loadRound1Question();
 }
 
 function loadRound1Question(){
-    if(round1Index>=round1Questions.length){
-        showSlide('techIntro');
+    if(round1Index >= round1Questions.length){
+        showSlide('techRound');
+        loadTechQuestion();
         return;
     }
 
-    const q=round1Questions[round1Index];
-    document.getElementById('question').innerText='Q'+(round1Index+1)+': '+q.q;
-    document.getElementById('answer').innerHTML='';
-    resetTimer();
-    startTimer();
+    const q = round1Questions[round1Index];
+    document.getElementById('question').innerText = 'Q' + (round1Index + 1) + ': ' + q.q;
+    document.getElementById('answer').innerHTML = '';
+    resetTimer('main');
 }
 
 function nextQuestion(){
@@ -562,41 +569,129 @@ function nextQuestion(){
     loadRound1Question();
 }
 
-function resetTimer(){
-    stopTimer();
-    timeLeft=20;
-    document.getElementById('timer').innerText=timeLeft;
+function resetTimer(type){
+    stopTimer(type);
+
+    if(type === 'main'){
+        timeLeft = 20;
+        document.getElementById('timer').innerText = 'Click to Start Timer';
+    }
+
+    if(type === 'tech'){
+        techTimeLeft = 20;
+        document.getElementById('techTimer').innerText = 'Click to Start Timer';
+    }
+
+    if(type === 'output'){
+        outputTimeLeft = 20;
+        document.getElementById('outputTimer').innerText = 'Click to Start Timer';
+    }
 }
 
-function startTimer(){
-    if(timerInt) return;
-
-    timerInt=setInterval(function(){
-        timeLeft--;
-        document.getElementById('timer').innerText=timeLeft;
-
-        if(timeLeft<=0){
-            stopTimer();
-            alert('⏰ Time is up!');
+function toggleTimer(type){
+    if(type === 'main'){
+        if(timerInt){
+            stopTimer('main');
+            document.getElementById('timer').innerText = 'Click to Start Timer';
+        } else {
+            startTimer('main');
         }
-    },1000);
+    }
+
+    if(type === 'tech'){
+        if(techTimerInt){
+            stopTimer('tech');
+            document.getElementById('techTimer').innerText = 'Click to Start Timer';
+        } else {
+            startTimer('tech');
+        }
+    }
+
+    if(type === 'output'){
+        if(outputTimerInt){
+            stopTimer('output');
+            document.getElementById('outputTimer').innerText = 'Click to Start Timer';
+        } else {
+            startTimer('output');
+        }
+    }
 }
 
-function stopTimer(){
-    if(timerInt){
+function startTimer(type){
+    if(type === 'main'){
+        if(timerInt) return;
+
+        document.getElementById('timer').innerText = timeLeft;
+        timerInt = setInterval(function(){
+            timeLeft--;
+            document.getElementById('timer').innerText = timeLeft;
+
+            if(timeLeft <= 0){
+                stopTimer('main');
+                document.getElementById('timer').innerText = 'Time Up';
+                alert('⏰ Time is up!');
+            }
+        },1000);
+    }
+
+    if(type === 'tech'){
+        if(techTimerInt) return;
+
+        document.getElementById('techTimer').innerText = techTimeLeft;
+        techTimerInt = setInterval(function(){
+            techTimeLeft--;
+            document.getElementById('techTimer').innerText = techTimeLeft;
+
+            if(techTimeLeft <= 0){
+                stopTimer('tech');
+                document.getElementById('techTimer').innerText = 'Time Up';
+                alert('⏰ Time is up!');
+            }
+        },1000);
+    }
+
+    if(type === 'output'){
+        if(outputTimerInt) return;
+
+        document.getElementById('outputTimer').innerText = outputTimeLeft;
+        outputTimerInt = setInterval(function(){
+            outputTimeLeft--;
+            document.getElementById('outputTimer').innerText = outputTimeLeft;
+
+            if(outputTimeLeft <= 0){
+                stopTimer('output');
+                document.getElementById('outputTimer').innerText = 'Time Up';
+                alert('⏰ Time is up!');
+            }
+        },1000);
+    }
+}
+
+function stopTimer(type){
+    if(type === 'main' && timerInt){
         clearInterval(timerInt);
-        timerInt=null;
+        timerInt = null;
+    }
+
+    if(type === 'tech' && techTimerInt){
+        clearInterval(techTimerInt);
+        techTimerInt = null;
+    }
+
+    if(type === 'output' && outputTimerInt){
+        clearInterval(outputTimerInt);
+        outputTimerInt = null;
     }
 }
 
 function showAnswer(){
-    const q=round1Questions[round1Index];
-    document.getElementById('answer').innerHTML=
-        '<div class="answer-box"><div class="answer-text">'+q.a+'</div></div>';
+    const q = round1Questions[round1Index];
+    document.getElementById('answer').innerHTML =
+        '<div class="answer-box"><div class="answer-text">' + q.a + '</div></div>';
     speak(q.a);
 }
 
-const techQuestions=[
+const techQuestions = [
     {
         question:'SQL – LEFT JOIN Nightmare',
         tableHtml:'<div class="table-wrap"><table class="quiz-table"><tr><th>Table A</th></tr><tr><td>ID</td></tr><tr><td>1</td></tr><tr><td>2</td></tr></table><br><table class="quiz-table"><tr><th>Table B</th></tr><tr><td>ID</td></tr><tr><td>1</td></tr><tr><td>1</td></tr><tr><td>1</td></tr><tr><td>2</td></tr><tr><td>2</td></tr></table></div><br><div class="mono">SELECT COUNT(*)\nFROM A\nLEFT JOIN B\nON A.ID = B.ID;</div>',
@@ -634,38 +729,30 @@ const techQuestions=[
     }
 ];
 
-function startTechnicalRound(){
-    techIndex=0;
-    showSlide('techRound');
-    loadTechQuestion();
-}
-
 function loadTechQuestion(){
-    if(techIndex>=techQuestions.length){
+    if(techIndex >= techQuestions.length){
         showSlide('outputRound');
-        outputIndex=0;
+        outputIndex = 0;
         loadOutputQuestion();
         return;
     }
 
-    const q=techQuestions[techIndex];
+    const q = techQuestions[techIndex];
 
-    document.getElementById('techCounter').innerText=techIndex+1;
-    document.getElementById('techTotal').innerText=techQuestions.length;
-    document.getElementById('techQuestionText').innerText=q.question;
-    document.getElementById('techTable').innerHTML=q.tableHtml;
+    document.getElementById('techCounter').innerText = techIndex + 1;
+    document.getElementById('techTotal').innerText = techQuestions.length;
+    document.getElementById('techQuestionText').innerText = q.question;
+    document.getElementById('techTable').innerHTML = q.tableHtml;
 
-    let optHtml='<div class="options-grid">';
+    let optHtml = '<div class="options-grid">';
     for(let i=0;i<q.options.length;i++){
-        optHtml+='<div class="option-btn">'+q.options[i]+'</div>';
+        optHtml += '<div class="option-btn">' + q.options[i] + '</div>';
     }
-    optHtml+='</div>';
+    optHtml += '</div>';
 
-    document.getElementById('techOptions').innerHTML=optHtml;
-    document.getElementById('techAnswer').innerHTML='';
-
-    resetTechTimer();
-    startTechTimer();
+    document.getElementById('techOptions').innerHTML = optHtml;
+    document.getElementById('techAnswer').innerHTML = '';
+    resetTimer('tech');
 }
 
 function nextTechQuestion(){
@@ -673,41 +760,14 @@ function nextTechQuestion(){
     loadTechQuestion();
 }
 
-function resetTechTimer(){
-    stopTechTimer();
-    techTimeLeft=20;
-    document.getElementById('techTimer').innerText=techTimeLeft;
-}
-
-function startTechTimer(){
-    if(techTimerInt) return;
-
-    techTimerInt=setInterval(function(){
-        techTimeLeft--;
-        document.getElementById('techTimer').innerText=techTimeLeft;
-
-        if(techTimeLeft<=0){
-            stopTechTimer();
-            alert('⏰ Time is up!');
-        }
-    },1000);
-}
-
-function stopTechTimer(){
-    if(techTimerInt){
-        clearInterval(techTimerInt);
-        techTimerInt=null;
-    }
-}
-
 function showTechAnswer(){
-    const q=techQuestions[techIndex];
-    document.getElementById('techAnswer').innerHTML=
-        '<div class="answer-box"><div class="answer-text">'+q.answer+'</div><div class="explanation">'+q.explanation+'</div></div>';
+    const q = techQuestions[techIndex];
+    document.getElementById('techAnswer').innerHTML =
+        '<div class="answer-box"><div class="answer-text">' + q.answer + '</div><div class="explanation">' + q.explanation + '</div></div>';
     speak(q.answer);
 }
 
-const outputQuestions=[
+const outputQuestions = [
     {q:'What is the output of: console.log(2 + 3 * 4);',a:'14'},
     {q:'What is the output of: console.log("5" + 1);',a:'51'},
     {q:'What is the output of: console.log(typeof null);',a:'object'},
@@ -721,17 +781,15 @@ const outputQuestions=[
 ];
 
 function loadOutputQuestion(){
-    if(outputIndex>=outputQuestions.length){
+    if(outputIndex >= outputQuestions.length){
         showSlide('thankYou');
         return;
     }
 
-    const q=outputQuestions[outputIndex];
-    document.getElementById('outputQuestion').innerText='OUTPUT Q'+(outputIndex+1)+': '+q.q;
-    document.getElementById('outputAnswer').innerHTML='';
-
-    resetOutputTimer();
-    startOutputTimer();
+    const q = outputQuestions[outputIndex];
+    document.getElementById('outputQuestion').innerText = 'OUTPUT Q' + (outputIndex + 1) + ': ' + q.q;
+    document.getElementById('outputAnswer').innerHTML = '';
+    resetTimer('output');
 }
 
 function nextOutputQuestion(){
@@ -739,37 +797,10 @@ function nextOutputQuestion(){
     loadOutputQuestion();
 }
 
-function resetOutputTimer(){
-    stopOutputTimer();
-    outputTimeLeft=20;
-    document.getElementById('outputTimer').innerText=outputTimeLeft;
-}
-
-function startOutputTimer(){
-    if(outputTimerInt) return;
-
-    outputTimerInt=setInterval(function(){
-        outputTimeLeft--;
-        document.getElementById('outputTimer').innerText=outputTimeLeft;
-
-        if(outputTimeLeft<=0){
-            stopOutputTimer();
-            alert('⏰ Time is up!');
-        }
-    },1000);
-}
-
-function stopOutputTimer(){
-    if(outputTimerInt){
-        clearInterval(outputTimerInt);
-        outputTimerInt=null;
-    }
-}
-
 function showOutputAnswer(){
-    const q=outputQuestions[outputIndex];
-    document.getElementById('outputAnswer').innerHTML=
-        '<div class="answer-box"><div class="answer-text">'+q.a+'</div></div>';
+    const q = outputQuestions[outputIndex];
+    document.getElementById('outputAnswer').innerHTML =
+        '<div class="answer-box"><div class="answer-text">' + q.a + '</div></div>';
     speak(q.a);
 }
 </script>
