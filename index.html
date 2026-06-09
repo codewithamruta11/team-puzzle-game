@@ -628,6 +628,7 @@ function toggleTimer(type){
             document.getElementById('timer').innerText = '▶';
             document.getElementById('timer').classList.remove('stop');
         } else {
+            if(timeLeft <= 0) timeLeft = 20;
             startTimer('main');
         }
     }
@@ -638,6 +639,7 @@ function toggleTimer(type){
             document.getElementById('techTimer').innerText = '▶';
             document.getElementById('techTimer').classList.remove('stop');
         } else {
+            if(techTimeLeft <= 0) techTimeLeft = 20;
             startTimer('tech');
         }
     }
@@ -648,6 +650,7 @@ function toggleTimer(type){
             document.getElementById('outputTimer').innerText = '▶';
             document.getElementById('outputTimer').classList.remove('stop');
         } else {
+            if(outputTimeLeft <= 0) outputTimeLeft = 20;
             startTimer('output');
         }
     }
@@ -669,7 +672,7 @@ function startTimer(type){
                 document.getElementById('timerDisplay').innerText = '0';
                 document.getElementById('timer').innerText = '▶';
                 document.getElementById('timer').classList.remove('stop');
-                alert('⏰ Time is up!');
+                timeLeft = 20;
             }
         },1000);
     }
@@ -689,7 +692,7 @@ function startTimer(type){
                 document.getElementById('techTimerDisplay').innerText = '0';
                 document.getElementById('techTimer').innerText = '▶';
                 document.getElementById('techTimer').classList.remove('stop');
-                alert('⏰ Time is up!');
+                techTimeLeft = 20;
             }
         },1000);
     }
@@ -709,7 +712,7 @@ function startTimer(type){
                 document.getElementById('outputTimerDisplay').innerText = '0';
                 document.getElementById('outputTimer').innerText = '▶';
                 document.getElementById('outputTimer').classList.remove('stop');
-                alert('⏰ Time is up!');
+                outputTimeLeft = 20;
             }
         },1000);
     }
