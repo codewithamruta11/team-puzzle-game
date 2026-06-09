@@ -263,7 +263,7 @@
         }
 
         .tech-question-panel{
-            flex:1 1 420px;
+            flex:1 1 500px;
             min-width:300px;
             text-align:left;
             background:rgba(255,255,255,.10);
@@ -272,14 +272,14 @@
             padding:18px;
         }
 
-        .tech-table-panel{
+        .tech-options-panel{
             flex:1 1 360px;
             min-width:280px;
+            text-align:left;
             background:rgba(255,255,255,.08);
             border:1px solid rgba(255,255,255,.14);
             border-radius:18px;
             padding:18px;
-            text-align:left;
         }
 
         .tech-question-text{
@@ -289,14 +289,13 @@
         }
 
         .tech-intro-box{
-            max-width:900px;
-            margin:24px auto;
-            padding:26px;
-            border-radius:18px;
-            background:rgba(255,255,255,.12);
-            font-size:24px;
-            line-height:1.8;
+            font-size:64px;
+            font-weight:900;
+            letter-spacing:2px;
+            text-transform:uppercase;
             text-align:center;
+            margin:28px auto;
+            padding:24px;
         }
 
         @keyframes gradientMove{
@@ -351,7 +350,7 @@
                 font-size:22px;
             }
             .tech-intro-box{
-                font-size:20px;
+                font-size:36px;
                 padding:20px;
             }
         }
@@ -394,7 +393,7 @@
         <button onclick="showExample()">Show Answer</button>
         <div id="exampleAns"></div>
         <div class="btn-row">
-            <button onclick="goBack()">⬅ Back</button>
+            <button onclick="backFromExample()">⬅ Back</button>
             <button onclick="startRound1()">Start Game</button>
         </div>
     </div>
@@ -407,21 +406,17 @@
         <div class="btn-row">
             <button onclick="showAnswer()">Show Answer</button>
             <button onclick="nextQuestion()">Next</button>
-            <button onclick="goBack()">⬅ Back</button>
+            <button onclick="backFromRound1()">⬅ Back</button>
         </div>
         <div id="answer"></div>
     </div>
 
-    <!-- TECH INTRO SLIDE -->
+    <!-- TECH INTRO -->
     <div id="techIntro" class="hidden">
-        <div class="round-title">⚙️ TECHNICAL ROUND</div>
-        <div class="tech-intro-box">
-            Now the Technical Round will begin.<br>
-            Click below to start the technical questions.
-        </div>
+        <div class="tech-intro-box">TECHNICAL ROUND</div>
         <div class="btn-row">
             <button onclick="startTechnicalRound()">Start Technical Round</button>
-            <button onclick="goBack()">⬅ Back</button>
+            <button onclick="backFromTechIntro()">⬅ Back</button>
         </div>
     </div>
 
@@ -430,18 +425,18 @@
         <div class="tech-layout">
             <div class="tech-question-panel">
                 <div id="techQuestionText" class="tech-question-text"></div>
-                <div id="techOptions"></div>
+                <div id="techTable"></div>
             </div>
 
-            <div class="tech-table-panel">
-                <div id="techTable"></div>
+            <div class="tech-options-panel">
+                <div id="techOptions"></div>
             </div>
         </div>
 
         <div class="btn-row">
             <button onclick="showTechAnswer()">Show Answer</button>
             <button onclick="nextTechQuestion()">Next</button>
-            <button onclick="showSlide('techIntro')">⬅ Back</button>
+            <button onclick="backFromTechRound()">⬅ Back</button>
         </div>
 
         <div id="techAnswer"></div>
@@ -457,7 +452,7 @@
         <div class="btn-row">
             <button onclick="showOutputAnswer()">Show Answer</button>
             <button onclick="nextOutputQuestion()">Next</button>
-            <button onclick="goBack()">⬅ Back</button>
+            <button onclick="backFromOutputRound()">⬅ Back</button>
         </div>
         <div id="outputAnswer"></div>
     </div>
@@ -527,6 +522,46 @@ function showSlide(id){
 
 function goBack(){
     showSlide(previousSlide);
+}
+
+function backFromExample(){
+    if(round1Index > 0){
+        round1Index--;
+        loadRound1Question();
+        return;
+    }
+    showSlide('rules');
+}
+
+function backFromRound1(){
+    if(round1Index > 0){
+        round1Index--;
+        loadRound1Question();
+        return;
+    }
+    showSlide('example');
+}
+
+function backFromTechIntro(){
+    showSlide(previousSlide === 'round1' ? 'round1' : 'example');
+}
+
+function backFromTechRound(){
+    if(techIndex > 0){
+        techIndex--;
+        loadTechQuestion();
+        return;
+    }
+    showSlide('techIntro');
+}
+
+function backFromOutputRound(){
+    if(outputIndex > 0){
+        outputIndex--;
+        loadOutputQuestion();
+        return;
+    }
+    showSlide('techRound');
 }
 
 function startGame(){
