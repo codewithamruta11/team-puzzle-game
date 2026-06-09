@@ -50,6 +50,15 @@
             opacity:.95;
         }
 
+        .small-timer-btn{
+            padding:8px 14px;
+            font-size:14px;
+            border-radius:8px;
+            min-width:120px;
+            margin:14px auto 6px;
+            display:inline-block;
+        }
+
         .round-title{
             font-size:38px;
             font-weight:800;
@@ -60,26 +69,6 @@
             font-size:22px;
             color:rgba(255,255,255,.78);
             margin-bottom:16px;
-        }
-
-        .timer{
-            font-size:72px;
-            font-weight:800;
-            margin:18px 0 6px;
-            text-align:center;
-        }
-
-        .clickable-timer{
-            cursor:pointer;
-            user-select:none;
-            color:#f8fafc;
-            text-shadow:0 4px 12px rgba(0,0,0,.4);
-        }
-
-        .clickable-timer:hover{
-            transform:scale(1.02);
-            transition:0.2s ease;
-            opacity:0.95;
         }
 
         #question,
@@ -320,7 +309,6 @@
             h1{font-size:40px!important}
             .round-title{font-size:28px}
             #question,#outputQuestion{font-size:22px}
-            .timer{font-size:50px}
             button{font-size:15px;padding:10px 14px}
             .hero-title{font-size:42px}
             .hero-tagline{font-size:22px}
@@ -352,7 +340,7 @@
         <h2>Please read the rules carefully</h2>
         <div id="rulesText" style="font-size:24px;line-height:2;max-width:900px;margin:28px auto;text-align:left;padding:24px;border-radius:18px;background:rgba(255,255,255,.12);"></div>
         <div class="btn-row">
-            <button onclick="showSlide('intro')">⬅ Back</button>
+            <button onclick="goBack()">⬅ Back</button>
             <button onclick="showSlide('example')">Next ➜</button>
         </div>
     </div>
@@ -367,7 +355,7 @@
         <button onclick="showExample()">Show Answer</button>
         <div id="exampleAns"></div>
         <div class="btn-row">
-            <button onclick="showSlide('rules')">⬅ Back</button>
+            <button onclick="goBack()">⬅ Back</button>
             <button onclick="startRound1()">Start Game</button>
         </div>
     </div>
@@ -375,11 +363,11 @@
     <!-- PUZZLE ROUND -->
     <div id="round1" class="hidden">
         <h2 id="question"></h2>
-        <div class="timer clickable-timer" id="timer" onclick="toggleTimer('main')">Click to Start Timer</div>
+        <button class="small-timer-btn" id="timer" onclick="toggleTimer('main')">Start Timer</button>
         <div class="btn-row">
             <button onclick="showAnswer()">Show Answer</button>
             <button onclick="nextQuestion()">Next</button>
-            <button onclick="showSlide('rules')">⬅ Back</button>
+            <button onclick="goBack()">⬅ Back</button>
         </div>
         <div id="answer"></div>
     </div>
@@ -397,12 +385,12 @@
             </div>
         </div>
 
-        <div class="timer clickable-timer" id="techTimer" onclick="toggleTimer('tech')">Click to Start Timer</div>
+        <button class="small-timer-btn" id="techTimer" onclick="toggleTimer('tech')">Start Timer</button>
 
         <div class="btn-row">
             <button onclick="showTechAnswer()">Show Answer</button>
             <button onclick="nextTechQuestion()">Next</button>
-            <button onclick="showSlide('round1')">⬅ Back</button>
+            <button onclick="goBack()">⬅ Back</button>
         </div>
 
         <div id="techAnswer"></div>
@@ -413,11 +401,11 @@
         <div class="round-title">💻 PROGRAM OUTPUT ROUND</div>
         <div class="sub-title">10 Questions</div>
         <h2 id="outputQuestion"></h2>
-        <div class="timer clickable-timer" id="outputTimer" onclick="toggleTimer('output')">Click to Start Timer</div>
+        <button class="small-timer-btn" id="outputTimer" onclick="toggleTimer('output')">Start Timer</button>
         <div class="btn-row">
             <button onclick="showOutputAnswer()">Show Answer</button>
             <button onclick="nextOutputQuestion()">Next</button>
-            <button onclick="showSlide('techRound')">⬅ Back</button>
+            <button onclick="goBack()">⬅ Back</button>
         </div>
         <div id="outputAnswer"></div>
     </div>
@@ -449,6 +437,9 @@ let timeLeft = 20;
 let techTimeLeft = 20;
 let outputTimeLeft = 20;
 
+let currentSlide = 'intro';
+let previousSlide = 'intro';
+
 function speak(text){
     if(!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
@@ -461,6 +452,11 @@ function speak(text){
 
 function showSlide(id){
     const pages = ['intro','rules','example','round1','techRound','outputRound','thankYou'];
+
+    if(currentSlide !== id){
+        previousSlide = currentSlide;
+    }
+    currentSlide = id;
 
     for(let i=0;i<pages.length;i++){
         const el = document.getElementById(pages[i]);
@@ -478,6 +474,10 @@ function showSlide(id){
         showRules();
         speak('Please read the rules carefully.');
     }
+}
+
+function goBack(){
+    showSlide(previousSlide);
 }
 
 function startGame(){
@@ -574,17 +574,17 @@ function resetTimer(type){
 
     if(type === 'main'){
         timeLeft = 20;
-        document.getElementById('timer').innerText = 'Click to Start Timer';
+        document.getElementById('timer').innerText = 'Start Timer';
     }
 
     if(type === 'tech'){
         techTimeLeft = 20;
-        document.getElementById('techTimer').innerText = 'Click to Start Timer';
+        document.getElementById('techTimer').innerText = 'Start Timer';
     }
 
     if(type === 'output'){
         outputTimeLeft = 20;
-        document.getElementById('outputTimer').innerText = 'Click to Start Timer';
+        document.getElementById('outputTimer').innerText = 'Start Timer';
     }
 }
 
@@ -592,7 +592,7 @@ function toggleTimer(type){
     if(type === 'main'){
         if(timerInt){
             stopTimer('main');
-            document.getElementById('timer').innerText = 'Click to Start Timer';
+            document.getElementById('timer').innerText = 'Start Timer';
         } else {
             startTimer('main');
         }
@@ -601,7 +601,7 @@ function toggleTimer(type){
     if(type === 'tech'){
         if(techTimerInt){
             stopTimer('tech');
-            document.getElementById('techTimer').innerText = 'Click to Start Timer';
+            document.getElementById('techTimer').innerText = 'Start Timer';
         } else {
             startTimer('tech');
         }
@@ -610,7 +610,7 @@ function toggleTimer(type){
     if(type === 'output'){
         if(outputTimerInt){
             stopTimer('output');
-            document.getElementById('outputTimer').innerText = 'Click to Start Timer';
+            document.getElementById('outputTimer').innerText = 'Start Timer';
         } else {
             startTimer('output');
         }
@@ -739,8 +739,6 @@ function loadTechQuestion(){
 
     const q = techQuestions[techIndex];
 
-    document.getElementById('techCounter').innerText = techIndex + 1;
-    document.getElementById('techTotal').innerText = techQuestions.length;
     document.getElementById('techQuestionText').innerText = q.question;
     document.getElementById('techTable').innerHTML = q.tableHtml;
 
