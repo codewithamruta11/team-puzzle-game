@@ -54,10 +54,26 @@ button:hover{
     margin-bottom:16px;
 }
 .timer{
-    font-size:72px;
-    font-weight:800;
+    font-size:96px;
+    font-weight:900;
     margin:18px 0 6px;
     text-align:center;
+    line-height:1;
+}
+.timer-icon-btn{
+    width:62px;
+    height:62px;
+    border-radius:50%;
+    padding:0;
+    font-size:28px;
+    font-weight:900;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#22c55e,#16a34a);
+}
+.timer-icon-btn.running{
+    background:linear-gradient(135deg,#f59e0b,#d97706);
 }
 #question{
     font-size:38px;
@@ -278,8 +294,9 @@ button:hover{
     h1{font-size:40px!important}
     .round-title{font-size:28px}
     #question{font-size:22px}
-    .timer{font-size:50px}
+    .timer{font-size:64px}
     button{font-size:15px;padding:10px 14px}
+    .timer-icon-btn{width:52px;height:52px;font-size:22px}
     .hero-title{font-size:42px}
     .hero-tagline{font-size:22px}
     .answer-text{font-size:28px}
@@ -335,6 +352,8 @@ button:hover{
     <div id="round1" class="hidden">
         <h2 id="question"></h2>
         <div class="timer" id="timerDisplay">20</div>
+        <button id="timerStartBtn" class="timer-icon-btn" onclick="startTimerButton()">▶</button>
+
         <div class="btn-row">
             <button onclick="showAnswer()">Show Answer</button>
             <button onclick="nextQuestion()">Next</button>
@@ -378,14 +397,7 @@ button:hover{
 
     <!-- THANK YOU -->
     <div id="thankYou" class="hidden">
-        <h1 style="font-size:64px;margin:0 0 10px;">🎉 THANK YOU 🎉</h1>
-        <h2>Thank you for participating in the game</h2>
-        <p style="font-size:28px;line-height:1.8;max-width:900px;margin:0 auto;">
-            We hope you enjoyed the challenge.<br>
-            Your presence and participation made this event special.<br>
-            See you again in the next fun session!
-        </p>
-        <h3 style="font-size:32px;margin-top:18px;">👏 Thank you for your participation and support! 👏</h3>
+        <h1 style="font-size:72px;margin:40px 0;">Thank you</h1>
     </div>
 
 </div>
@@ -509,7 +521,6 @@ function loadRound1Question(){
 
     document.getElementById('answer').innerHTML = '';
     resetTimer();
-    startTimer();
 }
 
 function nextQuestion(){
@@ -530,10 +541,25 @@ function resetTimer(){
     stopTimer();
     timeLeft = 20;
     document.getElementById('timerDisplay').innerText = timeLeft;
+
+    const btn = document.getElementById('timerStartBtn');
+    if(btn){
+        btn.innerText = '▶';
+        btn.classList.remove('running');
+    }
 }
 
-function startTimer(){
-    if(timerInt) return;
+function startTimerButton(){
+    stopTimer();
+
+    timeLeft = 20;
+    document.getElementById('timerDisplay').innerText = timeLeft;
+
+    const btn = document.getElementById('timerStartBtn');
+    if(btn){
+        btn.innerText = '⏳';
+        btn.classList.add('running');
+    }
 
     timerInt = setInterval(function(){
         timeLeft--;
@@ -541,6 +567,13 @@ function startTimer(){
 
         if(timeLeft <= 0){
             stopTimer();
+            document.getElementById('timerDisplay').innerText = '0';
+
+            if(btn){
+                btn.innerText = '▶';
+                btn.classList.remove('running');
+            }
+
             alert('⏰ Time is up!');
         }
     },1000);
