@@ -288,6 +288,17 @@
             margin-bottom:12px;
         }
 
+        .tech-intro-box{
+            max-width:900px;
+            margin:24px auto;
+            padding:26px;
+            border-radius:18px;
+            background:rgba(255,255,255,.12);
+            font-size:24px;
+            line-height:1.8;
+            text-align:center;
+        }
+
         @keyframes gradientMove{
             0%{background-position:0%}
             50%{background-position:100%}
@@ -338,6 +349,10 @@
                 width:52px;
                 height:52px;
                 font-size:22px;
+            }
+            .tech-intro-box{
+                font-size:20px;
+                padding:20px;
             }
         }
     </style>
@@ -397,6 +412,19 @@
         <div id="answer"></div>
     </div>
 
+    <!-- TECH INTRO SLIDE -->
+    <div id="techIntro" class="hidden">
+        <div class="round-title">⚙️ TECHNICAL ROUND</div>
+        <div class="tech-intro-box">
+            Now the Technical Round will begin.<br>
+            Click below to start the technical questions.
+        </div>
+        <div class="btn-row">
+            <button onclick="startTechnicalRound()">Start Technical Round</button>
+            <button onclick="goBack()">⬅ Back</button>
+        </div>
+    </div>
+
     <!-- TECH ROUND -->
     <div id="techRound" class="hidden">
         <div class="tech-layout">
@@ -410,13 +438,10 @@
             </div>
         </div>
 
-        <div class="timer" id="techTimerDisplay">20</div>
-        <button class="timer-btn" id="techTimer" onclick="toggleTimer('tech')">▶</button>
-
         <div class="btn-row">
             <button onclick="showTechAnswer()">Show Answer</button>
             <button onclick="nextTechQuestion()">Next</button>
-            <button onclick="goBack()">⬅ Back</button>
+            <button onclick="showSlide('techIntro')">⬅ Back</button>
         </div>
 
         <div id="techAnswer"></div>
@@ -457,11 +482,9 @@ let techIndex = 0;
 let outputIndex = 0;
 
 let timerInt = null;
-let techTimerInt = null;
 let outputTimerInt = null;
 
 let timeLeft = 20;
-let techTimeLeft = 20;
 let outputTimeLeft = 20;
 
 let currentSlide = 'intro';
@@ -478,7 +501,7 @@ function speak(text){
 }
 
 function showSlide(id){
-    const pages = ['intro','rules','example','round1','techRound','outputRound','thankYou'];
+    const pages = ['intro','rules','example','round1','techIntro','techRound','outputRound','thankYou'];
 
     if(currentSlide !== id){
         previousSlide = currentSlide;
@@ -494,7 +517,6 @@ function showSlide(id){
     if(active) active.classList.remove('hidden');
 
     stopTimer('main');
-    stopTimer('tech');
     stopTimer('output');
 
     if(id === 'rules'){
@@ -580,8 +602,7 @@ function startRound1(){
 
 function loadRound1Question(){
     if(round1Index >= round1Questions.length){
-        showSlide('techRound');
-        loadTechQuestion();
+        showSlide('techIntro');
         return;
     }
 
@@ -606,13 +627,6 @@ function resetTimer(type){
         document.getElementById('timer').classList.remove('stop');
     }
 
-    if(type === 'tech'){
-        techTimeLeft = 20;
-        document.getElementById('techTimerDisplay').innerText = techTimeLeft;
-        document.getElementById('techTimer').innerText = '▶';
-        document.getElementById('techTimer').classList.remove('stop');
-    }
-
     if(type === 'output'){
         outputTimeLeft = 20;
         document.getElementById('outputTimerDisplay').innerText = outputTimeLeft;
@@ -630,17 +644,6 @@ function toggleTimer(type){
         } else {
             if(timeLeft <= 0) timeLeft = 20;
             startTimer('main');
-        }
-    }
-
-    if(type === 'tech'){
-        if(techTimerInt){
-            stopTimer('tech');
-            document.getElementById('techTimer').innerText = '▶';
-            document.getElementById('techTimer').classList.remove('stop');
-        } else {
-            if(techTimeLeft <= 0) techTimeLeft = 20;
-            startTimer('tech');
         }
     }
 
@@ -677,26 +680,6 @@ function startTimer(type){
         },1000);
     }
 
-    if(type === 'tech'){
-        if(techTimerInt) return;
-
-        document.getElementById('techTimer').innerText = '⏸';
-        document.getElementById('techTimer').classList.add('stop');
-
-        techTimerInt = setInterval(function(){
-            techTimeLeft--;
-            document.getElementById('techTimerDisplay').innerText = techTimeLeft;
-
-            if(techTimeLeft <= 0){
-                stopTimer('tech');
-                document.getElementById('techTimerDisplay').innerText = '0';
-                document.getElementById('techTimer').innerText = '▶';
-                document.getElementById('techTimer').classList.remove('stop');
-                techTimeLeft = 20;
-            }
-        },1000);
-    }
-
     if(type === 'output'){
         if(outputTimerInt) return;
 
@@ -724,11 +707,6 @@ function stopTimer(type){
         timerInt = null;
     }
 
-    if(type === 'tech' && techTimerInt){
-        clearInterval(techTimerInt);
-        techTimerInt = null;
-    }
-
     if(type === 'output' && outputTimerInt){
         clearInterval(outputTimerInt);
         outputTimerInt = null;
@@ -740,6 +718,12 @@ function showAnswer(){
     document.getElementById('answer').innerHTML =
         '<div class="answer-box"><div class="answer-text">' + q.a + '</div></div>';
     speak(q.a);
+}
+
+function startTechnicalRound(){
+    techIndex = 0;
+    showSlide('techRound');
+    loadTechQuestion();
 }
 
 const techQuestions = [
@@ -800,7 +784,6 @@ function loadTechQuestion(){
 
     document.getElementById('techOptions').innerHTML = optHtml;
     document.getElementById('techAnswer').innerHTML = '';
-    resetTimer('tech');
 }
 
 function nextTechQuestion(){
