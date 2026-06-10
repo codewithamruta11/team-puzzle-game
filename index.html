@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content=" the Mystery</title><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Unlock the Mystery</title>
 
 <style>
 *{
@@ -266,21 +267,6 @@ button:hover{
     color:#f8fafc;
     text-align:left;
     max-width:860px;
-}
-
-/* Rules */
-.rule-card-title{
-    font-size:34px;
-    font-weight:900;
-    margin-bottom:8px;
-    text-align:center;
-}
-
-.rule-card-subtitle{
-    font-size:18px;
-    color:rgba(255,255,255,.82);
-    text-align:center;
-    margin-bottom:22px;
 }
 
 /* Technical round */
@@ -558,15 +544,87 @@ let round1Index = 0;
 let techIndex = 0;
 let timerInt = null;
 let timeLeft = 20;
+let currentSpeech = null;
+
+/* Improved speech function */
+function cleanSpeechText(text){
+    return String(text)
+        .replace(/😄/g, '')
+        .replace(/✅/g, '')
+        .replace(/🏆/g, '')
+        .replace(/⚡/g, '')
+        .replace(/⏱️/g, '')
+        .replace(/📖/g, '')
+        .replace(/📋/g, '')
+        .replace(/➜/g, '')
+        .trim();
+}
 
 function speak(text){
     if(!('speechSynthesis' in window)) return;
+
+    const speechText = cleanSpeechText(text);
+
     window.speechSynthesis.cancel();
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.rate = 0.85;
-    utter.pitch = 1;
-    utter.volume = 1;
-    window.speechSynthesis.speak(utter);
+
+    setTimeout(function(){
+        currentSpeech = new SpeechSynthesisUtterance(speechText);
+
+        currentSpeech.lang = 'en-US';
+        currentSpeech.rate = 0.62;
+        currentSpeech.pitch = 1;
+        currentSpeech.volume = 1;
+
+        const voices = window.speechSynthesis.getVoices();
+
+        if(voices && voices.length > 0){
+            const englishVoice =
+                voices.find(v => v.lang === 'en-US') ||
+                voices.find(v => v.lang === 'en-GB') ||
+                voices.find(v => v.lang.startsWith('en')) ||
+                voices[0];
+
+            currentSpeech.voice = englishVoice;
+        }
+
+        window.speechSynthesis.speak(currentSpeech);
+    }, 300);
+}
+
+if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged = function(){
+        window.speechSynthesis.getVoices();
+    };
+}
+
+function speakAnswer(answer){
+    let text = String(answer);
+
+    if(text === 'THE NUMBER 8'){
+        text = 'The number eight';
+    }
+
+    if(text === 'C) 5'){
+        text = 'Option C, five';
+    }
+
+    if(text === 'A) RN=4, R=4, DR=2'){
+        text = 'Option A. R N equals 4, Rank equals 4, Dense Rank equals 2';
+    }
+
+    if(text === 'A) 2, 0, NULL, NULL'){
+        text = 'Option A. 2, 0, null, null';
+    }
+
+    if(text === 'B) [2, 2, 2]'){
+        text = 'Option B. 2, 2, 2';
+    }
+
+    if(text === 'C) True False'){
+        text = 'Option C. True, False';
+    }
+
+    speak(text);
 }
 
 function showSlide(id){
@@ -669,7 +727,6 @@ function createAnswerImage(type, label){
             <line x1="62" y1="62" x2="178" y2="62" stroke="#f8fafc" stroke-width="10" stroke-linecap="round"/>
             <circle cx="62" cy="62" r="8" fill="#f8fafc"/>
             <circle cx="178" cy="62" r="8" fill="#f8fafc"/>
-
             <path d="M78 70 
                      Q82 62 92 70 
                      Q102 78 112 70 
@@ -681,11 +738,9 @@ function createAnswerImage(type, label){
                      Q96 194 74 184
                      Z" 
                   fill="#60a5fa"/>
-
             <path d="M94 86 L94 174" stroke="#bfdbfe" stroke-width="7" stroke-linecap="round"/>
             <path d="M122 84 L122 178" stroke="#bfdbfe" stroke-width="7" stroke-linecap="round"/>
             <path d="M150 86 L150 170" stroke="#bfdbfe" stroke-width="7" stroke-linecap="round"/>
-
             <path d="M78 142 Q120 160 166 142" fill="none" stroke="#dbeafe" stroke-width="8" stroke-linecap="round"/>
         `,
         bottle: `
@@ -841,135 +896,35 @@ function showExample(){
         '<div class="answer-text">MAP</div>' +
         '</div>';
 
-    speak('Map');
+    speakAnswer('MAP');
 }
 
 const round1Questions = [
-    {
-        q:'I have many keys but open no locks. What am I?',
-        a:'KEYBOARD',
-        img:'keyboard'
-    },
-    {
-        q:'I have hands but cannot clap. What am I?',
-        a:'CLOCK',
-        img:'clock'
-    },
-    {
-        q:'I go up but never come down. What am I?',
-        a:'AGE',
-        img:'age'
-    },
-    {
-        q:'Turn me on my side, and I am everything. Cut me in half, and I am nothing. What am I?',
-        a:'THE NUMBER 8',
-        img:'number8'
-    },
-    {
-        q:'I am full of holes but can still hold water. What am I?',
-        a:'SPONGE',
-        img:'sponge'
-    },
-    {
-        q:'What has one eye but cannot see?',
-        a:'NEEDLE',
-        img:'needle'
-    },
-    {
-        q:'What gets wetter the more it dries?',
-        a:'TOWEL',
-        img:'towel'
-    },
-    {
-        q:'What has a neck but no head?',
-        a:'BOTTLE',
-        img:'bottle'
-    },
-    {
-        q:'What has teeth but cannot bite?',
-        a:'COMB',
-        img:'comb'
-    },
-    {
-        q:'What comes down but never goes up?',
-        a:'RAIN',
-        img:'rain'
-    },
-    {
-        q:'I repeat the same work again,\nTill logic says I should refrain.',
-        a:'LOOP',
-        img:'loop'
-    },
-    {
-        q:'I find mistakes hidden in code,\nAnd lighten the developer’s load.',
-        a:'DEBUGGER',
-        img:'debugger'
-    },
-    {
-        q:'I connect millions of computers but cannot shake hands. What am I?',
-        a:'INTERNET',
-        img:'internet'
-    },
-    {
-        q:'I store memories but have no brain. What am I?',
-        a:'HARD DRIVE',
-        img:'harddrive'
-    },
-    {
-        q:'The more of me you delete, the faster things often become. What am I?',
-        a:'CACHE',
-        img:'cache'
-    },
-    {
-        q:'I protect your account, but people often forget me. What am I?',
-        a:'PASSWORD',
-        img:'password'
-    },
-    {
-        q:'I live in the cloud but never get wet. What am I?',
-        a:'CLOUD STORAGE',
-        img:'cloud'
-    },
-    {
-        q:'I define goals for every team,\nSuccess begins within my theme.',
-        a:'TARGET',
-        img:'target'
-    },
-    {
-        q:'I can run thousands of applications but never move an inch. What am I?',
-        a:'SERVER',
-        img:'server'
-    },
-    {
-        q:'I come once a year with hope and cheer,\nEmployees wait for me throughout the year.',
-        a:'APPRAISAL',
-        img:'appraisal'
-    },
-    {
-        q:'I decide your quick-thinking pace,\nIn your game I rule the race.',
-        a:'TIMER',
-        img:'timer'
-    },
-    {
-        q:'Palaces fill my streets.\nCamels are not far away.\nMy color made me famous.\nWho am I?',
-        a:'JAIPUR',
-        img:'jaipur'
-    },
-    {
-        q:'A room with no door and no wall,\nStill people love me after all.',
-        a:'MUSHROOM',
-        img:'mushroom'
-    },
-    {
-        q:'I shine by night, disappear by noon,\nSilent beauty in the sky soon.',
-        a:'MOON',
-        img:'moon'
-    },
-    {
-        q:'I judge your progress through the year,\nManagers review me with care.',
-        a:'PERFORMANCE',
-        img:'performance'
-    }
+    {q:'I have many keys but open no locks. What am I?', a:'KEYBOARD', img:'keyboard'},
+    {q:'I have hands but cannot clap. What am I?', a:'CLOCK', img:'clock'},
+    {q:'I go up but never come down. What am I?', a:'AGE', img:'age'},
+    {q:'Turn me on my side, and I am everything. Cut me in half, and I am nothing. What am I?', a:'THE NUMBER 8', img:'number8'},
+    {q:'I am full of holes but can still hold water. What am I?', a:'SPONGE', img:'sponge'},
+    {q:'What has one eye but cannot see?', a:'NEEDLE', img:'needle'},
+    {q:'What gets wetter the more it dries?', a:'TOWEL', img:'towel'},
+    {q:'What has a neck but no head?', a:'BOTTLE', img:'bottle'},
+    {q:'What has teeth but cannot bite?', a:'COMB', img:'comb'},
+    {q:'What comes down but never goes up?', a:'RAIN', img:'rain'},
+    {q:'I repeat the same work again,\nTill logic says I should refrain.', a:'LOOP', img:'loop'},
+    {q:'I find mistakes hidden in code,\nAnd lighten the developer’s load.', a:'DEBUGGER', img:'debugger'},
+    {q:'I connect millions of computers but cannot shake hands. What am I?', a:'INTERNET', img:'internet'},
+    {q:'I store memories but have no brain. What am I?', a:'HARD DRIVE', img:'harddrive'},
+    {q:'The more of me you delete, the faster things often become. What am I?', a:'CACHE', img:'cache'},
+    {q:'I protect your account, but people often forget me. What am I?', a:'PASSWORD', img:'password'},
+    {q:'I live in the cloud but never get wet. What am I?', a:'CLOUD STORAGE', img:'cloud'},
+    {q:'I define goals for every team,\nSuccess begins within my theme.', a:'TARGET', img:'target'},
+    {q:'I can run thousands of applications but never move an inch. What am I?', a:'SERVER', img:'server'},
+    {q:'I come once a year with hope and cheer,\nEmployees wait for me throughout the year.', a:'APPRAISAL', img:'appraisal'},
+    {q:'I decide your quick-thinking pace,\nIn your game I rule the race.', a:'TIMER', img:'timer'},
+    {q:'Palaces fill my streets.\nCamels are not far away.\nMy color made me famous.\nWho am I?', a:'JAIPUR', img:'jaipur'},
+    {q:'A room with no door and no wall,\nStill people love me after all.', a:'MUSHROOM', img:'mushroom'},
+    {q:'I shine by night, disappear by noon,\nSilent beauty in the sky soon.', a:'MOON', img:'moon'},
+    {q:'I judge your progress through the year,\nManagers review me with care.', a:'PERFORMANCE', img:'performance'}
 ];
 
 function startRound1(){
@@ -1092,7 +1047,7 @@ function showAnswer(){
         '<div class="answer-text">' + q.a + '</div>' +
         '</div>';
 
-    speak(q.a);
+    speakAnswer(q.a);
 }
 
 const techQuestions = [
@@ -1286,7 +1241,7 @@ function showTechAnswer(){
         q.explanation +
         '</div></div>';
 
-    speak(q.answer);
+    speakAnswer(q.answer);
 }
 </script>
 </body>
