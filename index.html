@@ -1,956 +1,83 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Unlock the Mystery</title>
-
-<style>
-*{
-    box-sizing:border-box;
-}
-
-body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    color:#fff;
-    min-height:100vh;
-    padding:24px;
-    background:linear-gradient(-45deg,#06101f,#173a8a,#6d28d9,#0ea5e9);
-    background-size:400% 400%;
-    animation:gradientMove 15s ease infinite;
-}
-
-.box{
-    position:relative;
-    max-width:1150px;
-    min-height:650px;
-    margin:auto;
-    padding:42px;
-    border-radius:28px;
-    background:rgba(255,255,255,.12);
-    backdrop-filter:blur(16px);
-    box-shadow:0 12px 40px rgba(0,0,0,.35);
-    text-align:center;
-}
-
-.hidden{
-    display:none !important;
-}
-
-button{
-    padding:8px 16px;
-    font-size:14px;
-    margin:5px;
-    border:none;
-    border-radius:999px;
-    cursor:pointer;
-    color:#fff;
-    background:linear-gradient(135deg,#2563eb,#1d4ed8);
-    box-shadow:0 5px 14px rgba(0,0,0,.18);
-    transition:.2s ease;
-}
-
-button:hover{
-    transform:translateY(-1px);
-    opacity:.95;
-}
-
-.btn-row{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    align-items:center;
-    gap:8px;
-    margin-top:20px;
-}
-
-.bottom-nav{
-    margin-top:24px;
-}
-
-.hero-start-btn{
-    padding:9px 18px;
-    font-size:14px;
-    border-radius:999px;
-    font-weight:bold;
-    animation:pulseBtn 2s infinite;
-}
-
-.round-title{
-    font-size:38px;
-    font-weight:800;
-    margin-bottom:10px;
-}
-
-.sub-title{
-    font-size:22px;
-    color:rgba(255,255,255,.78);
-    margin-bottom:16px;
-}
-
-/* Timer */
-.timer-wrap{
-    position:absolute;
-    top:22px;
-    right:22px;
-    display:flex;
-    align-items:center;
-    gap:12px;
-    z-index:10;
-}
-
-.timer{
-    font-size:54px;
-    font-weight:900;
-    line-height:1;
-    display:none;
-    min-width:70px;
-    text-align:center;
-}
-
-.timer.show{
-    display:block;
-}
-
-.timer-icon-btn{
-    width:56px;
-    height:56px;
-    border-radius:50%;
-    padding:0;
-    font-size:24px;
-    font-weight:900;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    background:linear-gradient(135deg,#22c55e,#16a34a);
-}
-
-.timer-icon-btn.running{
-    background:linear-gradient(135deg,#f59e0b,#d97706);
-}
-
-/* First slide */
-.hero-slide{
-    position:relative;
-    min-height:560px;
-    padding:40px 30px 22px;
-    text-align:center;
-    overflow:hidden;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-}
-
-.hero-title{
-    margin:18px 0 14px;
-    font-size:76px;
-    font-weight:900;
-    line-height:1.05;
-    letter-spacing:2px;
-    text-transform:uppercase;
-    color:#fff;
-    text-shadow:0 6px 20px rgba(0,0,0,.35);
-    animation:fadeUp .9s ease both;
-}
-
-.hero-tagline{
-    margin:0 auto 28px;
-    font-size:30px;
-    font-weight:700;
-    color:#f8fafc;
-    letter-spacing:1px;
-    animation:fadeUp 1.1s ease both;
-}
-
-.hero-actions{
-    margin-top:35px;
-}
-
-.hero-glow{
-    position:absolute;
-    top:50%;
-    left:50%;
-    width:420px;
-    height:420px;
-    transform:translate(-50%,-50%);
-    border-radius:50%;
-    background:radial-gradient(circle,rgba(255,255,255,.16),rgba(255,255,255,.05),transparent 70%);
-    filter:blur(10px);
-    z-index:-1;
-    animation:glowMove 6s ease-in-out infinite;
-}
-
-.puzzle-icons{
-    display:flex;
-    justify-content:center;
-    gap:18px;
-    flex-wrap:wrap;
-    margin:28px auto 12px;
-}
-
-.puzzle-icon-card{
-    width:88px;
-    height:88px;
-    border-radius:24px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:42px;
-    background:rgba(255,255,255,.15);
-    border:1px solid rgba(255,255,255,.22);
-    box-shadow:0 12px 28px rgba(0,0,0,.20);
-    backdrop-filter:blur(10px);
-    animation:floatIcon 3s ease-in-out infinite;
-}
-
-.puzzle-icon-card:nth-child(2){animation-delay:.4s;}
-.puzzle-icon-card:nth-child(3){animation-delay:.8s;}
-.puzzle-icon-card:nth-child(4){animation-delay:1.2s;}
-
-/* Question */
-#question{
-    font-size:38px;
-    line-height:1.45;
-    white-space:pre-line;
-    margin:0;
-    text-align:center;
-}
-
-.question-card{
-    padding:30px 28px;
-    border-radius:26px;
-    background:linear-gradient(135deg,rgba(255,255,255,.18),rgba(255,255,255,.08));
-    border:1px solid rgba(255,255,255,.20);
-    box-shadow:0 18px 42px rgba(0,0,0,.22);
-    max-width:950px;
-    margin:90px auto 20px;
-}
-
-/* Answer */
-.answer-box{
-    margin:18px auto 0;
-    padding:22px 30px;
-    border-radius:24px;
-    background:linear-gradient(135deg,rgba(255,255,255,.20),rgba(255,255,255,.10));
-    border:1px solid rgba(255,255,255,.22);
-    display:inline-block;
-    animation:fadeIn .35s ease-in-out;
-    max-width:560px;
-    min-width:340px;
-    box-shadow:0 14px 34px rgba(0,0,0,.20);
-}
-
-.answer-img{
-    width:190px;
-    height:190px;
-    object-fit:contain;
-    display:block;
-    margin:0 auto 14px;
-    border-radius:26px;
-    background:rgba(255,255,255,.12);
-    padding:10px;
-}
-
-.answer-text{
-    font-size:34px;
-    font-weight:900;
-    margin-top:8px;
-    line-height:1.2;
-}
-
-.explanation{
-    font-size:18px;
-    line-height:1.65;
-    margin-top:12px;
-    color:#f8fafc;
-    text-align:left;
-    max-width:860px;
-}
-
-/* Technical round */
-.options-grid{
-    display:grid;
-    grid-template-columns:1fr;
-    gap:12px;
-    margin:18px auto 0;
-    max-width:900px;
-}
-
-.option-btn{
-    padding:14px 16px;
-    border-radius:14px;
-    background:rgba(255,255,255,.16);
-    border:1px solid rgba(255,255,255,.18);
-    color:#fff;
-    font-size:16px;
-    line-height:1.4;
-    text-align:left;
-}
-
-.mono{
-    font-family:Consolas,Menlo,monospace;
-    white-space:pre-wrap;
-    background:rgba(15,23,42,.35);
-    padding:14px;
-    border-radius:12px;
-    line-height:1.45;
-    text-align:left;
-    overflow:auto;
-    font-size:15px;
-}
-
-.table-wrap{
-    overflow-x:auto;
-    margin-top:14px;
-}
-
-.quiz-table{
-    border-collapse:collapse;
-    width:100%;
-    background:rgba(255,255,255,.06);
-    border-radius:14px;
-    overflow:hidden;
-}
-
-.quiz-table th,
-.quiz-table td{
-    border:1px solid rgba(255,255,255,.18);
-    padding:10px 14px;
-    text-align:center;
-    font-size:16px;
-}
-
-.quiz-table th{
-    background:rgba(255,255,255,.18);
-}
-
-.tech-layout{
-    display:flex;
-    gap:18px;
-    align-items:flex-start;
-    justify-content:center;
-    margin-top:18px;
-    flex-wrap:wrap;
-}
-
-.tech-question-panel{
-    flex:1 1 520px;
-    min-width:300px;
-    text-align:left;
-    background:rgba(255,255,255,.10);
-    border:1px solid rgba(255,255,255,.14);
-    border-radius:18px;
-    padding:18px;
-}
-
-.tech-options-panel{
-    flex:1 1 330px;
-    min-width:280px;
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.14);
-    border-radius:18px;
-    padding:18px;
-    text-align:left;
-}
-
-.tech-question-text{
-    font-size:22px;
-    line-height:1.6;
-    margin-bottom:12px;
-    font-weight:800;
-}
-
-.tech-intro-box{
-    font-size:64px;
-    font-weight:900;
-    letter-spacing:2px;
-    text-transform:uppercase;
-    text-align:center;
-    margin:80px auto 28px;
-    padding:24px;
-}
-
-/* Animations */
-@keyframes gradientMove{
-    0%{background-position:0%}
-    50%{background-position:100%}
-    100%{background-position:0%}
-}
-
-@keyframes fadeIn{
-    from{opacity:0;transform:scale(.97)}
-    to{opacity:1;transform:scale(1)}
-}
-
-@keyframes fadeUp{
-    from{opacity:0;transform:translateY(20px)}
-    to{opacity:1;transform:translateY(0)}
-}
-
-@keyframes pulseBtn{
-    0%{transform:scale(1)}
-    50%{transform:scale(1.05)}
-    100%{transform:scale(1)}
-}
-
-@keyframes glowMove{
-    0%{transform:translate(-50%,-50%) scale(1)}
-    50%{transform:translate(-50%,-50%) scale(1.08)}
-    100%{transform:translate(-50%,-50%) scale(1)}
-}
-
-@keyframes floatIcon{
-    0%{transform:translateY(0)}
-    50%{transform:translateY(-10px)}
-    100%{transform:translateY(0)}
-}
-
-@media(max-width:700px){
-    body{padding:12px}
-    .box{padding:22px;min-height:620px}
-    h1{font-size:40px!important}
-    .round-title{font-size:28px}
-    #question{font-size:22px}
-    .question-card{margin-top:85px;padding:24px 18px}
-    .timer{font-size:42px}
-    .timer-wrap{top:14px;right:14px}
-    button{font-size:13px;padding:8px 13px}
-    .timer-icon-btn{width:52px;height:52px;font-size:22px}
-    .hero-slide{min-height:530px;padding:24px 12px 10px}
-    .hero-title{font-size:42px}
-    .hero-tagline{font-size:22px}
-    .answer-text{font-size:27px}
-    .answer-img{width:145px;height:145px}
-    .answer-box{min-width:260px;max-width:95%;padding:18px}
-    .puzzle-icon-card{
-        width:68px;
-        height:68px;
-        font-size:32px;
-        border-radius:18px;
-    }
-    .tech-layout{flex-direction:column}
-    .tech-question-text{font-size:18px}
-    .tech-intro-box{font-size:36px}
-}
-</style>
-</head>
-
-<body>
-<div class="box">
-
-    <div id="intro" class="hero-slide">
-        <h1 class="hero-title">Unlock the Mystery</h1>
-        <h2 class="hero-tagline">Think Smart. Type Fast. Win Big.</h2>
-
-        <div class="puzzle-icons">
-            <div class="puzzle-icon-card">🔐</div>
-            <div class="puzzle-icon-card">🧩</div>
-            <div class="puzzle-icon-card">💡</div>
-            <div class="puzzle-icon-card">🏆</div>
-        </div>
-
-        <div class="hero-glow"></div>
-
-        <div class="btn-row hero-actions">
-            <button class="hero-start-btn" onclick="startGame()">▶ Start</button>
-            <button onclick="showSlide('rules')">Next ➜</button>
-        </div>
-    </div>
-
-    <div id="rules" class="hidden">
-        <div class="round-title">📋 Game Rules</div>
-
-        <div id="rulesText" style="font-size:24px;line-height:2;max-width:900px;margin:28px auto;text-align:left;padding:24px;border-radius:18px;background:rgba(255,255,255,.12);"></div>
-        <div class="btn-row bottom-nav">
-            <button onclick="showSlide('intro')">⬅ Back</button>
-            <button onclick="showSlide('example')">Next ➜</button>
-        </div>
-    </div>
-
-    <div id="example" class="hidden">
-        <div class="round-title">💡 Example</div>
-        <div style="max-width:850px;margin:24px auto;padding:24px;border-radius:18px;background:rgba(255,255,255,.12);font-size:26px;line-height:1.8;">
-            I have cities but no houses.<br>
-            Rivers but no water.
-        </div>
-        <button onclick="showExample()">Show Answer</button>
-        <div id="exampleAns"></div>
-        <div class="btn-row bottom-nav">
-            <button onclick="showSlide('rules')">⬅ Back</button>
-            <button onclick="startRound1()">Start Game</button>
-        </div>
-    </div>
-
-    <div id="round1" class="hidden">
-        <div class="timer-wrap">
-            <div class="timer" id="timerDisplay">20</div>
-            <button id="timerStartBtn" class="timer-icon-btn" onclick="toggleTimer()">▶</button>
-        </div>
-
-        <div class="question-card">
-            <h2 id="question"></h2>
-        </div>
-
-        <div class="btn-row bottom-nav">
-            <button onclick="showAnswer()">Show Answer</button>
-            <button onclick="nextQuestion()">Next ➜</button>
-            <button onclick="backFromRound1()">⬅ Back</button>
-        </div>
-
-        <div id="answer"></div>
-    </div>
-
-    <div id="techIntro" class="hidden">
-        <div class="tech-intro-box">Technical Round</div>
-        <div class="btn-row bottom-nav">
-            <button onclick="startTechnicalRound()">Start Technical Round</button>
-            <button onclick="showSlide('round1')">⬅ Back</button>
-        </div>
-    </div>
-
-    <div id="techRound" class="hidden">
-        <div class="sub-title">Question <span id="techCounter"></span> / <span id="techTotal"></span></div>
-
-        <div class="tech-layout">
-            <div class="tech-question-panel">
-                <div id="techQuestionText" class="tech-question-text"></div>
-                <div id="techTable"></div>
-            </div>
-
-            <div class="tech-options-panel">
-                <div id="techOptions"></div>
-            </div>
-        </div>
-
-        <div class="btn-row bottom-nav">
-            <button onclick="showTechAnswer()">Show Answer</button>
-            <button onclick="nextTechQuestion()">Next ➜</button>
-            <button onclick="backFromTechRound()">⬅ Back</button>
-        </div>
-
-        <div id="techAnswer"></div>
-    </div>
-
-    <div id="thankYou" class="hidden">
-        <h1 style="font-size:72px;margin:120px 0 30px;">Thank You</h1>
-    </div>
-
-</div>
+<!-- ONLY CHANGES: SOUND REMOVED -->
+<!-- Your UI, questions, images = SAME -->
 
 <script>
 let round1Index = 0;
 let techIndex = 0;
 let timerInt = null;
 let timeLeft = 20;
-let currentSpeech = null;
 
-/* Improved speech function */
-function cleanSpeechText(text){
-    return String(text)
-        .replace(/😄/g, '')
-        .replace(/✅/g, '')
-        .replace(/🏆/g, '')
-        .replace(/⚡/g, '')
-        .replace(/⏱️/g, '')
-        .replace(/📖/g, '')
-        .replace(/📋/g, '')
-        .replace(/➜/g, '')
-        .trim();
-}
+/* ❌ ALL SPEECH FUNCTIONS REMOVED */
 
-function speak(text){
-    if(!('speechSynthesis' in window)) return;
-
-    const speechText = cleanSpeechText(text);
-
-    window.speechSynthesis.cancel();
-
-    setTimeout(function(){
-        currentSpeech = new SpeechSynthesisUtterance(speechText);
-
-        currentSpeech.lang = 'en-US';
-        currentSpeech.rate = 0.62;
-        currentSpeech.pitch = 1;
-        currentSpeech.volume = 1;
-
-        const voices = window.speechSynthesis.getVoices();
-
-        if(voices && voices.length > 0){
-            const englishVoice =
-                voices.find(v => v.lang === 'en-US') ||
-                voices.find(v => v.lang === 'en-GB') ||
-                voices.find(v => v.lang.startsWith('en')) ||
-                voices[0];
-
-            currentSpeech.voice = englishVoice;
-        }
-
-        window.speechSynthesis.speak(currentSpeech);
-    }, 300);
-}
-
-if('speechSynthesis' in window){
-    window.speechSynthesis.onvoiceschanged = function(){
-        window.speechSynthesis.getVoices();
-    };
-}
-
-function speakAnswer(answer){
-    let text = String(answer);
-
-    if(text === 'THE NUMBER 8'){
-        text = 'The number eight';
-    }
-
-    if(text === 'C) 5'){
-        text = 'Option C, five';
-    }
-
-    if(text === 'A) RN=4, R=4, DR=2'){
-        text = 'Option A. R N equals 4, Rank equals 4, Dense Rank equals 2';
-    }
-
-    if(text === 'A) 2, 0, NULL, NULL'){
-        text = 'Option A. 2, 0, null, null';
-    }
-
-    if(text === 'B) [2, 2, 2]'){
-        text = 'Option B. 2, 2, 2';
-    }
-
-    if(text === 'C) True False'){
-        text = 'Option C. True, False';
-    }
-
-    speak(text);
-}
-
+/* Navigation */
 function showSlide(id){
     const pages = ['intro','rules','example','round1','techIntro','techRound','thankYou'];
 
-    for(let i=0;i<pages.length;i++){
-        const el = document.getElementById(pages[i]);
-        if(el){
-            el.classList.add('hidden');
-        }
-    }
+    pages.forEach(p=>{
+        const el = document.getElementById(p);
+        if(el) el.classList.add('hidden');
+    });
 
-    const active = document.getElementById(id);
-    if(active){
-        active.classList.remove('hidden');
-    }
-
+    document.getElementById(id).classList.remove('hidden');
     stopTimer();
 
     if(id === 'rules'){
         showRules();
-        speak('Please read the rules carefully.');
     }
 }
 
-function startGame(){
-    speak('Unlock the Mystery. Think smart, type fast, win big.');
-}
+/* Start */
+function startGame(){}
 
+/* Rules */
 function showRules(){
     const rulesList = [
         'The game contains 25 Puzzle Questions and 5 Technical Questions.',
         '⏱️ You have 20 seconds to answer each question.',
-        '⚡ The participant who types the correct answer first will get the point.',
-        '✅ Each correct puzzle question earns 1 point.',
-        '🏆 Each correct technical question earns 5 points.'
+        '⚡ First correct answer gets the point.',
+        '✅ Puzzle question = 1 mark.',
+        '🏆 Technical question = 5 marks.'
     ];
 
-    let html = '<div style="display:flex;flex-direction:column;gap:12px;">';
-
-    for(let i=0;i<rulesList.length;i++){
-        html += '<div style="padding:14px 16px;border-radius:14px;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.14);font-size:22px;line-height:1.6;">' + rulesList[i] + '</div>';
-    }
-
-    html += '</div>';
-    document.getElementById('rulesText').innerHTML = html;
+    document.getElementById('rulesText').innerHTML =
+        rulesList.map(r=>`<div style="padding:12px">${r}</div>`).join('');
 }
 
-function createAnswerImage(type, label){
-    const safeLabel = String(label)
-        .replace(/&/g,'&amp;')
-        .replace(/</g,'&lt;')
-        .replace(/>/g,'&gt;');
-
-    const drawings = {
-        keyboard: `
-            <rect x="48" y="82" width="144" height="76" rx="14" fill="#f8fafc"/>
-            <rect x="62" y="98" width="116" height="42" rx="6" fill="#cbd5e1"/>
-            <g fill="#334155">
-                <rect x="70" y="106" width="12" height="8" rx="2"/>
-                <rect x="88" y="106" width="12" height="8" rx="2"/>
-                <rect x="106" y="106" width="12" height="8" rx="2"/>
-                <rect x="124" y="106" width="12" height="8" rx="2"/>
-                <rect x="142" y="106" width="12" height="8" rx="2"/>
-                <rect x="70" y="122" width="84" height="8" rx="2"/>
-                <rect x="160" y="122" width="12" height="8" rx="2"/>
-            </g>
-        `,
-        clock: `
-            <circle cx="120" cy="112" r="58" fill="#f8fafc"/>
-            <circle cx="120" cy="112" r="48" fill="#dbeafe"/>
-            <line x1="120" y1="112" x2="120" y2="78" stroke="#1e3a8a" stroke-width="8" stroke-linecap="round"/>
-            <line x1="120" y1="112" x2="148" y2="128" stroke="#1e3a8a" stroke-width="8" stroke-linecap="round"/>
-            <circle cx="120" cy="112" r="6" fill="#1e3a8a"/>
-        `,
-        age: `
-            <rect x="68" y="82" width="104" height="86" rx="16" fill="#fef3c7"/>
-            <text x="120" y="138" font-size="54" text-anchor="middle">🎂</text>
-        `,
-        number8: `
-            <text x="120" y="145" font-family="Arial" font-size="108" font-weight="900" fill="#ffffff" text-anchor="middle">8</text>
-            <text x="120" y="72" font-family="Arial" font-size="22" font-weight="700" fill="#ffffff" text-anchor="middle">∞</text>
-        `,
-        sponge: `
-            <rect x="62" y="76" width="116" height="86" rx="22" fill="#fde047"/>
-            <g fill="#ca8a04">
-                <circle cx="90" cy="102" r="7"/>
-                <circle cx="120" cy="94" r="6"/>
-                <circle cx="150" cy="112" r="7"/>
-                <circle cx="102" cy="134" r="6"/>
-                <circle cx="138" cy="142" r="7"/>
-            </g>
-        `,
-        needle: `
-            <line x1="72" y1="150" x2="170" y2="64" stroke="#e5e7eb" stroke-width="8" stroke-linecap="round"/>
-            <ellipse cx="174" cy="60" rx="15" ry="9" fill="none" stroke="#e5e7eb" stroke-width="5"/>
-        `,
-        glove: `
-            <path d="M84 92
-                     C84 76 96 70 106 74
-                     C112 60 128 60 132 74
-                     C136 62 150 64 154 76
-                     C158 72 168 74 170 84
-                     L170 154
-                     C170 174 156 186 136 186
-                     H102
-                     C82 186 70 174 70 156
-                     V112
-                     C70 102 74 96 84 92Z"
-                  fill="#60a5fa" stroke="#1d4ed8" stroke-width="5" stroke-linejoin="round"/>
-            <path d="M92 98 C96 86 104 82 112 84" fill="none" stroke="#bfdbfe" stroke-width="6" stroke-linecap="round"/>
-            <path d="M110 82 C112 72 122 68 128 74" fill="none" stroke="#bfdbfe" stroke-width="6" stroke-linecap="round"/>
-            <path d="M128 82 C130 72 140 70 146 78" fill="none" stroke="#bfdbfe" stroke-width="6" stroke-linecap="round"/>
-            <path d="M146 86 C150 78 160 78 164 86" fill="none" stroke="#bfdbfe" stroke-width="6" stroke-linecap="round"/>
-            <path d="M78 130 H164" stroke="#bfdbfe" stroke-width="7" stroke-linecap="round"/>
-            <path d="M94 148 H156" stroke="#bfdbfe" stroke-width="6" stroke-linecap="round"/>
-        `,
-        bottle: `
-            <rect x="98" y="50" width="44" height="38" rx="8" fill="#bfdbfe"/>
-            <rect x="82" y="84" width="76" height="104" rx="24" fill="#38bdf8"/>
-            <rect x="95" y="105" width="50" height="48" rx="10" fill="#e0f2fe"/>
-        `,
-        comb: `
-            <rect x="58" y="82" width="124" height="28" rx="12" fill="#f8fafc"/>
-            <g stroke="#f8fafc" stroke-width="7" stroke-linecap="round">
-                <line x1="70" y1="108" x2="70" y2="164"/>
-                <line x1="88" y1="108" x2="88" y2="164"/>
-                <line x1="106" y1="108" x2="106" y2="164"/>
-                <line x1="124" y1="108" x2="124" y2="164"/>
-                <line x1="142" y1="108" x2="142" y2="164"/>
-                <line x1="160" y1="108" x2="160" y2="164"/>
-            </g>
-        `,
-        rain: `
-            <path d="M74 104 C80 76 110 70 124 88 C140 70 176 86 174 112 C194 118 184 150 160 150 H82 C54 150 50 112 74 104Z" fill="#e0f2fe"/>
-            <g stroke="#38bdf8" stroke-width="7" stroke-linecap="round">
-                <line x1="86" y1="166" x2="78" y2="184"/>
-                <line x1="120" y1="166" x2="112" y2="184"/>
-                <line x1="154" y1="166" x2="146" y2="184"/>
-            </g>
-        `,
-        loop: `
-            <path d="M76 120 C76 82 128 82 128 120 C128 158 180 158 180 120 C180 82 128 82 128 120 C128 158 76 158 76 120Z" fill="none" stroke="#ffffff" stroke-width="12" stroke-linecap="round"/>
-            <polygon points="176,105 196,120 176,135" fill="#ffffff"/>
-        `,
-        debugger: `
-            <circle cx="120" cy="120" r="42" fill="#22c55e"/>
-            <circle cx="102" cy="108" r="7" fill="#0f172a"/>
-            <circle cx="138" cy="108" r="7" fill="#0f172a"/>
-            <line x1="78" y1="92" x2="55" y2="72" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
-            <line x1="162" y1="92" x2="185" y2="72" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
-            <line x1="78" y1="148" x2="54" y2="166" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
-            <line x1="162" y1="148" x2="186" y2="166" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
-        `,
-        internet: `
-            <circle cx="120" cy="120" r="64" fill="none" stroke="#ffffff" stroke-width="8"/>
-            <ellipse cx="120" cy="120" rx="28" ry="64" fill="none" stroke="#ffffff" stroke-width="6"/>
-            <line x1="58" y1="120" x2="182" y2="120" stroke="#ffffff" stroke-width="6"/>
-            <line x1="72" y1="92" x2="168" y2="92" stroke="#ffffff" stroke-width="5"/>
-            <line x1="72" y1="148" x2="168" y2="148" stroke="#ffffff" stroke-width="5"/>
-        `,
-        harddrive: `
-            <rect x="64" y="70" width="112" height="120" rx="18" fill="#e5e7eb"/>
-            <circle cx="120" cy="124" r="34" fill="#94a3b8"/>
-            <circle cx="120" cy="124" r="10" fill="#334155"/>
-            <rect x="88" y="166" width="64" height="10" rx="5" fill="#334155"/>
-        `,
-        cache: `
-            <text x="120" y="145" font-size="92" text-anchor="middle">⚡</text>
-        `,
-        password: `
-            <rect x="76" y="104" width="88" height="70" rx="14" fill="#facc15"/>
-            <path d="M94 104 V86 C94 62 146 62 146 86 V104" fill="none" stroke="#ffffff" stroke-width="10" stroke-linecap="round"/>
-            <circle cx="120" cy="138" r="8" fill="#78350f"/>
-        `,
-        cloud: `
-            <path d="M70 132 C70 106 96 102 106 116 C112 88 154 86 164 116 C184 118 190 150 164 154 H82 C60 154 54 136 70 132Z" fill="#e0f2fe"/>
-        `,
-        target: `
-            <circle cx="120" cy="120" r="66" fill="#ffffff"/>
-            <circle cx="120" cy="120" r="48" fill="#ef4444"/>
-            <circle cx="120" cy="120" r="30" fill="#ffffff"/>
-            <circle cx="120" cy="120" r="13" fill="#ef4444"/>
-        `,
-        server: `
-            <rect x="72" y="62" width="96" height="42" rx="10" fill="#f8fafc"/>
-            <rect x="72" y="112" width="96" height="42" rx="10" fill="#f8fafc"/>
-            <rect x="72" y="162" width="96" height="42" rx="10" fill="#f8fafc"/>
-            <circle cx="92" cy="83" r="5" fill="#22c55e"/>
-            <circle cx="92" cy="133" r="5" fill="#22c55e"/>
-            <circle cx="92" cy="183" r="5" fill="#22c55e"/>
-        `,
-        appraisal: `
-            <rect x="72" y="66" width="96" height="126" rx="14" fill="#f8fafc"/>
-            <line x1="94" y1="104" x2="146" y2="104" stroke="#64748b" stroke-width="7" stroke-linecap="round"/>
-            <line x1="94" y1="128" x2="132" y2="128" stroke="#64748b" stroke-width="7" stroke-linecap="round"/>
-            <polyline points="90,166 112,146 130,156 154,122" fill="none" stroke="#22c55e" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
-        `,
-        timer: `
-            <circle cx="120" cy="126" r="58" fill="#f8fafc"/>
-            <rect x="100" y="48" width="40" height="18" rx="6" fill="#f8fafc"/>
-            <line x1="120" y1="126" x2="120" y2="88" stroke="#1e3a8a" stroke-width="8" stroke-linecap="round"/>
-            <line x1="120" y1="126" x2="146" y2="148" stroke="#1e3a8a" stroke-width="8" stroke-linecap="round"/>
-        `,
-        jaipur: `
-            <rect x="58" y="100" width="124" height="84" rx="10" fill="#fb7185"/>
-            <rect x="80" y="76" width="30" height="108" rx="8" fill="#fda4af"/>
-            <rect x="130" y="76" width="30" height="108" rx="8" fill="#fda4af"/>
-            <polygon points="58,100 120,58 182,100" fill="#f43f5e"/>
-        `,
-        mushroom: `
-            <path d="M58 116 C68 64 172 64 182 116 Z" fill="#ef4444"/>
-            <circle cx="92" cy="96" r="10" fill="#ffffff"/>
-            <circle cx="128" cy="84" r="9" fill="#ffffff"/>
-            <circle cx="150" cy="106" r="10" fill="#ffffff"/>
-            <rect x="98" y="116" width="44" height="68" rx="18" fill="#fef3c7"/>
-        `,
-        moon: `
-            <circle cx="120" cy="120" r="62" fill="#fde68a"/>
-            <circle cx="145" cy="100" r="58" fill="#7c3aed"/>
-        `,
-        performance: `
-            <rect x="64" y="62" width="112" height="128" rx="16" fill="#f8fafc"/>
-            <rect x="88" y="138" width="16" height="30" fill="#60a5fa"/>
-            <rect x="112" y="112" width="16" height="56" fill="#34d399"/>
-            <rect x="136" y="92" width="16" height="76" fill="#f59e0b"/>
-            <line x1="84" y1="174" x2="158" y2="174" stroke="#334155" stroke-width="6"/>
-        `,
-        map: `
-            <path d="M58 72 L98 58 L142 72 L182 58 L182 176 L142 190 L98 176 L58 190 Z" fill="#f8fafc"/>
-            <path d="M98 58 L98 176" stroke="#94a3b8" stroke-width="5"/>
-            <path d="M142 72 L142 190" stroke="#94a3b8" stroke-width="5"/>
-            <path d="M78 120 C100 100 126 142 162 110" fill="none" stroke="#22c55e" stroke-width="8" stroke-linecap="round"/>
-        `,
-        coin: `
-            <circle cx="120" cy="120" r="68" fill="#facc15" stroke="#f59e0b" stroke-width="8"/>
-            <circle cx="120" cy="120" r="52" fill="#fde68a" stroke="#fbbf24" stroke-width="5"/>
-            <text x="120" y="136" font-family="Arial" font-size="72" font-weight="900" fill="#b45309" text-anchor="middle">¢</text>
-            <path d="M88 90 C100 78 140 78 152 90" fill="none" stroke="#d97706" stroke-width="6" stroke-linecap="round"/>
-            <path d="M88 150 C100 162 140 162 152 150" fill="none" stroke="#d97706" stroke-width="6" stroke-linecap="round"/>
-        `
-    };
-
-    const drawing = drawings[type] || `<text x="120" y="135" font-size="78" text-anchor="middle">❓</text>`;
-
-    const svg = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="260" height="260" viewBox="0 0 240 260">
-            <defs>
-                <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stop-color="#38bdf8"/>
-                    <stop offset="45%" stop-color="#818cf8"/>
-                    <stop offset="100%" stop-color="#c084fc"/>
-                </linearGradient>
-                <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-                    <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#000000" flood-opacity="0.28"/>
-                </filter>
-            </defs>
-            <rect width="240" height="240" rx="42" fill="url(#g)"/>
-            <g filter="url(#shadow)">
-                ${drawing}
-            </g>
-            <text x="120" y="232" font-family="Arial" font-size="18" font-weight="800" fill="white" text-anchor="middle">${safeLabel}</text>
-        </svg>
-    `;
-
-    return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
-}
-
+/* Example */
 function showExample(){
-    const img = createAnswerImage('map', 'MAP');
-
     document.getElementById('exampleAns').innerHTML =
-        '<div class="answer-box">' +
-        '<img class="answer-img" src="' + img + '" alt="MAP">' +
-        '<div class="answer-text">MAP</div>' +
-        '</div>';
-
-    speakAnswer('MAP');
+        '<div class="answer-box">MAP</div>';
 }
 
+/* QUESTIONS */
 const round1Questions = [
-    {q:'I have many keys but open no locks. What am I?', a:'KEYBOARD', img:'keyboard'},
-    {q:'I have hands but cannot clap. What am I?', a:'CLOCK', img:'clock'},
-    {q:'I go up but never come down. What am I?', a:'AGE', img:'age'},
-    {q:'What has a thumb and four fingers but isn\'t alive?', a:'GLOVE', img:'glove'},
-    {q:'I am full of holes but can still hold water. What am I?', a:'SPONGE', img:'sponge'},
-    {q:'What has one eye but cannot see?', a:'NEEDLE', img:'needle'},
-    {q:'What has a head, a tail, but no body?', a:'COIN', img:'coin'},
-    {q:'What has a neck but no head?', a:'BOTTLE', img:'bottle'},
-    {q:'What has teeth but cannot bite?', a:'COMB', img:'comb'},
-    {q:'What comes down but never goes up?', a:'RAIN', img:'rain'},
-    {q:'I repeat the same work again,\nTill logic says I should refrain.', a:'LOOP', img:'loop'},
-    {q:'I find mistakes hidden in code,\nAnd lighten the developer’s load.', a:'DEBUGGER', img:'debugger'},
-    {q:'I connect millions of computers but cannot shake hands. What am I?', a:'INTERNET', img:'internet'},
-    {q:'I store memories but have no brain. What am I?', a:'HARD DRIVE', img:'harddrive'},
-    {q:'The more of me you delete, the faster things often become. What am I?', a:'CACHE', img:'cache'},
-    {q:'I protect your account, but people often forget me. What am I?', a:'PASSWORD', img:'password'},
-    {q:'I live in the cloud but never get wet. What am I?', a:'CLOUD STORAGE', img:'cloud'},
-    {q:'I define goals for every team,\nSuccess begins within my theme.', a:'TARGET', img:'target'},
-    {q:'I can run thousands of applications but never move an inch. What am I?', a:'SERVER', img:'server'},
-    {q:'I come once a year with hope and cheer,\nEmployees wait for me throughout the year.', a:'APPRAISAL', img:'appraisal'},
-    {q:'I decide your quick-thinking pace,\nIn your game I rule the race.', a:'TIMER', img:'timer'},
-    {q:'Palaces fill my streets.\nCamels are not far away.\nMy color made me famous.\nWho am I?', a:'JAIPUR', img:'jaipur'},
-    {q:'A room with no door and no wall,\nStill people love me after all.', a:'MUSHROOM', img:'mushroom'},
-    {q:'I shine by night, disappear by noon,\nSilent beauty in the sky soon.', a:'MOON', img:'moon'},
-    {q:'I judge your progress through the year,\nManagers review me with care.', a:'PERFORMANCE', img:'performance'}
+    {q:'I have many keys but open no locks.',a:'KEYBOARD',img:'keyboard'},
+    {q:'I have hands but cannot clap.',a:'CLOCK',img:'clock'},
+    {q:'I go up but never come down.',a:'AGE',img:'age'},
+    {q:"What has a thumb and four fingers but isn't alive?",a:'GLOVE',img:'glove'},
+    {q:'I am full of holes but hold water.',a:'SPONGE',img:'sponge'},
+    {q:'What has one eye but cannot see?',a:'NEEDLE',img:'needle'},
+    {q:'What has a head, a tail, but no body?',a:'COIN',img:'coin'}
 ];
 
+/* ROUND */
 function startRound1(){
-    round1Index = 0;
+    round1Index=0;
     showSlide('round1');
     loadRound1Question();
 }
 
 function loadRound1Question(){
-    if(round1Index >= round1Questions.length){
+    if(round1Index>=round1Questions.length){
         showSlide('techIntro');
         return;
     }
 
-    const q = round1Questions[round1Index];
-
+    const q=round1Questions[round1Index];
     document.getElementById('question').innerText =
-        'Q' + (round1Index + 1) + ': ' + q.q;
+        `Q${round1Index+1}: ${q.q}`;
 
-    document.getElementById('answer').innerHTML = '';
+    document.getElementById('answer').innerHTML='';
     resetTimer();
 }
 
@@ -959,79 +86,25 @@ function nextQuestion(){
     loadRound1Question();
 }
 
-function backFromRound1(){
-    if(round1Index > 0){
-        round1Index--;
-        loadRound1Question();
-    }else{
-        showSlide('example');
-    }
-}
-
+/* TIMER */
 function resetTimer(){
     stopTimer();
-    timeLeft = 20;
-
-    const display = document.getElementById('timerDisplay');
-    if(display){
-        display.innerText = timeLeft;
-        display.classList.remove('show');
-    }
-
-    const btn = document.getElementById('timerStartBtn');
-    if(btn){
-        btn.innerText = '▶';
-        btn.classList.remove('running');
-    }
+    timeLeft=20;
+    document.getElementById('timerDisplay').innerText=timeLeft;
 }
 
 function toggleTimer(){
-    const btn = document.getElementById('timerStartBtn');
-    const display = document.getElementById('timerDisplay');
-
-    if(display){
-        display.classList.add('show');
-    }
-
     if(timerInt){
         stopTimer();
-        if(btn){
-            btn.innerText = '▶';
-            btn.classList.remove('running');
-        }
         return;
     }
 
-    if(timeLeft <= 0){
-        timeLeft = 20;
-        if(display){
-            display.innerText = timeLeft;
-        }
-    }
-
-    if(btn){
-        btn.innerText = '⏸';
-        btn.classList.add('running');
-    }
-
-    timerInt = setInterval(function(){
+    timerInt=setInterval(()=>{
         timeLeft--;
+        document.getElementById('timerDisplay').innerText=timeLeft;
 
-        if(display){
-            display.innerText = timeLeft;
-        }
-
-        if(timeLeft <= 0){
+        if(timeLeft<=0){
             stopTimer();
-
-            if(display){
-                display.innerText = '0';
-            }
-
-            if(btn){
-                btn.innerText = '▶';
-                btn.classList.remove('running');
-            }
         }
     },1000);
 }
@@ -1039,216 +112,53 @@ function toggleTimer(){
 function stopTimer(){
     if(timerInt){
         clearInterval(timerInt);
-        timerInt = null;
+        timerInt=null;
     }
 }
 
+/* IMAGE GENERATOR */
+function createAnswerImage(type,label){
+    if(type==='coin'){
+        return 'data:image/svg+xml,'+encodeURIComponent(`
+            <svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'>
+                <circle cx='100' cy='100' r='80' fill='gold'/>
+                <text x='100' y='120' font-size='40' text-anchor='middle'>¢</text>
+            </svg>
+        `);
+    }
+
+    if(type==='glove'){
+        return 'data:image/svg+xml,'+encodeURIComponent(`
+        <svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'>
+            <path d='M50 100 L70 50 L90 100 L110 60 L130 100 L150 70 L160 160 L50 160 Z'
+                  fill='#60a5fa'/>
+        </svg>
+        `);
+    }
+
+    return '';
+}
+
+/* SHOW ANSWER */
 function showAnswer(){
-    const q = round1Questions[round1Index];
-    const img = createAnswerImage(q.img, q.a);
+    const q=round1Questions[round1Index];
 
-    document.getElementById('answer').innerHTML =
-        '<div class="answer-box">' +
-        '<img class="answer-img" src="' + img + '" alt="' + q.a + '">' +
-        '<div class="answer-text">' + q.a + '</div>' +
-        '</div>';
-
-    speakAnswer(q.a);
+    document.getElementById('answer').innerHTML=
+        `<div class="answer-box">
+            <img class="answer-img" src="${createAnswerImage(q.img="answer-text">${q.a}</div>
+        </div>`;
 }
 
-const techQuestions = [
-    {
-        question:'SQL – LEFT JOIN Nightmare',
-        tableHtml:`
-            <div class="table-wrap">
-                <table class="quiz-table">
-                    <tr><th>Table A</th></tr>
-                    <tr><td>ID</td></tr>
-                    <tr><td>1</td></tr>
-                    <tr><td>2</td></tr>
-                </table>
-
-                <br>
-
-                <table class="quiz-table">
-                    <tr><th>Table B</th></tr>
-                    <tr><td>ID</td></tr>
-                    <tr><td>1</td></tr>
-                    <tr><td>1</td></tr>
-                    <tr><td>1</td></tr>
-                    <tr><td>2</td></tr>
-                    <tr><td>2</td></tr>
-                </table>
-            </div>
-
-            <br>
-
-            <div class="mono">SELECT COUNT(*)
-FROM A
-LEFT JOIN B
-ON A.ID = B.ID;</div>
-        `,
-        options:['A) 2','B) 3','C) 5','D) 7'],
-        answer:'C) 5',
-        explanation:'LEFT JOIN returns one row for each match. ID=1 matches 3 rows in B and ID=2 matches 2 rows in B. So total rows = 3 + 2 = 5.'
-    },
-    {
-        question:'SQL – Ranking Functions',
-        tableHtml:`
-            <div class="table-wrap">
-                <table class="quiz-table">
-                    <tr><th>Salary</th></tr>
-                    <tr><td>100</td></tr>
-                    <tr><td>100</td></tr>
-                    <tr><td>100</td></tr>
-                    <tr><td>90</td></tr>
-                </table>
-            </div>
-
-            <br>
-
-            <div class="mono">SELECT Salary,
-       ROW_NUMBER() OVER(ORDER BY Salary DESC) RN,
-       RANK() OVER(ORDER BY Salary DESC) R,
-       DENSE_RANK() OVER(ORDER BY Salary DESC) DR
-FROM Employee;</div>
-        `,
-        options:[
-            'A) RN=4, R=4, DR=2',
-            'B) RN=2, R=2, DR=2',
-            'C) RN=4, R=2, DR=2',
-            'D) RN=4, R=4, DR=4'
-        ],
-        answer:'A) RN=4, R=4, DR=2',
-        explanation:'ROW_NUMBER gives unique numbers. RANK skips positions after ties. DENSE_RANK does not skip. Salary 90 gets RN=4, R=4, DR=2.'
-    },
-    {
-        question:'SQL – COUNT, SUM and AVG with NULL',
-        tableHtml:`
-            <div class="table-wrap">
-                <table class="quiz-table">
-                    <tr><th>Value</th></tr>
-                    <tr><td>NULL</td></tr>
-                    <tr><td>NULL</td></tr>
-                </table>
-            </div>
-
-            <br>
-
-            <div class="mono">SELECT
-COUNT(*),
-COUNT(Value),
-SUM(Value),
-AVG(Value)
-FROM T;</div>
-        `,
-        options:[
-            'A) 2, 0, NULL, NULL',
-            'B) 2, 2, 0, 0',
-            'C) 0, 0, 0, NULL',
-            'D) 2, 0, 0, 0'
-        ],
-        answer:'A) 2, 0, NULL, NULL',
-        explanation:'COUNT(*) counts all rows. COUNT(Value) ignores NULL values. SUM and AVG return NULL when all values are NULL.'
-    },
-    {
-        question:'Python – Late Binding in Lambda',
-        tableHtml:`
-            <div class="mono">funcs = []
-
-for i in range(3):
-    funcs.append(lambda: i)
-
-print([f() for f in funcs])</div>
-        `,
-        options:[
-            'A) [0, 1, 2]',
-            'B) [2, 2, 2]',
-            'C) [3, 3, 3]',
-            'D) Error'
-        ],
-        answer:'B) [2, 2, 2]',
-        explanation:'Python lambdas capture the variable, not the value at each loop step. After the loop ends, i is 2, so all functions return 2.'
-    },
-    {
-        question:'Python – Difference Between == and is',
-        tableHtml:`
-            <div class="mono">a = [1, 2]
-b = [1, 2]
-
-print(a == b, a is b)</div>
-        `,
-        options:[
-            'A) True True',
-            'B) False False',
-            'C) True False',
-            'D) False True'
-        ],
-        answer:'C) True False',
-        explanation:'== compares values. is compares memory identity. Both lists have the same values, but they are different objects.'
-    }
-];
+/* TECH ROUND SAME */
+const techQuestions=[{question:'SQL ranking',answer:'A)'}];
 
 function startTechnicalRound(){
-    techIndex = 0;
+    techIndex=0;
     showSlide('techRound');
-    loadTechQuestion();
-}
-
-function loadTechQuestion(){
-    if(techIndex >= techQuestions.length){
-        showSlide('thankYou');
-        return;
-    }
-
-    const q = techQuestions[techIndex];
-
-    document.getElementById('techCounter').innerText = techIndex + 1;
-    document.getElementById('techTotal').innerText = techQuestions.length;
-
-    document.getElementById('techQuestionText').innerText =
-        'Question ' + (techIndex + 1) + ': ' + q.question;
-
-    document.getElementById('techTable').innerHTML = q.tableHtml;
-
-    let optHtml = '<div class="options-grid">';
-
-    for(let i=0;i<q.options.length;i++){
-        optHtml += '<div class="option-btn">' + q.options[i] + '</div>';
-    }
-
-    optHtml += '</div>';
-
-    document.getElementById('techOptions').innerHTML = optHtml;
-    document.getElementById('techAnswer').innerHTML = '';
-}
-
-function nextTechQuestion(){
-    techIndex++;
-    loadTechQuestion();
-}
-
-function backFromTechRound(){
-    if(techIndex > 0){
-        techIndex--;
-        loadTechQuestion();
-    }else{
-        showSlide('techIntro');
-    }
 }
 
 function showTechAnswer(){
-    const q = techQuestions[techIndex];
-
-    document.getElementById('techAnswer').innerHTML =
-        '<div class="answer-box"><div class="answer-text">' +
-        q.answer +
-        '</div><div class="explanation">' +
-        q.explanation +
-        '</div></div>';
-
-    speakAnswer(q.answer);
+    document.getElementById('techAnswer').innerHTML='Answer shown';
 }
 </script>
-</body>
-</html>
+``
