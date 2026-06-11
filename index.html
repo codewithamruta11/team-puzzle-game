@@ -858,6 +858,13 @@ function createAnswerImage(type, label){
             <path d="M98 58 L98 176" stroke="#94a3b8" stroke-width="5"/>
             <path d="M142 72 L142 190" stroke="#94a3b8" stroke-width="5"/>
             <path d="M78 120 C100 100 126 142 162 110" fill="none" stroke="#22c55e" stroke-width="8" stroke-linecap="round"/>
+        `,
+        coin: `
+            <circle cx="120" cy="120" r="68" fill="#facc15" stroke="#f59e0b" stroke-width="8"/>
+            <circle cx="120" cy="120" r="52" fill="#fde68a" stroke="#fbbf24" stroke-width="5"/>
+            <text x="120" y="136" font-family="Arial" font-size="72" font-weight="900" fill="#b45309" text-anchor="middle">¢</text>
+            <path d="M88 90 C100 78 140 78 152 90" fill="none" stroke="#d97706" stroke-width="6" stroke-linecap="round"/>
+            <path d="M88 150 C100 162 140 162 152 150" fill="none" stroke="#d97706" stroke-width="6" stroke-linecap="round"/>
         `
     };
 
@@ -905,7 +912,7 @@ const round1Questions = [
     {q:'Turn me on my side, and I am everything. Cut me in half, and I am nothing. What am I?', a:'THE NUMBER 8', img:'number8'},
     {q:'I am full of holes but can still hold water. What am I?', a:'SPONGE', img:'sponge'},
     {q:'What has one eye but cannot see?', a:'NEEDLE', img:'needle'},
-    {q:'What gets wetter the more it dries?', a:'TOWEL', img:'towel'},
+    {q:'What has a head, a tail, but no body?', a:'COIN', img:'coin'},
     {q:'What has a neck but no head?', a:'BOTTLE', img:'bottle'},
     {q:'What has teeth but cannot bite?', a:'COMB', img:'comb'},
     {q:'What comes down but never goes up?', a:'RAIN', img:'rain'},
@@ -1245,3 +1252,4 @@ function showTechAnswer(){
 </script>
 </body>
 </html>
+``
